@@ -1,7 +1,10 @@
 # Alley Cat — native JavaScript browser edition
 
-Play in a browser by opening the repository's **GitHub Pages** site. The site
-serves `index.html`, the same self-contained game as `alley-cat.html`.
+[**Play online**](https://danzig666.github.io/alley-cat-browser/)
+· [Standalone HTML](alley-cat.html)
+
+The GitHub Pages site serves `index.html`, the same self-contained game as
+`alley-cat.html`.
 
 Open **alley-cat.html** in a modern browser, then click **Play Alley Cat**.
 **The file preview inside chat does not run the game.** Download the file, or
