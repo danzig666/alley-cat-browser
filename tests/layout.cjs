@@ -14,14 +14,18 @@ const {chromium}=require('playwright');
       const layout=await page.evaluate(()=>{
         const game=document.getElementById('game').getBoundingClientRect(),side=document.getElementById('sidebar').getBoundingClientRect();
         const hd=document.getElementById('hd-game').getBoundingClientRect();
+        const choices=Array.from(document.querySelectorAll('#screen #menu-options button'),button=>{
+          const bounds=button.getBoundingClientRect();return bounds.left>=game.left&&bounds.right<=game.right+.5&&bounds.top>=game.top&&bounds.bottom<=game.bottom+.5&&bounds.height>=44;
+        });
         const arcade=document.getElementById('arcade'),w=arcade.clientWidth,h=arcade.clientHeight;
         const panel=Math.min(320,Math.max(240,w*.22));
         const beside=w>=600?Math.min(w-panel-8,h*4/3):0;
         const below=Math.min(w,(h-Math.min(240,Math.max(160,h*.28))-8)*4/3);
-        return {overlayFits:Math.abs(hd.top-game.top)<.5&&Math.abs(hd.bottom-game.bottom)<.5&&Math.abs(hd.left-game.left)<.5&&Math.abs(hd.right-game.right)<.5,width:game.width,height:game.height,ratio:game.width/game.height,side:arcade.classList.contains('side-layout'),
+        return {choices,overlayFits:Math.abs(hd.top-game.top)<.5&&Math.abs(hd.bottom-game.bottom)<.5&&Math.abs(hd.left-game.left)<.5&&Math.abs(hd.right-game.right)<.5,width:game.width,height:game.height,ratio:game.width/game.height,side:arcade.classList.contains('side-layout'),
           optimal:Math.max(beside,below),panelBeside:side.x>=game.right-1,inside:game.top>=0&&game.bottom<=innerHeight&&side.bottom<=innerHeight+1};
       });
       assert(Math.abs(layout.ratio-4/3)<.003, name+': correct 4:3');assert(layout.inside,name+': fits viewport');assert(layout.overlayFits,name+': entire HD overlay fits the native screen, including top edge');
+      assert.equal(layout.choices.length,4);assert(layout.choices.every(Boolean),name+': four touch-sized cat buttons fit inside the game screen');
       assert(Math.abs(layout.width-layout.optimal)<2,name+': maximizes picture across side/below arrangements');
       if(name==='desktop'||name==='laptop'||name==='ultrawide'){assert(layout.side&&layout.panelBeside);assert(layout.height>=height-20);}
       if(name==='desktop'||name==='fold-unfolded')await page.screenshot({path:path.join(__dirname,`layout-${name}.png`)});

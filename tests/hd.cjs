@@ -29,9 +29,9 @@ const {chromium}=require('playwright');
     });
     assert(logo.count>1500&&logo.top>=24,`The full blue IBM logo must have space above it: ${JSON.stringify(logo)}`);
     await page.locator('#screen').screenshot({path:path.join(__dirname,'hd-title.png')});
-    await page.keyboard.press('Enter',{delay:150});await phase('difficulty');
+    assert.equal(await page.locator('#screen #menu-options button').count(),4);
     await page.locator('#screen').screenshot({path:path.join(__dirname,'hd-skill.png')});
-    await page.keyboard.press('k',{delay:150});await phase('ready');await page.keyboard.press('Enter',{delay:150});await phase('playing');
+    await page.locator('#menu-options button').first().click();await phase('playing');
     await page.waitForTimeout(900);
     await page.evaluate(()=>{game.suspend();releaseKeys();present();});
     const snapshot=()=>page.evaluate(()=>({ram:Array.from(ram),words:Array.from(words),phase:game.phase,

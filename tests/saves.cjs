@@ -26,8 +26,12 @@ const root=path.join(__dirname,'..');
     await phase('title');await roundtrip('title');
     assert.equal(await page.evaluate(()=>colorArt.mode),'original');assert.equal(await page.evaluate(()=>speaker.style),'speaker');
     await page.keyboard.press('Enter',{delay:150});await phase('difficulty');await roundtrip('difficulty');
-    await page.keyboard.press('k',{delay:150});await phase('ready');await roundtrip('ready');
-    await page.keyboard.press('Enter',{delay:150});await phase('playing');await page.waitForTimeout(500);
+    // Hold the automatic ready confirmation only long enough to verify that
+    // an old checkpoint parked on this native screen still restores exactly.
+    await page.evaluate(()=>{window.normalMenuAdvance=advanceMenus;advanceMenus=()=>{if(game.phase!=='ready')normalMenuAdvance();};});
+    await page.locator('#menu-options button').first().click();await phase('ready');await roundtrip('ready');
+    await page.evaluate(()=>advanceMenus=normalMenuAdvance);
+    await phase('playing');await page.waitForTimeout(500);
     await page.keyboard.press('Escape',{delay:150});await phase('paused');await roundtrip('paused');
     await page.keyboard.press('Enter',{delay:150});await phase('playing');await page.waitForTimeout(300);
     await page.click('#graphics');await page.click('#audio-style');

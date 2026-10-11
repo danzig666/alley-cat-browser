@@ -37,19 +37,21 @@ const {chromium}=require('playwright');
     assert(frames[16].h<=180&&frames[16].w>=330,'Mouse includes its own tail, with no cat paw above it');
     assert(frames[17].h>=340,'Broom includes the complete handle');
     await page.click('#start');const phase=p=>page.waitForFunction(p=>game.phase===p,p);
-    await phase('title');await page.keyboard.press('Enter',{delay:120});await phase('difficulty');
-    await page.keyboard.press('k',{delay:120});await phase('ready');await page.keyboard.press('Enter',{delay:120});
-    await phase('playing');await page.waitForTimeout(1700);
+    await phase('title');await page.locator('#menu-options button').first().click();await phase('playing');await page.waitForTimeout(1700);
     await page.evaluate(()=>{game.suspend();window.hangBaseline=game.capture();});
-    for(const line of [8,40,72])for(const key of ['e','q','ArrowDown']){
-      const start=await page.evaluate(line=>{
+    for(const line of [8,40,72])for(const [key,mode] of [['e','hd'],['q','hd'],['ArrowDown','hd'],['ArrowRight','hd'],['ArrowLeft','hd'],['ArrowRight','original'],['ArrowLeft','original']]){
+      const start=await page.evaluate(({line,key})=>{
         game.restore(hangBaseline);game.suspend();releaseKeys();r.ds=0x1010;
         const run=generator=>{for(let n=0;n<2000;n++)if(generator.next().done)return;throw new Error('Native placement did not finish');};
         run(sub_18413());
-        const row=[8,40,72].indexOf(line),offset=memoryAGet(0x1010,4133+row);
-        let x=-1;for(let candidate=48;candidate<200;candidate+=8){
-          const at=candidate+10,index=(at>>>6)+offset+4118,mask=128>>((at>>>3)&7);
-          if(memoryAGet(0x1010,index)&mask){x=candidate;break;}
+        let x=-1;for(let candidate=40;candidate<260;candidate+=8){
+          let supported=true;
+          const offsets=key==='ArrowLeft'?[0,-6]:key==='ArrowRight'?[0,6]:[0];
+          for(const dx of offsets){
+            memoryASet16(0x1010,0x579,candidate+dx);memoryASet(0x1010,0x57b,line);
+            memoryASet(0x1010,0x55c,0);run(sub_189dd());supported&&=flags.carry;
+          }
+          if(supported){x=candidate;break;}
         }
         if(x<0)throw new Error('No clothesline platform');
         // Position the other cats away from the test landing. Their native AI
@@ -60,7 +62,7 @@ const {chromium}=require('playwright');
         memoryASet(0x1010,0x55c,1);memoryASet(0x1010,0x571,0);memoryASet(0x1010,0x56e,0);
         run(sub_18342());execution.restore([{name:'sub_17230',pc:0x17385,parked:null,budget:false}]);
         game.iterator=sub_17230();game.resume();return {x,y:line};
-      },line);
+      },{line,key});
       await page.waitForFunction(()=>memoryAGet(0x1010,0x55c)===2&&hdArt.renderedRecords?.some(r=>r.kind==='player'&&r.pose==='hang'));
       assert.match(await page.locator('#hint').textContent(),/jump.*drop/);
       const hanging=await page.evaluate(()=>{game.suspend();return {
@@ -69,14 +71,36 @@ const {chromium}=require('playwright');
       if(key==='e')await page.locator('#hd-game').screenshot({path:path.join(__dirname,`hd-hanging-${line}.png`)});
       await page.click('#hd-style');assert.deepEqual(await page.evaluate(()=>Array.from(ram)),hanging.ram);
       assert.deepEqual(await page.evaluate(()=>Array.from(words)),hanging.words);
-      await page.click('#hd-style');await page.evaluate(()=>{game.resume();focusGame();});
+      if(mode==='hd')await page.click('#hd-style');
+      await page.evaluate(()=>{game.resume();focusGame();});
+      if(key==='ArrowLeft'||key==='ArrowRight')await page.evaluate(()=>{
+        window.slideTrace=[];window.normalPlayerBegin=hdArt.begin;
+        // Observe actual native draws: a narrow section can be traversed and
+        // left within one browser frame, before Playwright's next RAF poll.
+        hdArt.begin=function(...args){
+          const result=normalPlayerBegin.apply(this,args),frame=args[0],record=this.entities.get(frame.hdId);
+          if(frame.kind==='player'&&frame.source===0x09da&&record)slideTrace.push({
+            x:game.state().x,y:game.state().y,record:{x:record.x,y:record.y,width:record.width,height:record.height,source:record.source,pose:record.pose}});
+          return result;
+        };
+      });
       await page.keyboard.down(key);
       await page.waitForFunction(({x,y,key})=>{
-        const state=game.state();return memoryAGet(0x1010,0x55c)===0&&
+        const state=game.state();
+        if(key==='ArrowLeft'||key==='ArrowRight')return slideTrace.some(point=>point.y===y&&
+          (key==='ArrowLeft'?x-point.x:point.x-x)>=12);
+        return memoryAGet(0x1010,0x55c)===0&&
           (key==='ArrowDown'?state.y>y:state.y<y&&(key==='q'?state.x<x:state.x>x));
-      },{...start,key},{timeout:1200});
+      },{...start,key},{timeout:1200}).catch(async error=>{
+        const actual=await page.evaluate(()=>({state:game.state(),axes:[memoryAGet(0x1010,0x698),memoryAGet(0x1010,0x699)],
+          flags:[memoryAGet(0x1010,0x55c),memoryAGet(0x1010,0x56e),memoryAGet(0x1010,0x571)],keys:[...pressed],trace:window.slideTrace}));
+        throw new Error(JSON.stringify({line,key,mode,start,actual,error:error.message}));
+      });
       if(line===8&&key==='e'){
-        await page.waitForFunction(()=>hdArt.renderedRecords?.some(r=>r.kind==='player'&&r.artTop>0),null,{timeout:1200});
+        await page.waitForFunction(()=>{
+          if(!hdArt.renderedRecords?.some(r=>r.kind==='player'&&r.artTop>0))return false;
+          game.suspend();return true;
+        },null,{timeout:1200});
         const crop=await page.evaluate(()=>{
           game.suspend();const record=hdArt.renderedRecords.find(r=>r.kind==='player');
           const donor=hdArt.animation[record.pose==='jump'?4:5],draw=hdArt.ctx.drawImage,calls=[];
@@ -95,10 +119,16 @@ const {chromium}=require('playwright');
         assert.equal(crop.calls[0][7],crop.record.height);
       }
       await page.keyboard.up(key);await page.evaluate(()=>game.suspend());
+      if(key==='ArrowLeft'||key==='ArrowRight'){
+        const trace=await page.evaluate(()=>{hdArt.begin=normalPlayerBegin;return slideTrace;});
+        const slide=trace.find(point=>point.y===line&&(key==='ArrowLeft'?start.x-point.x:point.x-start.x)>=12);
+        assert(slide);assert.equal(slide.record.source,0x09da);assert.equal(slide.record.pose,'hang');
+        assert.equal(slide.record.y,line);assert.equal(slide.record.height,14);assert.equal(slide.record.width,24);
+      }
       assert.equal(await page.evaluate(()=>game.error),null);
     }
     assert.equal(await page.evaluate(()=>colorArt.identity('sub_19efc',0x1679,'sub_18396')),'impact');
     assert.deepEqual(errors,[]);
-    console.log('PASS: 16 complete animation frames plus mouse and broom without neighbor fragments; hanging pose at all three native lines; real Q/E jump and Down drop with original AI active; live CGA switch preserves RAM/registers; jump clipping and saved crop validation.');
+    console.log('PASS: complete animation frames; hanging at all three lines; left/right traversal in HD and CGA; Q/E jumps and Down drop with original AI active; live CGA switch preserves RAM/registers; jump clipping and saved crop validation.');
   }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

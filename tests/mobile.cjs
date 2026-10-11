@@ -15,10 +15,10 @@ const html=fs.readFileSync(path.join(__dirname,'../alley-cat.html'),'utf8');
     const center=async selector=>{const b=await page.locator(selector).boundingBox();return {x:b.x+b.width/2,y:b.y+b.height/2,id:1};};
     const tapScreen=async()=>{const point=await center('#game');await touch('touchStart',[point]);await page.waitForTimeout(50);await touch('touchEnd');};
     await page.click('#start');await phase('title');
-    await tapScreen();await phase('difficulty');
+    assert.equal(await page.locator('#screen #menu-options button').count(),4);
+    assert.equal(await page.locator('#sidebar #menu').count(),0);
     assert.equal(await page.evaluate(()=>memoryAGet(0x1010,0x69b)),0,'Keyboard input must be selected automatically');
-    await page.locator('#menu-options button').first().click();await phase('ready');
-    await tapScreen();await phase('playing');
+    await page.locator('#menu-options button').first().click();await phase('playing');
     // Some phone viewers blur their window on focus. A visible game must run.
     const first=await page.evaluate(()=>alleyCat.state().frames);
     await page.evaluate(()=>window.dispatchEvent(new Event('blur')));await page.waitForTimeout(200);
@@ -78,8 +78,7 @@ const html=fs.readFileSync(path.join(__dirname,'../alley-cat.html'),'utf8');
     // Menus must remain reachable while fullscreen and must also keep 4:3.
     await page.keyboard.press('Control+m',{delay:140});await phase('difficulty');
     assert(await page.locator('#menu-options button').first().isVisible());await ratio();
-    await page.locator('#menu-options button').first().click();await phase('ready');
-    await tapScreen();await phase('playing');
+    await page.locator('#menu-options button').first().click();await phase('playing');
     await page.locator('#fullscreen').click();
     await page.evaluate(()=>document.getElementById('arcade').requestFullscreen=undefined);
     await page.locator('#fullscreen').click();await page.waitForTimeout(150);await ratio();

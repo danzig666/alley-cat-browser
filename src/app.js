@@ -2,13 +2,34 @@ const canvas=document.querySelector('#game');
 const context=canvas.getContext('2d',{alpha:false});
 const image=context.createImageData(320,200);
 const $=id=>document.getElementById(id);
-let started=false, lastPhase='', raf=0;
+let started=false, raf=0;
+const cats=[['Kitten','Easy','KeyK'],['House Cat','Normal','KeyH'],['Tomcat','Hard','KeyT'],['Alley Cat','Expert','KeyA']];
+let chosenCat=null,menuInputPhase='',menuView='';
+function resetMenuFlow(){chosenCat=null;menuInputPhase='';menuView='';}
+function chooseCat(key){
+  if(chosenCat||!['title','difficulty'].includes(game.phase))return;
+  chosenCat=key;speaker.enable().catch(()=>{});focusGame();updateUI();
+}
+function advanceMenus(){
+  if(game.suspendedAt)return;
+  const phase=game.phase;
+  if(phase==='playing'){chosenCat=null;menuInputPhase='';return;}
+  if(phase===menuInputPhase)return;
+  let key=null;
+  if(phase==='title'&&chosenCat)key='Enter';
+  if(phase==='difficulty'&&chosenCat)key=chosenCat;
+  if(phase==='keyboard')key='KeyN';
+  // Wait until the original routine has captured its key counter. Sending
+  // Enter before this point would be swallowed by its initialization.
+  if(phase==='ready'&&execution.frames.some(frame=>frame.name==='sub_1d1c7'&&frame.parked===1))key='Enter';
+  if(key){menuInputPhase=phase;tap(key);}
+}
 function focusGame() {canvas.focus({preventScroll:true});}
 function chord(code) {
   setKey('ControlLeft',true); setKey(code,true);
   setTimeout(()=>{setKey(code,false);setKey('ControlLeft',false);},140);
 }
-const phaseInfo={title:['TITLE SCREEN','Press Enter to continue.'],keyboard:['CHOOSE YOUR CONTROLS','Choose keyboard controls to begin.'],difficulty:['CHOOSE YOUR DIFFICULTY','How adventurous are you feeling?'],ready:['READY TO ROAM','Press Enter to start.'],playing:['IN THE ALLEY','Arrows / WASD · Space jump · Q/E diagonal jump · F action'],entering:['ENTERING THE WINDOW','A new adventure awaits.'],paused:['PAWS MODE','Press any key to resume.'],booting:['STARTING',''],error:['GAME STOPPED','Restart to try again.'],ended:['SESSION ENDED','Restart to play again.']};
+const phaseInfo={title:['CHOOSE YOUR CAT','Choose a cat on the game screen to start.'],keyboard:['STARTING','Getting the keyboard and touch controls ready.'],difficulty:['CHOOSE YOUR CAT','Choose a cat on the game screen to start.'],ready:['READY TO ROAM','Heading into the alley…'],playing:['IN THE ALLEY','Arrows / WASD · Space jump · Q/E diagonal jump · F action'],entering:['ENTERING THE WINDOW','A new adventure awaits.'],paused:['PAWS MODE','Resume when you’re ready.'],booting:['STARTING',''],error:['GAME STOPPED','Restart to try again.'],ended:['SESSION ENDED','Restart to play again.']};
 function updateUI() {
   const phase=game.phase;
   updateSaveButtons();
@@ -16,7 +37,7 @@ function updateUI() {
   $('hint').textContent=phaseInfo[phase]?.[1] || 'Keyboard & touch controls';
   if(phase==='playing'&&memoryAGet(0x1010,0x55c)>=1){
     $('status').textContent='HANGING';
-    $('hint').textContent='Hanging: Space / Q / E to jump · Down / S to drop · Swipe up or down';
+    $('hint').textContent='Hanging: Left / Right to move · Space / Q / E to jump · Down / S to drop · Swipe in the same directions';
   }
   $('pause').textContent=phase==='paused'?'Resume':'Pause';
   $('sound').textContent=speaker.muted || !memoryAGet(0x1010,0)?'Sound off':'Sound on';
@@ -24,25 +45,35 @@ function updateUI() {
     $('error').hidden=false;
     $('error').textContent='The game stopped: '+game.error.message+'. Press Restart to begin a new session.';
   }
-  if(phase===lastPhase) return;
-  lastPhase=phase;
+  $('screen').dataset.graphics=colorArt.mode;
+  const view=phase+'/'+(chosenCat||'');
+  if(view===menuView)return;
+  menuView=view;
   $('menu').hidden=!['title','keyboard','difficulty','ready','paused'].includes(phase);
-  $('menu-hint').textContent=phaseInfo[phase]?.[1] || '';
-  const options=phase==='difficulty'?[['Kitten · K','KeyK'],['House Cat · H','KeyH'],['Tomcat · T','KeyT'],['Alley Cat · A','KeyA']]:phase==='keyboard'?[['Keyboard · N','KeyN']]:[['Continue · Enter','Enter']];
-  $('menu-options').replaceChildren(...options.map(([label,key])=>{
-    const button=document.createElement('button'); button.textContent=label;
-    button.addEventListener('click',()=>{speaker.enable();tap(key);focusGame();}); return button;
+  $('menu').dataset.phase=phase;
+  $('menu-heading').textContent=phase==='paused'?'Paws for a moment':chosenCat||phase==='ready'||phase==='keyboard'?'Here we go…':'Choose your cat';
+  $('menu-hint').textContent=phase==='paused'?'Your adventure is waiting.':chosenCat||phase==='ready'||phase==='keyboard'?'Heading into the alley…':'Choose a difficulty to start.';
+  const options=phase==='paused'?[['Resume','', 'Enter']]:cats;
+  $('menu-options').replaceChildren(...options.map(([label,level,key])=>{
+    const button=document.createElement('button');button.type='button';button.dataset.cat=key;
+    button.textContent=label;
+    if(level){const detail=document.createElement('span');detail.textContent=level;button.append(detail);}
+    button.disabled=!!chosenCat||phase==='ready'||phase==='keyboard';
+    button.addEventListener('click',()=>{
+      if(game.phase==='paused'){speaker.enable().catch(()=>{});tap('Enter');focusGame();}
+      else chooseCat(key);
+    });return button;
   }));
   sizeFullscreen();
 }
 function frame() {
-  if(started) {game.pump(); present(); updateUI();}
+  if(started) {game.pump();advanceMenus();present();updateUI();}
   raf=requestAnimationFrame(frame);
 }
 function present(){render(context,image);hdArt.update();hdArt.render();}
 $('start').addEventListener('click',()=>{
   try {
-    keyboardBindings.clear();game.reset(); started=true;
+    resetMenuFlow();keyboardBindings.clear();game.reset(); started=true;
     speaker.enable().catch(()=>{$('hint').textContent='Sound unavailable. You can still play.';});
     $('cover').hidden=true;
     for(const id of ['sound','pause','restart']) $(id).disabled=false;
@@ -55,7 +86,7 @@ $('start').addEventListener('click',()=>{
 });
 $('restart').addEventListener('click',()=>{
   if(game.error || !game.iterator || ['title','keyboard','difficulty','ready'].includes(game.phase)) {
-    keyboardBindings.clear();releaseKeys(); game.reset(); $('error').hidden=true;
+    resetMenuFlow();keyboardBindings.clear();releaseKeys(); game.reset(); $('error').hidden=true;
   } else chord('KeyR');
   focusGame();
 });
@@ -66,6 +97,7 @@ $('sound').addEventListener('click',()=>{
   speaker.enable(); focusGame();
 });
 function updateStyleButtons() {
+  $('screen').dataset.graphics=colorArt.mode;
   const color=colorArt.mode==='color',fm=speaker.style==='fm';
   $('graphics').dataset.mode=colorArt.mode;$('graphics').setAttribute('aria-pressed',String(color));
   $('graphics').querySelector('.toggle-value').textContent=color?'Pixel art ⇄ CGA':colorArt.mode==='hd'?'HD → Original CGA':'CGA ⇄ Pixel art';
@@ -160,7 +192,7 @@ async function loadSavedGame(id) {
   try {
     const record=await saveStore.read(id);
     game.restore(record.snapshot);
-    keyboardBindings.clear();swipe=null;swipeActions.clear();started=true;lastPhase='';
+    resetMenuFlow();keyboardBindings.clear();swipe=null;swipeActions.clear();started=true;
     $('cover').hidden=true;$('error').hidden=true;
     for(const button of ['sound','pause','restart'])$(button).disabled=false;
     updateStyleButtons();$('art-badge').innerHTML='<i></i> '+(colorArt.mode==='hd'?'HAND-DRAWN HD':colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
@@ -183,6 +215,9 @@ document.addEventListener('keydown',event=>{
     else if(!$('load-game').disabled)loadSavedGame();return;
   }
   if(!started || event.code==='Tab' || event.metaKey || event.code==='F5' || event.code==='F12') return;
+  if(!event.ctrlKey&&['title','difficulty'].includes(game.phase)&&cats.some(cat=>cat[2]===event.code)){
+    event.preventDefault();if(!event.repeat)chooseCat(event.code);return;
+  }
   if(event.target.closest('select,input')) return;
   if(event.target.closest('button') && (event.code==='Space' || event.code==='Enter')) return;
   if(event.ctrlKey && !['KeyS','KeyR','KeyM','KeyY','Digit9','ControlLeft','ControlRight'].includes(event.code)) return;

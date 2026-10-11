@@ -14,6 +14,13 @@
       <div class="screen" id="screen">
         <canvas id="game" width="320" height="200" tabindex="0" aria-label="Alley Cat. Arrows or WASD to move, Space to jump, Q or E to jump diagonally, Alt or F for action. Swipe to move and jump, tap for action."></canvas>
         <canvas id="hd-game" width="1280" height="800" hidden aria-hidden="true"></canvas>
+        <div class="menu" id="menu" role="dialog" aria-labelledby="menu-heading" hidden>
+          <div class="menu-panel">
+            <h2 id="menu-heading">Choose your cat</h2>
+            <p id="menu-hint">Choose a difficulty to start.</p>
+            <div id="menu-options"></div>
+          </div>
+        </div>
         <div id="cover" class="cover">
           <div class="pixel-cat" aria-hidden="true">/\_/\<br>( o.o )<br> &gt; ^ &lt;</div>
           <h2>Let the mischief begin.</h2>
@@ -46,10 +53,6 @@
       <div class="extra-styles" aria-label="HD presentation options">
         <button id="hd-style" type="button" aria-pressed="false">Hand-drawn HD</button>
         <button id="piano-style" type="button" aria-pressed="false">Piano music + sound</button>
-      </div>
-      <div class="menu" id="menu" hidden>
-        <span id="menu-hint">Press Enter to continue.</span>
-        <div id="menu-options"></div>
       </div>
       <section class="save-controls" aria-label="Saved games">
         <div class="save-buttons"><button id="save-game" disabled>Save · F6</button><button id="load-game" disabled>Load latest · F7</button></div>

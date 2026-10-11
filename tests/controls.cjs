@@ -9,9 +9,7 @@ const {chromium}=require('playwright');
     await page.setContent(fs.readFileSync(path.join(__dirname,'../alley-cat.html'),'utf8'));
     const phase=p=>page.waitForFunction(p=>alleyCat.state().phase===p,p);
     await page.click('#start');await phase('title');
-    await page.keyboard.press('Enter',{delay:120});await phase('difficulty');
-    await page.keyboard.press('k',{delay:120});await phase('ready');
-    await page.keyboard.press('Enter',{delay:120});await phase('playing');await page.waitForTimeout(1700);
+    await page.locator('#menu-options button').first().click();await phase('playing');await page.waitForTimeout(1700);
     await page.keyboard.down('d');await page.waitForTimeout(700);await page.keyboard.up('d');
     await page.waitForFunction(()=>memoryAGet(0x1010,0x571)===0&&alleyCat.state().x>20);
     await page.evaluate(()=>{

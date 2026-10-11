@@ -8,12 +8,13 @@
   <style>:root{color-scheme:dark;--bg:#10121b;--panel:#191c28;--line:#2b2e40;--text:#edf0f7;--muted:#9ca1b6;--cyan:#72e8e4;--pink:#f397ce;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--text)}main{padding:8px;height:100vh;height:100dvh}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:6px;color:var(--text);background:#242738;padding:9px 10px}button:hover{background:#34384d;border-color:#5b627e}button:focus-visible,a:focus-visible,canvas:focus-visible,summary:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}button:disabled{opacity:.4;cursor:default}button:active{transform:translateY(1px)}
 .arcade{display:grid;grid-template-rows:var(--picture-height,60dvh) minmax(0,1fr);gap:8px;height:100%;min-height:0;background:var(--bg)}.arcade.side-layout{grid-template-columns:minmax(0,1fr) var(--sidebar-width,260px);grid-template-rows:minmax(0,1fr)}.playfield{min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;background:#000;border-radius:6px;overflow:hidden}.screen{position:relative;background:#000;width:var(--game-width,100%);height:var(--game-height,auto);aspect-ratio:4/3;flex:none;max-width:100%;max-height:100%}canvas{display:block;width:100%;height:100%;aspect-ratio:4/3;image-rendering:pixelated;background:#000;touch-action:none;user-select:none;-webkit-user-select:none}canvas:focus{outline:none}.sidebar{min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:6px;scrollbar-width:thin}.sidebar>*{margin-top:14px}.sidebar>header{margin-top:0}header{display:flex;align-items:center;justify-content:space-between;gap:8px}.wordmark{font:700 21px monospace;letter-spacing:1px;color:var(--cyan);text-decoration:none}.wordmark span{color:var(--pink)}.wordmark i{display:none}.edition,.eyebrow,.badge,.screen-bar,footer{font:10px monospace;letter-spacing:.4px;color:var(--muted)}.edition{max-width:70px;font-size:9px;text-align:right}.eyebrow{color:var(--pink);margin:0 0 7px}h1{font-size:23px;font-weight:600;letter-spacing:-.6px;margin:0 0 6px}.description{color:var(--muted);font-size:12px;line-height:1.5;margin:0}.badge{display:block;margin-top:10px;font-size:9px}.badge i,.screen-bar i{display:inline-block;background:var(--cyan);width:5px;height:5px;margin-right:5px;border-radius:50%}.screen-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;padding-top:12px;border-top:1px solid var(--line);font-size:9px}.screen-bar>span:first-child{color:var(--text)}
-.toolbar p{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 9px}.tools{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tools button{font-size:11px}.style-controls{display:grid;gap:6px}.style-controls button{text-align:left;padding:9px 10px}.toggle-label{display:block;font:9px monospace;letter-spacing:1px;color:var(--muted);margin-bottom:4px}.toggle-value{display:block;font-size:12px;color:var(--cyan)}.style-controls button[aria-pressed="false"] .toggle-value{color:var(--pink)}.menu{padding:10px;border:1px solid var(--line);border-radius:6px}.menu>span{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}#menu-options{display:flex;gap:6px;flex-wrap:wrap}#menu-options button{font-size:11px;flex:1;white-space:nowrap}
+.toolbar p{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 9px}.tools{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tools button{font-size:11px}.style-controls{display:grid;gap:6px}.style-controls button{text-align:left;padding:9px 10px}.toggle-label{display:block;font:9px monospace;letter-spacing:1px;color:var(--muted);margin-bottom:4px}.toggle-value{display:block;font-size:12px;color:var(--cyan)}.style-controls button[aria-pressed="false"] .toggle-value{color:var(--pink)}
 .save-controls{padding-top:12px;border-top:1px solid var(--line)}.save-buttons{display:grid;grid-template-columns:1fr 1fr;gap:6px}.save-buttons button{font-size:11px;color:var(--cyan)}#save-status{font-size:11px;line-height:1.5;color:var(--muted);margin:8px 0}summary{cursor:pointer;font-size:12px;color:var(--pink);padding:7px 0}#save-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:5px}#save-list button{display:block;width:100%;text-align:left;font-size:11px;line-height:1.6}#save-list small{display:block;color:var(--muted)}
 .cover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse at 50% 35%,#262039,#0d0f18 70%);padding:12px;overflow:auto}.pixel-cat{font:25px/1.25 monospace;white-space:pre;color:var(--pink)}.cover h2{font-size:25px;font-weight:500;margin:18px 0 8px;letter-spacing:-.5px}.cover p{color:var(--muted);font-size:13px;margin:0 0 20px}.primary{background:var(--cyan);color:#101820;border:none;padding:14px 22px;font:600 12px monospace;letter-spacing:.8px}.primary:hover{background:#a0fff9}.primary span{margin-left:20px}.cover small{font-size:10px;color:var(--muted);margin-top:12px}.cover .preview-help{max-width:360px;margin:12px 0 0;padding:10px;border:1px solid #63425e;border-radius:6px;color:var(--pink);line-height:1.5;font-size:11px}#error{position:absolute;inset:0;background:#16131eea;padding:24px;display:flex;justify-content:center;align-items:center;text-align:center;color:var(--pink);font-size:14px;line-height:1.8}
 .guide{border-top:1px solid var(--line);padding-top:14px}.guide h2{font-size:16px;font-weight:500;margin:0 0 8px}.guide p:not(.eyebrow){color:var(--muted);font-size:11px;line-height:1.7;margin:0}.guide dl{display:grid;gap:9px;margin:14px 0 0}.guide dl>div{display:grid;gap:3px}.guide dt{font-size:11px;color:var(--muted)}.guide dd{margin:0;font-size:11px;color:var(--muted)}kbd{display:inline-block;min-width:21px;text-align:center;font:10px monospace;color:var(--text);background:#202331;border:1px solid #35394e;border-bottom-width:2px;padding:2px 5px;border-radius:4px}footer{border-top:1px solid var(--line);padding-top:12px;font-size:9px;line-height:1.7}footer span{display:block}.touch-hint,.gesture-help,.touch-controls{display:none}.touch-hint{color:var(--cyan);font-size:11px;line-height:1.5}.touch-controls{align-items:center;justify-content:space-between;gap:8px;user-select:none}.touch-controls button{touch-action:none}.dpad{display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(2,40px);gap:4px}.dpad button:first-child{grid-column:2}.dpad button:nth-child(2){grid-row:2;grid-column:1}.dpad button:nth-child(3){grid-row:2;grid-column:2}.dpad button:nth-child(4){grid-row:2;grid-column:3}.action{border-color:#63425e;color:var(--pink);padding:15px 12px;font:11px monospace}.action span{display:block;font-size:8px;color:var(--muted);margin-top:6px}
 body.game-expanded{overflow:hidden}.arcade.is-expanded,.arcade:fullscreen{width:100vw;height:100vh;height:100dvh;background:var(--bg);padding:8px}.arcade.is-expanded{position:fixed;inset:0;z-index:100}
 #hd-game{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:auto;pointer-events:none;image-rendering:auto}.extra-styles{display:grid;grid-template-columns:1fr 1fr;gap:6px}.extra-styles button{font-size:11px}.extra-styles button[aria-pressed="true"]{color:var(--cyan);border-color:var(--cyan)}
+.screen{container-type:inline-size}.menu{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:center;margin:0;border:0;border-radius:0;padding:clamp(8px,2cqw,24px);background:linear-gradient(transparent 15%,#070b18ed 65%);text-align:center}.menu-panel{width:min(96%,480px);max-height:100%;overflow:auto;padding:4px}.menu h2{font:700 clamp(16px,4cqw,28px) monospace;color:var(--cyan);margin:0 0 6px}.menu p{font-size:clamp(11px,2.5cqw,14px);color:var(--text);margin:0 0 12px}#menu-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#menu-options button{min-height:44px;font:700 clamp(12px,3cqw,17px) monospace;white-space:normal;padding:clamp(8px,2cqw,14px);color:var(--pink);background:#191c28;border-color:#626680}#menu-options button span{display:block;font:400 clamp(10px,2.4cqw,12px) system-ui;margin-top:4px;color:var(--muted)}#menu-options button:hover{background:#34384d;border-color:var(--cyan)}.menu:not([data-phase="title"]){align-items:center;background:#10121b}.menu[data-phase="paused"] #menu-options{grid-template-columns:1fr}.screen[data-graphics="color"] .menu h2{color:#f4c660}.screen[data-graphics="hd"] .menu{background:linear-gradient(transparent 15%,#332516ed 65%)}.screen[data-graphics="hd"] .menu:not([data-phase="title"]){background:linear-gradient(145deg,#fbefd1,#ceb486)}.screen[data-graphics="hd"] .menu h2{font-family:Georgia,serif;color:#fff0ce}.screen[data-graphics="hd"] .menu:not([data-phase="title"]) h2,.screen[data-graphics="hd"] .menu:not([data-phase="title"]) p{color:#463525}.screen[data-graphics="hd"] #menu-options button{font-family:Georgia,serif;color:#463525;background:#f5e5c4;border-color:#9e774b}.screen[data-graphics="hd"] #menu-options button span{color:#705639}.screen[data-graphics="hd"] #menu-options button:hover{background:#fff4dc;border-color:#463525}
 @media(pointer:coarse){.touch-hint,.gesture-help{display:block}.touch-controls{display:flex}}
 @media(max-width:600px){.sidebar{padding:12px}.sidebar .intro{display:none}.cover h2{font-size:18px;margin-top:10px}.cover p{font-size:11px;margin-bottom:12px}.pixel-cat{font-size:18px}.primary{padding:11px 16px;font-size:11px}.cover small{margin-top:8px}.style-controls{grid-template-columns:1fr 1fr}.toggle-value{font-size:11px}.tools{grid-template-columns:repeat(4,1fr)}.guide dl{grid-template-columns:1fr 1fr;gap:10px}}
 </style>
@@ -25,6 +26,13 @@ body.game-expanded{overflow:hidden}.arcade.is-expanded,.arcade:fullscreen{width:
       <div class="screen" id="screen">
         <canvas id="game" width="320" height="200" tabindex="0" aria-label="Alley Cat. Arrows or WASD to move, Space to jump, Q or E to jump diagonally, Alt or F for action. Swipe to move and jump, tap for action."></canvas>
         <canvas id="hd-game" width="1280" height="800" hidden aria-hidden="true"></canvas>
+        <div class="menu" id="menu" role="dialog" aria-labelledby="menu-heading" hidden>
+          <div class="menu-panel">
+            <h2 id="menu-heading">Choose your cat</h2>
+            <p id="menu-hint">Choose a difficulty to start.</p>
+            <div id="menu-options"></div>
+          </div>
+        </div>
         <div id="cover" class="cover">
           <div class="pixel-cat" aria-hidden="true">/\_/\<br>( o.o )<br> &gt; ^ &lt;</div>
           <h2>Let the mischief begin.</h2>
@@ -57,10 +65,6 @@ body.game-expanded{overflow:hidden}.arcade.is-expanded,.arcade:fullscreen{width:
       <div class="extra-styles" aria-label="HD presentation options">
         <button id="hd-style" type="button" aria-pressed="false">Hand-drawn HD</button>
         <button id="piano-style" type="button" aria-pressed="false">Piano music + sound</button>
-      </div>
-      <div class="menu" id="menu" hidden>
-        <span id="menu-hint">Press Enter to continue.</span>
-        <div id="menu-options"></div>
       </div>
       <section class="save-controls" aria-label="Saved games">
         <div class="save-buttons"><button id="save-game" disabled>Save · F6</button><button id="load-game" disabled>Load latest · F7</button></div>
@@ -1022,7 +1026,7 @@ const hdArt={
       const shade=ctx.createLinearGradient(0,0,320,200);shade.addColorStop(0,'#fbefd1');shade.addColorStop(1,'#ceb486');ctx.fillStyle=shade;ctx.fillRect(0,0,320,200);
       ctx.fillStyle='#463525';ctx.textAlign='center';ctx.font='italic 19px Georgia';
       ctx.fillText(game.phase==='paused'?'Paws for a moment…':game.phase==='difficulty'?'Choose your adventure':'The alley is yours',160,67);
-      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':'Use the controls panel to continue',160,94);return;
+      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':game.phase==='paused'?'Resume when you’re ready.':'Choose a cat on the screen to begin',160,94);return;
     }
     if(this.dirty)this.buildBackground();ctx.drawImage(this.background,0,0,320,200);
     const visibleIds=new Set();
@@ -1042,8 +1046,8 @@ const hdArt={
     this.renderedRecords=records.sort((a,b)=>a.id-b.id);
     for(const record of this.renderedRecords){
       const hanging=record.kind==='player'&&record.source===0x09da;
-      const alpha=game.phase==='playing'&&!hanging?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
-      const x=record.fromX+(record.x-record.fromX)*alpha,y=record.fromY+(record.y-record.fromY)*alpha;
+      const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
+      const x=record.fromX+(record.x-record.fromX)*alpha,y=hanging?record.y:record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
       const gait=Math.floor(game.time()/85)%4;
       let illustration;
@@ -3414,6 +3418,9 @@ yield* sub_18375();
 frame.pc=2097210;
 case 2097210:;
 case 0x17e8f:
+    if(memoryAGet16(r.ds,4)===0 && memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x699)===0 && memoryAGet(r.ds,0x698)!==0) {
+      pc=0x18053;continue dispatch;
+    }
     if (memoryAGet(r.ds, 0x0699) != 0x00)
         { pc = 0x17e97; continue dispatch; }
 case 0x17e96:
@@ -3836,7 +3843,10 @@ case 2097256:;
         return;
     r.ax = memoryAGet16(r.ds, 0x0563);
     memoryASet16(r.ds, 0x055f, r.ax);
-    memoryASet16(r.ds, 0x0565, 0x0b03);
+
+    if(memoryAGet16(r.ds,4)===0 && memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x571)===0) {
+      memoryASet16(r.ds,0x055d,0x09da);memoryASet16(r.ds,0x0565,0x0e03);
+    }else memoryASet16(r.ds,0x0565,0x0b03);
     frame.pc=2097257;
 case 2097257:
 yield* sub_18375();
@@ -5383,7 +5393,10 @@ case 0x18a42:
     memoryASet(r.ds, 0x057b, r.dl);
     r.dl += 0x32;
     memoryASet(r.ds, 0x057c, r.dl);
-    memoryASet16(r.ds, 0x0579, memoryAGet16(r.ds, 0x0579) & 0xfff8);
+
+    if(!(memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x571)===0 &&
+         memoryAGet(r.ds,0x698)!==0 && memoryAGet(r.ds,0x699)===0))
+      memoryASet16(r.ds,0x0579,memoryAGet16(r.ds,0x0579)&0xfff8);
     memoryASet(r.ds, 0x055c, 0x01);
     flags.carry = true;
 
@@ -21580,13 +21593,34 @@ const canvas=document.querySelector('#game');
 const context=canvas.getContext('2d',{alpha:false});
 const image=context.createImageData(320,200);
 const $=id=>document.getElementById(id);
-let started=false, lastPhase='', raf=0;
+let started=false, raf=0;
+const cats=[['Kitten','Easy','KeyK'],['House Cat','Normal','KeyH'],['Tomcat','Hard','KeyT'],['Alley Cat','Expert','KeyA']];
+let chosenCat=null,menuInputPhase='',menuView='';
+function resetMenuFlow(){chosenCat=null;menuInputPhase='';menuView='';}
+function chooseCat(key){
+  if(chosenCat||!['title','difficulty'].includes(game.phase))return;
+  chosenCat=key;speaker.enable().catch(()=>{});focusGame();updateUI();
+}
+function advanceMenus(){
+  if(game.suspendedAt)return;
+  const phase=game.phase;
+  if(phase==='playing'){chosenCat=null;menuInputPhase='';return;}
+  if(phase===menuInputPhase)return;
+  let key=null;
+  if(phase==='title'&&chosenCat)key='Enter';
+  if(phase==='difficulty'&&chosenCat)key=chosenCat;
+  if(phase==='keyboard')key='KeyN';
+  // Wait until the original routine has captured its key counter. Sending
+  // Enter before this point would be swallowed by its initialization.
+  if(phase==='ready'&&execution.frames.some(frame=>frame.name==='sub_1d1c7'&&frame.parked===1))key='Enter';
+  if(key){menuInputPhase=phase;tap(key);}
+}
 function focusGame() {canvas.focus({preventScroll:true});}
 function chord(code) {
   setKey('ControlLeft',true); setKey(code,true);
   setTimeout(()=>{setKey(code,false);setKey('ControlLeft',false);},140);
 }
-const phaseInfo={title:['TITLE SCREEN','Press Enter to continue.'],keyboard:['CHOOSE YOUR CONTROLS','Choose keyboard controls to begin.'],difficulty:['CHOOSE YOUR DIFFICULTY','How adventurous are you feeling?'],ready:['READY TO ROAM','Press Enter to start.'],playing:['IN THE ALLEY','Arrows / WASD · Space jump · Q/E diagonal jump · F action'],entering:['ENTERING THE WINDOW','A new adventure awaits.'],paused:['PAWS MODE','Press any key to resume.'],booting:['STARTING',''],error:['GAME STOPPED','Restart to try again.'],ended:['SESSION ENDED','Restart to play again.']};
+const phaseInfo={title:['CHOOSE YOUR CAT','Choose a cat on the game screen to start.'],keyboard:['STARTING','Getting the keyboard and touch controls ready.'],difficulty:['CHOOSE YOUR CAT','Choose a cat on the game screen to start.'],ready:['READY TO ROAM','Heading into the alley…'],playing:['IN THE ALLEY','Arrows / WASD · Space jump · Q/E diagonal jump · F action'],entering:['ENTERING THE WINDOW','A new adventure awaits.'],paused:['PAWS MODE','Resume when you’re ready.'],booting:['STARTING',''],error:['GAME STOPPED','Restart to try again.'],ended:['SESSION ENDED','Restart to play again.']};
 function updateUI() {
   const phase=game.phase;
   updateSaveButtons();
@@ -21594,7 +21628,7 @@ function updateUI() {
   $('hint').textContent=phaseInfo[phase]?.[1] || 'Keyboard & touch controls';
   if(phase==='playing'&&memoryAGet(0x1010,0x55c)>=1){
     $('status').textContent='HANGING';
-    $('hint').textContent='Hanging: Space / Q / E to jump · Down / S to drop · Swipe up or down';
+    $('hint').textContent='Hanging: Left / Right to move · Space / Q / E to jump · Down / S to drop · Swipe in the same directions';
   }
   $('pause').textContent=phase==='paused'?'Resume':'Pause';
   $('sound').textContent=speaker.muted || !memoryAGet(0x1010,0)?'Sound off':'Sound on';
@@ -21602,25 +21636,35 @@ function updateUI() {
     $('error').hidden=false;
     $('error').textContent='The game stopped: '+game.error.message+'. Press Restart to begin a new session.';
   }
-  if(phase===lastPhase) return;
-  lastPhase=phase;
+  $('screen').dataset.graphics=colorArt.mode;
+  const view=phase+'/'+(chosenCat||'');
+  if(view===menuView)return;
+  menuView=view;
   $('menu').hidden=!['title','keyboard','difficulty','ready','paused'].includes(phase);
-  $('menu-hint').textContent=phaseInfo[phase]?.[1] || '';
-  const options=phase==='difficulty'?[['Kitten · K','KeyK'],['House Cat · H','KeyH'],['Tomcat · T','KeyT'],['Alley Cat · A','KeyA']]:phase==='keyboard'?[['Keyboard · N','KeyN']]:[['Continue · Enter','Enter']];
-  $('menu-options').replaceChildren(...options.map(([label,key])=>{
-    const button=document.createElement('button'); button.textContent=label;
-    button.addEventListener('click',()=>{speaker.enable();tap(key);focusGame();}); return button;
+  $('menu').dataset.phase=phase;
+  $('menu-heading').textContent=phase==='paused'?'Paws for a moment':chosenCat||phase==='ready'||phase==='keyboard'?'Here we go…':'Choose your cat';
+  $('menu-hint').textContent=phase==='paused'?'Your adventure is waiting.':chosenCat||phase==='ready'||phase==='keyboard'?'Heading into the alley…':'Choose a difficulty to start.';
+  const options=phase==='paused'?[['Resume','', 'Enter']]:cats;
+  $('menu-options').replaceChildren(...options.map(([label,level,key])=>{
+    const button=document.createElement('button');button.type='button';button.dataset.cat=key;
+    button.textContent=label;
+    if(level){const detail=document.createElement('span');detail.textContent=level;button.append(detail);}
+    button.disabled=!!chosenCat||phase==='ready'||phase==='keyboard';
+    button.addEventListener('click',()=>{
+      if(game.phase==='paused'){speaker.enable().catch(()=>{});tap('Enter');focusGame();}
+      else chooseCat(key);
+    });return button;
   }));
   sizeFullscreen();
 }
 function frame() {
-  if(started) {game.pump(); present(); updateUI();}
+  if(started) {game.pump();advanceMenus();present();updateUI();}
   raf=requestAnimationFrame(frame);
 }
 function present(){render(context,image);hdArt.update();hdArt.render();}
 $('start').addEventListener('click',()=>{
   try {
-    keyboardBindings.clear();game.reset(); started=true;
+    resetMenuFlow();keyboardBindings.clear();game.reset(); started=true;
     speaker.enable().catch(()=>{$('hint').textContent='Sound unavailable. You can still play.';});
     $('cover').hidden=true;
     for(const id of ['sound','pause','restart']) $(id).disabled=false;
@@ -21633,7 +21677,7 @@ $('start').addEventListener('click',()=>{
 });
 $('restart').addEventListener('click',()=>{
   if(game.error || !game.iterator || ['title','keyboard','difficulty','ready'].includes(game.phase)) {
-    keyboardBindings.clear();releaseKeys(); game.reset(); $('error').hidden=true;
+    resetMenuFlow();keyboardBindings.clear();releaseKeys(); game.reset(); $('error').hidden=true;
   } else chord('KeyR');
   focusGame();
 });
@@ -21644,6 +21688,7 @@ $('sound').addEventListener('click',()=>{
   speaker.enable(); focusGame();
 });
 function updateStyleButtons() {
+  $('screen').dataset.graphics=colorArt.mode;
   const color=colorArt.mode==='color',fm=speaker.style==='fm';
   $('graphics').dataset.mode=colorArt.mode;$('graphics').setAttribute('aria-pressed',String(color));
   $('graphics').querySelector('.toggle-value').textContent=color?'Pixel art ⇄ CGA':colorArt.mode==='hd'?'HD → Original CGA':'CGA ⇄ Pixel art';
@@ -21738,7 +21783,7 @@ async function loadSavedGame(id) {
   try {
     const record=await saveStore.read(id);
     game.restore(record.snapshot);
-    keyboardBindings.clear();swipe=null;swipeActions.clear();started=true;lastPhase='';
+    resetMenuFlow();keyboardBindings.clear();swipe=null;swipeActions.clear();started=true;
     $('cover').hidden=true;$('error').hidden=true;
     for(const button of ['sound','pause','restart'])$(button).disabled=false;
     updateStyleButtons();$('art-badge').innerHTML='<i></i> '+(colorArt.mode==='hd'?'HAND-DRAWN HD':colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
@@ -21761,6 +21806,9 @@ document.addEventListener('keydown',event=>{
     else if(!$('load-game').disabled)loadSavedGame();return;
   }
   if(!started || event.code==='Tab' || event.metaKey || event.code==='F5' || event.code==='F12') return;
+  if(!event.ctrlKey&&['title','difficulty'].includes(game.phase)&&cats.some(cat=>cat[2]===event.code)){
+    event.preventDefault();if(!event.repeat)chooseCat(event.code);return;
+  }
   if(event.target.closest('select,input')) return;
   if(event.target.closest('button') && (event.code==='Space' || event.code==='Enter')) return;
   if(event.ctrlKey && !['KeyS','KeyR','KeyM','KeyY','Digit9','ControlLeft','ControlRight'].includes(event.code)) return;

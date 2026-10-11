@@ -2292,6 +2292,9 @@ yield* sub_18375();
 frame.pc=2097210;
 case 2097210:;
 case 0x17e8f:
+    if(memoryAGet16(r.ds,4)===0 && memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x699)===0 && memoryAGet(r.ds,0x698)!==0) {
+      pc=0x18053;continue dispatch;
+    }
     if (memoryAGet(r.ds, 0x0699) != 0x00)
         { pc = 0x17e97; continue dispatch; }
 case 0x17e96:
@@ -2714,7 +2717,10 @@ case 2097256:;
         return;
     r.ax = memoryAGet16(r.ds, 0x0563);
     memoryASet16(r.ds, 0x055f, r.ax);
-    memoryASet16(r.ds, 0x0565, 0x0b03);
+
+    if(memoryAGet16(r.ds,4)===0 && memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x571)===0) {
+      memoryASet16(r.ds,0x055d,0x09da);memoryASet16(r.ds,0x0565,0x0e03);
+    }else memoryASet16(r.ds,0x0565,0x0b03);
     frame.pc=2097257;
 case 2097257:
 yield* sub_18375();
@@ -4261,7 +4267,10 @@ case 0x18a42:
     memoryASet(r.ds, 0x057b, r.dl);
     r.dl += 0x32;
     memoryASet(r.ds, 0x057c, r.dl);
-    memoryASet16(r.ds, 0x0579, memoryAGet16(r.ds, 0x0579) & 0xfff8);
+
+    if(!(memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x571)===0 &&
+         memoryAGet(r.ds,0x698)!==0 && memoryAGet(r.ds,0x699)===0))
+      memoryASet16(r.ds,0x0579,memoryAGet16(r.ds,0x0579)&0xfff8);
     memoryASet(r.ds, 0x055c, 0x01);
     flags.carry = true;
 

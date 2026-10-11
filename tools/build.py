@@ -72,6 +72,26 @@ for match in re.finditer(r'void (\w+)\(\)\s*\{', source):
             body = body.replace('case 0x'+label+':', 'case 0x'+label+': game.phase="playing";')
     if name == 'sub_1d0a0':
         body = 'game.phase="paused";\n' + body + '\ngame.phase="playing";'
+    if name == 'sub_17b15':
+        # Allow horizontal movement from the hanging state. Reuse the native
+        # support test, walking step, gravity and enemy collisions; keep the
+        # original hanging mask while traversing a supported clothesline.
+        # Add no yields/calls, preserving all serialized continuation IDs.
+        body = body.replace('case 0x17e8f:', '''case 0x17e8f:
+    if(memoryAGet16(r.ds,4)===0 && memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x699)===0 && memoryAGet(r.ds,0x698)!==0) {
+      pc=0x18053;continue dispatch;
+    }''')
+        body = body.replace('memoryASet16(r.ds, 0x0565, 0x0b03);', '''
+    if(memoryAGet16(r.ds,4)===0 && memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x571)===0) {
+      memoryASet16(r.ds,0x055d,0x09da);memoryASet16(r.ds,0x0565,0x0e03);
+    }else memoryASet16(r.ds,0x0565,0x0b03);''')
+    if name == 'sub_189dd':
+        # Landing aligns the cat to an 8px cell. Rechecking support while
+        # already hanging must not undo each 6px horizontal movement step.
+        body = body.replace('memoryASet16(r.ds, 0x0579, memoryAGet16(r.ds, 0x0579) & 0xfff8);', '''
+    if(!(memoryAGet(r.ds,0x55c)!==0 && memoryAGet(r.ds,0x571)===0 &&
+         memoryAGet(r.ds,0x698)!==0 && memoryAGet(r.ds,0x699)===0))
+      memoryASet16(r.ds,0x0579,memoryAGet16(r.ds,0x0579)&0xfff8);''')
     # Keep a separate color layer through the original save/restore blitters.
     # The game RAM and the CGA raster remain the authoritative simulation.
     if name in ('sub_19f65', 'sub_19efc', 'sub_1a569'):

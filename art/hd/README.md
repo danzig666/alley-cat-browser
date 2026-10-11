@@ -15,6 +15,8 @@ not new collision maps or level layouts.
 `src/hd-art.js` renders at 1280×800 inside the same corrected 4:3 display.
 Character movement is interpolated visually between native updates. The animation atlas supplies four cat walk, four terrier run and four goldfish swim frames, plus jumping, falling, swimming and swatting cat poses. Actor identity comes from recovered drawing routines and native entity slots, including the fish copy blitter and the custom broom drawing loop. Native
 RAM, input, sprite masks, collision geometry and animation timing are unchanged.
+Horizontal clothesline movement is a separate browser control improvement;
+the HD renderer keeps its original hanging mask and smooths movement along it.
 The animation sheet has uneven rows and columns, so extraction uses its
 transparent gutters rather than an equal grid. The static donor sheet uses
 individual source rectangles so the mouse has no neighboring cat paw and the

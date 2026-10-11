@@ -45,9 +45,8 @@ async function main() {
       matching++;total++;
     }
     console.log('PASS: '+matching+' original title pixels match the DOS reference exactly.');
-    await press('Enter'); await phase('difficulty');
-    await press('k'); await phase('ready');
-    await press('Enter'); await phase('playing');
+    assert.equal(await page.locator('#screen #menu-options button').count(),4);
+    await page.locator('#menu-options button').first().click();await phase('playing');
     await page.waitForTimeout(800);
     assert.equal((await state()).difficulty,0);
     const before=await state(); console.log('INITIAL PLAY',before);
@@ -70,9 +69,8 @@ async function main() {
     assert.equal((await state()).lives,3,'Original Ctrl-R must restore three lives');
     for(const [key,level] of [['h',1],['t',2],['a',3]]) {
       await press('Control+m'); await phase('difficulty');
-      await press(key); await phase('ready');
+      await press(key);await phase('playing');
       assert.equal((await state()).difficulty,level);
-      await press('Enter'); await phase('playing');
     }
     assert.equal((await state()).error,null);
     assert.deepEqual(errors,[]);

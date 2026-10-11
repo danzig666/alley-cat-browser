@@ -297,7 +297,7 @@ const hdArt={
       const shade=ctx.createLinearGradient(0,0,320,200);shade.addColorStop(0,'#fbefd1');shade.addColorStop(1,'#ceb486');ctx.fillStyle=shade;ctx.fillRect(0,0,320,200);
       ctx.fillStyle='#463525';ctx.textAlign='center';ctx.font='italic 19px Georgia';
       ctx.fillText(game.phase==='paused'?'Paws for a moment…':game.phase==='difficulty'?'Choose your adventure':'The alley is yours',160,67);
-      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':'Use the controls panel to continue',160,94);return;
+      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':game.phase==='paused'?'Resume when you’re ready.':'Choose a cat on the screen to begin',160,94);return;
     }
     if(this.dirty)this.buildBackground();ctx.drawImage(this.background,0,0,320,200);
     const visibleIds=new Set();
@@ -317,8 +317,8 @@ const hdArt={
     this.renderedRecords=records.sort((a,b)=>a.id-b.id);
     for(const record of this.renderedRecords){
       const hanging=record.kind==='player'&&record.source===0x09da;
-      const alpha=game.phase==='playing'&&!hanging?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
-      const x=record.fromX+(record.x-record.fromX)*alpha,y=record.fromY+(record.y-record.fromY)*alpha;
+      const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
+      const x=record.fromX+(record.x-record.fromX)*alpha,y=hanging?record.y:record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
       const gait=Math.floor(game.time()/85)%4;
       let illustration;

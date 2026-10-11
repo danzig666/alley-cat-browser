@@ -16,8 +16,7 @@ const root=path.join(__dirname,'..');
     await page.goto('http://127.0.0.1:'+server.address().port);await page.click(process.env.HD?'#hd-style':'#graphics');await page.click('#start');
     const press=key=>page.keyboard.press(key,{delay:120});
     const phase=p=>page.waitForFunction(p=>alleyCat.state().phase===p,p);
-    await phase('title'); await press('Enter'); await phase('difficulty'); await press('k'); await phase('ready');
-    await press('Enter'); await phase('playing'); await page.waitForTimeout(500);
+    await phase('title');await page.locator('#menu-options button').first().click();await phase('playing'); await page.waitForTimeout(500);
     await page.evaluate(()=>{
       window.roomBaseline={ram:ram.slice(),words:words.slice(),flags:{...flags}};
       window.savedMemorySet16=memoryASet16;

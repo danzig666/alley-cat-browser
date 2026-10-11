@@ -32,10 +32,10 @@ Switching either setting does not restart the game or change its position,
 score, difficulty, timer, collision data, or input. The logical raster stays
 320×200 and the displayed aspect stays 4:3.
 
-Tap the original title to continue, tap a difficulty button, then tap the
-game to start. Keyboard mode is selected automatically; the joystick question
-is skipped. Desktop players can press **Enter**, choose **K**, **H**, **T**, or
-**A**, then press **Enter** again.
+Press **Play Alley Cat**, then choose **Kitten**, **House Cat**, **Tomcat**, or
+**Alley Cat** using the buttons on the game screen. Play begins automatically,
+with no Enter/Continue confirmation. **K/H/T/A** also selects a cat from this
+screen. Keyboard and touch controls are selected automatically.
 
 | Control | Action |
 | --- | --- |
@@ -45,6 +45,7 @@ is skipped. Desktop players can press **Enter**, choose **K**, **H**, **T**, or
 | F | Special action during play |
 | Space | Jump; hold left or right first to jump sideways |
 | Q / E | Jump left / right with a single key |
+| Left / Right or A / D while hanging | Move along a supported clothesline section |
 | Down / S while hanging | Let go of the clothesline and drop |
 | Z / C | Down-left / down-right, useful underwater |
 | Home / Page Up | Original diagonal jump keys |
@@ -172,11 +173,16 @@ native coordinates. The player's separately drawn upper/lower pieces compose
 one HD cat. Visual interpolation smooths movement between native updates;
 the game's clocks, input, collisions and occupied CGA pixels remain unchanged.
 HD title, difficulty and pause screens use the same browser menu controls.
-On a clothesline the original cat hangs by its paws: use Space, Q/E or an
-upward swipe to jump, and Down/S or a downward swipe to drop. HD shows this
+On a clothesline the cat hangs by its paws: use Left/Right, A/D or a horizontal
+swipe to move along a supported section, Space/Q/E or an upward swipe to jump,
+and Down/S or a downward swipe to drop. Jump across gaps. HD shows this
 pose at the original line height and the controls panel explains it. Animation
 frames are cut at the atlas's actual transparent gutters; jumps at the screen
 edge crop the illustration instead of compressing it into the visible rows.
+The browser allows horizontal movement from the hanging state through the
+original walking step, support checks, gravity and enemy collisions. Rechecking
+support preserves the current horizontal position instead of repeating the
+native landing alignment. This control improvement applies to all graphics modes.
 
 `src/piano.js` uses real Yamaha C5 recordings from **Salamander Grand Piano**,
 by **Alexander Holm**, licensed under
@@ -219,6 +225,7 @@ node tests/mobile.cjs
 node tests/presentation.cjs
 node tests/controls.cjs
 node tests/layout.cjs
+node tests/menu.cjs
 node tests/saves.cjs
 node tests/hd.cjs
 node tests/player-animation.cjs
