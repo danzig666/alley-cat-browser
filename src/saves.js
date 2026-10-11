@@ -54,6 +54,7 @@ function validateSave(state) {
   if(state.art.cheeseMask!==null && (!(state.art.cheeseMask instanceof Uint8Array) || state.art.cheeseMask.length!==64000))bad();
   if(state.art.cheeseTable!==null && (!(state.art.cheeseTable instanceof Uint32Array) || state.art.cheeseTable.length!==256000))bad();
   if(state.hd){
+    if(state.hd.pauseAt!==undefined && state.hd.pauseAt!==null && (!Number.isFinite(state.hd.pauseAt)||state.hd.pauseAt<0))bad();
     if(!(state.hd.provenance instanceof Uint32Array)||state.hd.provenance.length%2||!Array.isArray(state.hd.entities)||state.hd.entities.length>10000||
        !(state.hd.backgroundPixels instanceof Uint8Array)||state.hd.backgroundPixels.length!==64000||!(state.hd.staticMetal instanceof Uint8Array)||state.hd.staticMetal.length!==64000)bad();
     let last=-1;for(let i=0;i<state.hd.provenance.length;i+=2){const index=state.hd.provenance[i];if(index<=last||index>=hdArt.provenance.length)bad();last=index;}

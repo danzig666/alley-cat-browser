@@ -3,8 +3,8 @@
 const hdArt={
   ready:false,canvas:null,ctx:null,scene:-1,background:null,backgroundPixels:new Uint8Array(64000),
   staticMetal:new Uint8Array(64000),provenance:new Uint32Array(0x100000*4),
-  entities:new Map(),recent:[],nextId:1,images:{},sprites:[],props:[],furniture:[],details:[],materials:{},patterns:{},dirty:true,playerMotion:null,
-  reset(){this.provenance.fill(0);this.entities.clear();this.recent=[];this.nextId=1;this.scene=-1;this.dirty=true;this.playerMotion=null;},
+  entities:new Map(),recent:[],nextId:1,images:{},sprites:[],props:[],furniture:[],details:[],materials:{},patterns:{},dirty:true,playerMotion:null,pauseAt:null,
+  reset(){this.provenance.fill(0);this.entities.clear();this.recent=[];this.nextId=1;this.scene=-1;this.dirty=true;this.playerMotion=null;this.pauseAt=null;},
   async load(){
     for(const [name,uri] of Object.entries(HD_ART_ASSETS)){
       const image=new Image();image.src=uri;await image.decode();this.images[name]=image;
@@ -153,11 +153,17 @@ const hdArt={
   },
   update(){
     if(!this.ready)return;
+    if(game.phase==='paused'){if(this.pauseAt===null)this.pauseAt=game.time();}else this.pauseAt=null;
+    // Native wipes and the loss-of-life card are temporary screens. Running
+    // alley material detection on their nearly empty raster is both wrong and
+    // expensive; keep the outgoing room until native initialization completes.
+    if(execution.frames.some(frame=>frame.name==='sub_18e20'))return;
     const scene=game.phase==='title'?8:Math.min(7,memoryAGet16(0x1010,4));
     if(scene!==this.scene){this.scene=scene;this.backgroundPixels.fill(scene===0?2:scene===2?1:2);this.staticMetal.fill(0);this.dirty=true;}
     const metal=new Set(ART_PALETTES.metal.map(rgb=>artPack(rgb)>>>0));
+    const paused=pausedPictureSaved();
     for(let y=0;y<200;y++)for(let x=0;x<320;x++){
-      const pixel=y*320+x,addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2),slot=addr*4+(x&3);
+      const pixel=y*320+x,addr=pictureAddress(x,y,paused),slot=addr*4+(x&3);
       if(this.entities.get(this.provenance[slot])?.room===scene)continue;
       const index=(ram[addr]>>(6-(x&3)*2))&3,isMetal=Number(metal.has(colorArt.layer[slot]));
       if(this.backgroundPixels[pixel]!==index||this.staticMetal[pixel]!==isMetal){this.backgroundPixels[pixel]=index;this.staticMetal[pixel]=isMetal;this.dirty=true;}
@@ -323,16 +329,20 @@ const hdArt={
     const visible=colorArt.mode==='hd';this.canvas.hidden=!visible;if(!visible)return;
     const ctx=this.ctx;ctx.setTransform(4,0,0,4,0,0);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
     if(game.phase==='title'){ctx.drawImage(this.scenes[8],0,0,320,200);return;}
-    if(['keyboard','difficulty','ready','paused'].includes(game.phase)){
+    if(execution.frames.some(frame=>frame.name==='sub_18e20')){
+      this.renderTransition(ctx);return;
+    }
+    if(['keyboard','difficulty','ready'].includes(game.phase)){
       const shade=ctx.createLinearGradient(0,0,320,200);shade.addColorStop(0,'#fbefd1');shade.addColorStop(1,'#ceb486');ctx.fillStyle=shade;ctx.fillRect(0,0,320,200);
       ctx.fillStyle='#463525';ctx.textAlign='center';ctx.font='italic 19px Georgia';
-      ctx.fillText(game.phase==='paused'?'Paws for a moment…':game.phase==='difficulty'?'Choose your adventure':'The alley is yours',160,67);
-      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':game.phase==='paused'?'Resume when you’re ready.':'Choose a cat on the screen to begin',160,94);return;
+      ctx.fillText(game.phase==='difficulty'?'Choose your adventure':'The alley is yours',160,67);
+      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':'Choose a cat on the screen to begin',160,94);return;
     }
     if(this.dirty)this.buildBackground();ctx.drawImage(this.background,0,0,320,200);
     const visibleIds=new Set();
+    const paused=pausedPictureSaved(),now=this.pauseAt??game.time();
     for(let y=0;y<200;y++)for(let x=0;x<320;x++){
-      const addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2);const id=this.provenance[addr*4+(x&3)];if(id)visibleIds.add(id);
+      const addr=pictureAddress(x,y,paused);const id=this.provenance[addr*4+(x&3)];if(id)visibleIds.add(id);
     }
     const records=Array.from(visibleIds,id=>this.entities.get(id)).filter(record=>record?.room===this.scene).map(record=>{
       // Older browser saves used the walking illustration for these states.
@@ -357,10 +367,10 @@ const hdArt={
     this.renderedRecords=records.filter(record=>record.kind!=='blackcat'||cats.get(record.actor)===record).sort((a,b)=>a.id-b.id);
     for(const record of this.renderedRecords){
       const hanging=record.kind==='player'&&record.source===0x09da;
-      const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
+      const alpha=['playing','paused'].includes(game.phase)?Math.max(0,Math.min(1,(now-record.at)/55)):1;
       const x=record.fromX+(record.x-record.fromX)*alpha,y=hanging?record.y:record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
-      const gait=Math.floor(game.time()/85)%4;
+      const gait=Math.floor(now/85)%4;
       let illustration;
       if(record.kind==='blackcat')illustration=record.pose==='peek'?this.binCat:this.lineCats[record.pose==='idle'?0:gait];
       else if(['player','cat'].includes(record.kind)) {
@@ -372,7 +382,7 @@ const hdArt={
       else if(record.kind==='object')illustration=this.props[4];
       else if(record.kind==='impact') {
         ctx.save();ctx.strokeStyle='#f0d699';ctx.lineWidth=.75;
-        for(let i=0;i<7;i++){const a=i*Math.PI*2/7+game.time()/300;ctx.beginPath();ctx.moveTo(x+record.width/2+Math.cos(a)*record.width*.2,y+record.height/2+Math.sin(a)*record.height*.2);ctx.lineTo(x+record.width/2+Math.cos(a)*record.width*.45,y+record.height/2+Math.sin(a)*record.height*.45);ctx.stroke();}ctx.restore();continue;
+        for(let i=0;i<7;i++){const a=i*Math.PI*2/7+now/300;ctx.beginPath();ctx.moveTo(x+record.width/2+Math.cos(a)*record.width*.2,y+record.height/2+Math.sin(a)*record.height*.2);ctx.lineTo(x+record.width/2+Math.cos(a)*record.width*.45,y+record.height/2+Math.sin(a)*record.height*.45);ctx.stroke();}ctx.restore();continue;
       }
       if(record.kind==='bubble'){
         ctx.strokeStyle='#d9f3ec';ctx.lineWidth=.45;ctx.beginPath();ctx.ellipse(x+record.width/2,y+record.height/2,record.width/2,record.height/2,0,0,Math.PI*2);ctx.stroke();continue;
@@ -384,13 +394,30 @@ const hdArt={
       ctx.restore();
     }
   },
+  renderTransition(ctx){
+    const room=memoryAGet16(0x1010,4),scene=Math.max(0,Math.min(7,room===0?memoryAGet16(0x1010,6):this.scene)),failed=memoryAGet(0x1010,0x552)!==0;
+    ctx.drawImage(this.scenes[scene],0,0,320,200);
+    const card=execution.frames.some(frame=>frame.name==='sub_18fa6'),progress=Math.min(1,memoryAGet16(0x1010,0x1835)/320);
+    ctx.save();ctx.globalAlpha=card ? .8 : .8*progress;
+    ctx.fillStyle=scene===2?'#102f3d':'#211c2d';ctx.fillRect(0,0,320,200);ctx.restore();
+    if(room!==0 || !card)return; // Follow the native wipe without rebuilding materials.
+    // Reuse the complete hand-drawn cat, rather than treating the native
+    // flickering death silhouette as brick, graffiti or a tiny walking mask.
+    const cat=this.animation[failed?5:0],ratio=cat.width/cat.height;
+    const width=Math.min(64,40*ratio*6/5),height=width*5/6/ratio;
+    ctx.drawImage(cat,160-width/2,84-height/2,width,height);
+    ctx.textAlign='center';ctx.fillStyle='#fff0ce';ctx.font='italic 17px Georgia';
+    ctx.fillText(failed&&scene===2?'Out of breath…':'Back to the alley',160,126);
+    ctx.font='10px Georgia';ctx.fillText('Lives remaining: '+memoryAGet(0x1010,0x1f80),160,145);
+  },
   capture(){return {provenance:sparseLayer(this.provenance),entities:Array.from(this.entities.values(),record=>({...record})),nextId:this.nextId,
-    scene:this.scene,backgroundPixels:this.backgroundPixels.slice(),staticMetal:this.staticMetal.slice(),playerMotion:this.playerMotion?{...this.playerMotion}:null};},
+    scene:this.scene,backgroundPixels:this.backgroundPixels.slice(),staticMetal:this.staticMetal.slice(),playerMotion:this.playerMotion?{...this.playerMotion}:null,pauseAt:this.pauseAt};},
   restore(state){
     this.reset();if(!state)return;
     for(let i=0;i<state.provenance.length;i+=2)this.provenance[state.provenance[i]]=state.provenance[i+1];
     this.entities=new Map(state.entities.map(record=>[record.id,{...record}]));this.recent=Array.from(this.entities.values()).slice(-100);this.nextId=state.nextId;this.scene=state.scene;
     this.backgroundPixels.set(state.backgroundPixels);this.staticMetal.set(state.staticMetal);this.dirty=true;
     this.playerMotion=state.playerMotion?{...state.playerMotion}:null;
+    this.pauseAt=state.pauseAt??(game.phase==='paused'?game.time():null);
   }
 };

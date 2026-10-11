@@ -177,13 +177,14 @@ const colorArt = {
     return artPack(colors[shade]);
   },
   render(context,image) {
+    const paused=pausedPictureSaved();
     const menu=['difficulty','ready','keyboard'].includes(game.phase);
     const title=game.phase==='title',room=memoryAGet16(0x1010,4);
     const scene=title?8:Math.min(7,room),table=this.tables[scene];
     // BIOS menu lettering uses color 2. It must contrast with color 0.
     const menuColors=[ART_PALETTES.ink[0],ART_PALETTES.glass[3],ART_PALETTES.red[3],ART_PALETTES.cream[4]].map(artPack);
     for(let y=0;y<200;y++)for(let x=0;x<320;x++) {
-      const addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2),bit=x&3;
+      const addr=pictureAddress(x,y,paused),bit=x&3;
       const index=(ram[addr]>>(6-bit*2))&3,at=(y*320+x)*4;
       let color=this.layer[addr*4+bit];
       if(menu)color=menuColors[index];

@@ -17,6 +17,7 @@ body.game-expanded{overflow:hidden}.arcade.is-expanded,.arcade:fullscreen{width:
 .screen{container-type:inline-size}.menu{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:center;margin:0;border:0;border-radius:0;padding:clamp(8px,2cqw,24px);background:linear-gradient(transparent 15%,#070b18ed 65%);text-align:center}.menu-panel{width:min(96%,480px);max-height:100%;overflow:auto;padding:4px}.menu h2{font:700 clamp(16px,4cqw,28px) monospace;color:var(--cyan);margin:0 0 6px}.menu p{font-size:clamp(11px,2.5cqw,14px);color:var(--text);margin:0 0 12px}#menu-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#menu-options button{min-height:44px;font:700 clamp(12px,3cqw,17px) monospace;white-space:normal;padding:clamp(8px,2cqw,14px);color:var(--pink);background:#191c28;border-color:#626680}#menu-options button span{display:block;font:400 clamp(10px,2.4cqw,12px) system-ui;margin-top:4px;color:var(--muted)}#menu-options button:hover{background:#34384d;border-color:var(--cyan)}.menu:not([data-phase="title"]){align-items:center;background:#10121b}.menu[data-phase="paused"] #menu-options{grid-template-columns:1fr}.screen[data-graphics="color"] .menu h2{color:#f4c660}.screen[data-graphics="hd"] .menu{background:linear-gradient(transparent 15%,#332516ed 65%)}.screen[data-graphics="hd"] .menu:not([data-phase="title"]){background:linear-gradient(145deg,#fbefd1,#ceb486)}.screen[data-graphics="hd"] .menu h2{font-family:Georgia,serif;color:#fff0ce}.screen[data-graphics="hd"] .menu:not([data-phase="title"]) h2,.screen[data-graphics="hd"] .menu:not([data-phase="title"]) p{color:#463525}.screen[data-graphics="hd"] #menu-options button{font-family:Georgia,serif;color:#463525;background:#f5e5c4;border-color:#9e774b}.screen[data-graphics="hd"] #menu-options button span{color:#705639}.screen[data-graphics="hd"] #menu-options button:hover{background:#fff4dc;border-color:#463525}
 @media(pointer:coarse){.touch-hint,.gesture-help{display:block}.touch-controls{display:flex}}
 @media(max-width:600px){.sidebar{padding:12px}.sidebar .intro{display:none}.cover h2{font-size:18px;margin-top:10px}.cover p{font-size:11px;margin-bottom:12px}.pixel-cat{font-size:18px}.primary{padding:11px 16px;font-size:11px}.cover small{margin-top:8px}.style-controls{grid-template-columns:1fr 1fr}.toggle-value{font-size:11px}.tools{grid-template-columns:repeat(4,1fr)}.guide dl{grid-template-columns:1fr 1fr;gap:10px}}
+.screen[data-graphics] .menu[data-phase="paused"]{align-items:flex-start;justify-content:flex-end;background:transparent;pointer-events:none;padding:8px}.menu[data-phase="paused"] .menu-panel{width:auto;padding:0;overflow:visible;pointer-events:auto}.menu[data-phase="paused"] h2,.menu[data-phase="paused"] p{display:none}.menu[data-phase="paused"] #menu-options button{min-height:44px;padding:8px 16px}
 </style>
 </head>
 <body>
@@ -360,13 +361,25 @@ function pixel(x,y,color) {
   colorArt.layer[addr*4+(x&3)]=0;
 }
 const RGBI = ['000000','0000aa','00aa00','00aaaa','aa0000','aa00aa','aa5500','aaaaaa','555555','5555ff','55ff55','55ffff','ff5555','ff55ff','ffff55','ffffff'].map(h=>[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]);
+function pausedPictureSaved() {
+  const frame=execution.frames.find(frame=>frame.name==='sub_1d0a0');
+  // The original pause saves these two text rows before printing PAWS.
+  // Read that backup for presentation, including pauses loaded from old saves.
+  return game.phase==='paused' && !!frame && (frame.pc===0x1d0ea || frame.pc>=2097158);
+}
+function pictureAddress(x,y,paused) {
+  if(paused && y>=88 && y<104 && x>=40 && x<296)
+    return 0x1010e+(y-88)*64+(x>>2)-10;
+  return 0xb8000+(y&1)*8192+(y>>1)*80+(x>>2);
+}
 function render(context,image) {
   if(colorArt.mode==='color') {colorArt.render(context,image);return;}
   const p=game.paletteRegister, bright=(p&16)?8:0;
   const indices=[p&15,(p&32)?3:2,(p&32)?5:4,(p&32)?7:6];
   const colors=indices.map((c,i)=>RGBI[i?c+bright:c]);
+  const paused=pausedPictureSaved();
   for(let y=0;y<200;y++) for(let x=0;x<320;x++) {
-    const byte=ram[0xb8000+(y&1)*8192+(y>>1)*80+(x>>2)];
+    const byte=ram[pictureAddress(x,y,paused)];
     const color=colors[(byte>>(6-((x&3)<<1)))&3], at=(y*320+x)*4;
     image.data[at]=color[0]; image.data[at+1]=color[1]; image.data[at+2]=color[2]; image.data[at+3]=255;
   }
@@ -603,13 +616,14 @@ const colorArt = {
     return artPack(colors[shade]);
   },
   render(context,image) {
+    const paused=pausedPictureSaved();
     const menu=['difficulty','ready','keyboard'].includes(game.phase);
     const title=game.phase==='title',room=memoryAGet16(0x1010,4);
     const scene=title?8:Math.min(7,room),table=this.tables[scene];
     // BIOS menu lettering uses color 2. It must contrast with color 0.
     const menuColors=[ART_PALETTES.ink[0],ART_PALETTES.glass[3],ART_PALETTES.red[3],ART_PALETTES.cream[4]].map(artPack);
     for(let y=0;y<200;y++)for(let x=0;x<320;x++) {
-      const addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2),bit=x&3;
+      const addr=pictureAddress(x,y,paused),bit=x&3;
       const index=(ram[addr]>>(6-bit*2))&3,at=(y*320+x)*4;
       let color=this.layer[addr*4+bit];
       if(menu)color=menuColors[index];
@@ -734,8 +748,8 @@ window.alleyCat.art=colorArt;
 const hdArt={
   ready:false,canvas:null,ctx:null,scene:-1,background:null,backgroundPixels:new Uint8Array(64000),
   staticMetal:new Uint8Array(64000),provenance:new Uint32Array(0x100000*4),
-  entities:new Map(),recent:[],nextId:1,images:{},sprites:[],props:[],furniture:[],details:[],materials:{},patterns:{},dirty:true,playerMotion:null,
-  reset(){this.provenance.fill(0);this.entities.clear();this.recent=[];this.nextId=1;this.scene=-1;this.dirty=true;this.playerMotion=null;},
+  entities:new Map(),recent:[],nextId:1,images:{},sprites:[],props:[],furniture:[],details:[],materials:{},patterns:{},dirty:true,playerMotion:null,pauseAt:null,
+  reset(){this.provenance.fill(0);this.entities.clear();this.recent=[];this.nextId=1;this.scene=-1;this.dirty=true;this.playerMotion=null;this.pauseAt=null;},
   async load(){
     for(const [name,uri] of Object.entries(HD_ART_ASSETS)){
       const image=new Image();image.src=uri;await image.decode();this.images[name]=image;
@@ -884,11 +898,17 @@ const hdArt={
   },
   update(){
     if(!this.ready)return;
+    if(game.phase==='paused'){if(this.pauseAt===null)this.pauseAt=game.time();}else this.pauseAt=null;
+    // Native wipes and the loss-of-life card are temporary screens. Running
+    // alley material detection on their nearly empty raster is both wrong and
+    // expensive; keep the outgoing room until native initialization completes.
+    if(execution.frames.some(frame=>frame.name==='sub_18e20'))return;
     const scene=game.phase==='title'?8:Math.min(7,memoryAGet16(0x1010,4));
     if(scene!==this.scene){this.scene=scene;this.backgroundPixels.fill(scene===0?2:scene===2?1:2);this.staticMetal.fill(0);this.dirty=true;}
     const metal=new Set(ART_PALETTES.metal.map(rgb=>artPack(rgb)>>>0));
+    const paused=pausedPictureSaved();
     for(let y=0;y<200;y++)for(let x=0;x<320;x++){
-      const pixel=y*320+x,addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2),slot=addr*4+(x&3);
+      const pixel=y*320+x,addr=pictureAddress(x,y,paused),slot=addr*4+(x&3);
       if(this.entities.get(this.provenance[slot])?.room===scene)continue;
       const index=(ram[addr]>>(6-(x&3)*2))&3,isMetal=Number(metal.has(colorArt.layer[slot]));
       if(this.backgroundPixels[pixel]!==index||this.staticMetal[pixel]!==isMetal){this.backgroundPixels[pixel]=index;this.staticMetal[pixel]=isMetal;this.dirty=true;}
@@ -1054,16 +1074,20 @@ const hdArt={
     const visible=colorArt.mode==='hd';this.canvas.hidden=!visible;if(!visible)return;
     const ctx=this.ctx;ctx.setTransform(4,0,0,4,0,0);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
     if(game.phase==='title'){ctx.drawImage(this.scenes[8],0,0,320,200);return;}
-    if(['keyboard','difficulty','ready','paused'].includes(game.phase)){
+    if(execution.frames.some(frame=>frame.name==='sub_18e20')){
+      this.renderTransition(ctx);return;
+    }
+    if(['keyboard','difficulty','ready'].includes(game.phase)){
       const shade=ctx.createLinearGradient(0,0,320,200);shade.addColorStop(0,'#fbefd1');shade.addColorStop(1,'#ceb486');ctx.fillStyle=shade;ctx.fillRect(0,0,320,200);
       ctx.fillStyle='#463525';ctx.textAlign='center';ctx.font='italic 19px Georgia';
-      ctx.fillText(game.phase==='paused'?'Paws for a moment…':game.phase==='difficulty'?'Choose your adventure':'The alley is yours',160,67);
-      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':game.phase==='paused'?'Resume when you’re ready.':'Choose a cat on the screen to begin',160,94);return;
+      ctx.fillText(game.phase==='difficulty'?'Choose your adventure':'The alley is yours',160,67);
+      ctx.font='10px Georgia';ctx.fillText(game.phase==='difficulty'?'Kitten · House Cat · Tomcat · Alley Cat':'Choose a cat on the screen to begin',160,94);return;
     }
     if(this.dirty)this.buildBackground();ctx.drawImage(this.background,0,0,320,200);
     const visibleIds=new Set();
+    const paused=pausedPictureSaved(),now=this.pauseAt??game.time();
     for(let y=0;y<200;y++)for(let x=0;x<320;x++){
-      const addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2);const id=this.provenance[addr*4+(x&3)];if(id)visibleIds.add(id);
+      const addr=pictureAddress(x,y,paused);const id=this.provenance[addr*4+(x&3)];if(id)visibleIds.add(id);
     }
     const records=Array.from(visibleIds,id=>this.entities.get(id)).filter(record=>record?.room===this.scene).map(record=>{
       // Older browser saves used the walking illustration for these states.
@@ -1088,10 +1112,10 @@ const hdArt={
     this.renderedRecords=records.filter(record=>record.kind!=='blackcat'||cats.get(record.actor)===record).sort((a,b)=>a.id-b.id);
     for(const record of this.renderedRecords){
       const hanging=record.kind==='player'&&record.source===0x09da;
-      const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
+      const alpha=['playing','paused'].includes(game.phase)?Math.max(0,Math.min(1,(now-record.at)/55)):1;
       const x=record.fromX+(record.x-record.fromX)*alpha,y=hanging?record.y:record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
-      const gait=Math.floor(game.time()/85)%4;
+      const gait=Math.floor(now/85)%4;
       let illustration;
       if(record.kind==='blackcat')illustration=record.pose==='peek'?this.binCat:this.lineCats[record.pose==='idle'?0:gait];
       else if(['player','cat'].includes(record.kind)) {
@@ -1103,7 +1127,7 @@ const hdArt={
       else if(record.kind==='object')illustration=this.props[4];
       else if(record.kind==='impact') {
         ctx.save();ctx.strokeStyle='#f0d699';ctx.lineWidth=.75;
-        for(let i=0;i<7;i++){const a=i*Math.PI*2/7+game.time()/300;ctx.beginPath();ctx.moveTo(x+record.width/2+Math.cos(a)*record.width*.2,y+record.height/2+Math.sin(a)*record.height*.2);ctx.lineTo(x+record.width/2+Math.cos(a)*record.width*.45,y+record.height/2+Math.sin(a)*record.height*.45);ctx.stroke();}ctx.restore();continue;
+        for(let i=0;i<7;i++){const a=i*Math.PI*2/7+now/300;ctx.beginPath();ctx.moveTo(x+record.width/2+Math.cos(a)*record.width*.2,y+record.height/2+Math.sin(a)*record.height*.2);ctx.lineTo(x+record.width/2+Math.cos(a)*record.width*.45,y+record.height/2+Math.sin(a)*record.height*.45);ctx.stroke();}ctx.restore();continue;
       }
       if(record.kind==='bubble'){
         ctx.strokeStyle='#d9f3ec';ctx.lineWidth=.45;ctx.beginPath();ctx.ellipse(x+record.width/2,y+record.height/2,record.width/2,record.height/2,0,0,Math.PI*2);ctx.stroke();continue;
@@ -1115,14 +1139,31 @@ const hdArt={
       ctx.restore();
     }
   },
+  renderTransition(ctx){
+    const room=memoryAGet16(0x1010,4),scene=Math.max(0,Math.min(7,room===0?memoryAGet16(0x1010,6):this.scene)),failed=memoryAGet(0x1010,0x552)!==0;
+    ctx.drawImage(this.scenes[scene],0,0,320,200);
+    const card=execution.frames.some(frame=>frame.name==='sub_18fa6'),progress=Math.min(1,memoryAGet16(0x1010,0x1835)/320);
+    ctx.save();ctx.globalAlpha=card ? .8 : .8*progress;
+    ctx.fillStyle=scene===2?'#102f3d':'#211c2d';ctx.fillRect(0,0,320,200);ctx.restore();
+    if(room!==0 || !card)return; // Follow the native wipe without rebuilding materials.
+    // Reuse the complete hand-drawn cat, rather than treating the native
+    // flickering death silhouette as brick, graffiti or a tiny walking mask.
+    const cat=this.animation[failed?5:0],ratio=cat.width/cat.height;
+    const width=Math.min(64,40*ratio*6/5),height=width*5/6/ratio;
+    ctx.drawImage(cat,160-width/2,84-height/2,width,height);
+    ctx.textAlign='center';ctx.fillStyle='#fff0ce';ctx.font='italic 17px Georgia';
+    ctx.fillText(failed&&scene===2?'Out of breath…':'Back to the alley',160,126);
+    ctx.font='10px Georgia';ctx.fillText('Lives remaining: '+memoryAGet(0x1010,0x1f80),160,145);
+  },
   capture(){return {provenance:sparseLayer(this.provenance),entities:Array.from(this.entities.values(),record=>({...record})),nextId:this.nextId,
-    scene:this.scene,backgroundPixels:this.backgroundPixels.slice(),staticMetal:this.staticMetal.slice(),playerMotion:this.playerMotion?{...this.playerMotion}:null};},
+    scene:this.scene,backgroundPixels:this.backgroundPixels.slice(),staticMetal:this.staticMetal.slice(),playerMotion:this.playerMotion?{...this.playerMotion}:null,pauseAt:this.pauseAt};},
   restore(state){
     this.reset();if(!state)return;
     for(let i=0;i<state.provenance.length;i+=2)this.provenance[state.provenance[i]]=state.provenance[i+1];
     this.entities=new Map(state.entities.map(record=>[record.id,{...record}]));this.recent=Array.from(this.entities.values()).slice(-100);this.nextId=state.nextId;this.scene=state.scene;
     this.backgroundPixels.set(state.backgroundPixels);this.staticMetal.set(state.staticMetal);this.dirty=true;
     this.playerMotion=state.playerMotion?{...state.playerMotion}:null;
+    this.pauseAt=state.pauseAt??(game.phase==='paused'?game.time():null);
   }
 };
 
@@ -21534,6 +21575,7 @@ function validateSave(state) {
   if(state.art.cheeseMask!==null && (!(state.art.cheeseMask instanceof Uint8Array) || state.art.cheeseMask.length!==64000))bad();
   if(state.art.cheeseTable!==null && (!(state.art.cheeseTable instanceof Uint32Array) || state.art.cheeseTable.length!==256000))bad();
   if(state.hd){
+    if(state.hd.pauseAt!==undefined && state.hd.pauseAt!==null && (!Number.isFinite(state.hd.pauseAt)||state.hd.pauseAt<0))bad();
     if(!(state.hd.provenance instanceof Uint32Array)||state.hd.provenance.length%2||!Array.isArray(state.hd.entities)||state.hd.entities.length>10000||
        !(state.hd.backgroundPixels instanceof Uint8Array)||state.hd.backgroundPixels.length!==64000||!(state.hd.staticMetal instanceof Uint8Array)||state.hd.staticMetal.length!==64000)bad();
     let last=-1;for(let i=0;i<state.hd.provenance.length;i+=2){const index=state.hd.provenance[i];if(index<=last||index>=hdArt.provenance.length)bad();last=index;}

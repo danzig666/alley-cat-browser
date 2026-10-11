@@ -178,7 +178,13 @@ layouts. The original fence markings become rounded brush strokes at their
 native coordinates. The player's separately drawn upper/lower pieces compose
 one HD cat. Visual interpolation smooths movement between native updates;
 the game's clocks, input, collisions and occupied CGA pixels remain unchanged.
-HD title, difficulty and pause screens use the same browser menu controls.
+HD title and difficulty screens use the browser menu controls. Pausing keeps
+the game picture visible with a small Resume button in the corner; switch
+CGA, pixel art and HD while paused to compare the same frozen scene. HD
+animations stay frozen too, including after loading a paused save.
+HD room transitions use a light illustrated fade and loss-of-life card,
+without rebuilding alley materials from the native death animation. Drowning
+returns to the alley at the original transition timing and loses one life.
 On a clothesline the cat hangs by its paws: use Left/Right, A/D or a horizontal
 swipe to move along a supported section, Space/Q/E or an upward swipe to jump,
 and Down/S or a downward swipe to drop. Jump across gaps. HD shows this
@@ -278,8 +284,8 @@ Verified in Chromium:
   the uploaded executable exactly, including CGA palette values.
 - Title music produces a nonzero Web Audio waveform and original PIT divisor
   events; original sound on/off works.
-- All four difficulty selections, alley movement and jumping, original pause
-  overlay/resume, restart, menu, nine-lives shortcut, and graceful exit.
+- All four difficulty selections, alley movement and jumping, visible frozen
+  pause/resume, restart, menu, nine-lives shortcut, and graceful exit.
 - All seven room modes initialize, render, update, and accept input without
   JavaScript errors.
 - Responsive mobile layout; swipes move and jump, taps perform actions, and
@@ -313,6 +319,9 @@ Verified in Chromium:
 - The complete HD overlay fits the native screen at desktop, phone and foldable sizes.
 - The embedded sampled piano covers music and gameplay effects, produces a nonzero audio waveform offline and
   can switch back to original PC speaker or FM without restarting the game.
+- `node tests/pause-transition.cjs` checks frozen pictures and graphics switching
+  in all three styles, the original pause backup, paused save compatibility,
+  and native fish-room oxygen expiry followed by a prompt return to the alley.
 
 A full winning playthrough and every collision/scoring path have **not** been
 verified. Browser frame scheduling and the PC-speaker output may differ in

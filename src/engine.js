@@ -257,13 +257,25 @@ function pixel(x,y,color) {
   colorArt.layer[addr*4+(x&3)]=0;
 }
 const RGBI = ['000000','0000aa','00aa00','00aaaa','aa0000','aa00aa','aa5500','aaaaaa','555555','5555ff','55ff55','55ffff','ff5555','ff55ff','ffff55','ffffff'].map(h=>[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]);
+function pausedPictureSaved() {
+  const frame=execution.frames.find(frame=>frame.name==='sub_1d0a0');
+  // The original pause saves these two text rows before printing PAWS.
+  // Read that backup for presentation, including pauses loaded from old saves.
+  return game.phase==='paused' && !!frame && (frame.pc===0x1d0ea || frame.pc>=2097158);
+}
+function pictureAddress(x,y,paused) {
+  if(paused && y>=88 && y<104 && x>=40 && x<296)
+    return 0x1010e+(y-88)*64+(x>>2)-10;
+  return 0xb8000+(y&1)*8192+(y>>1)*80+(x>>2);
+}
 function render(context,image) {
   if(colorArt.mode==='color') {colorArt.render(context,image);return;}
   const p=game.paletteRegister, bright=(p&16)?8:0;
   const indices=[p&15,(p&32)?3:2,(p&32)?5:4,(p&32)?7:6];
   const colors=indices.map((c,i)=>RGBI[i?c+bright:c]);
+  const paused=pausedPictureSaved();
   for(let y=0;y<200;y++) for(let x=0;x<320;x++) {
-    const byte=ram[0xb8000+(y&1)*8192+(y>>1)*80+(x>>2)];
+    const byte=ram[pictureAddress(x,y,paused)];
     const color=colors[(byte>>(6-((x&3)<<1)))&3], at=(y*320+x)*4;
     image.data[at]=color[0]; image.data[at+1]=color[1]; image.data[at+2]=color[2]; image.data[at+3]=255;
   }
