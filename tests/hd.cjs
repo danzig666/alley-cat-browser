@@ -48,6 +48,31 @@ const {chromium}=require('playwright');
     await page.click('#hd-style');await page.click('#piano-style');await page.evaluate(async()=>{await alleyCat.load();game.suspend();present();});
     assert.equal(await page.evaluate(()=>colorArt.mode),'hd');assert.equal(await page.evaluate(()=>speaker.style),'piano');assert.deepEqual(await snapshot(),before);
     assert.match(await page.locator('#art-badge').textContent(),/HAND-DRAWN HD/);
+    const encounters=await page.evaluate(async()=>{
+      const saved=game.capture(),realTime=game.time;let clock=saved.elapsed;
+      game.time=()=>clock;game.suspendedAt=0;r.ds=0x1010;
+      const run=generator=>{for(let n=0;n<2000;n++){clock+=8;if(generator.next().done)return;}throw new Error('Encounter did not complete');};
+      const kinds=caller=>Array.from(hdArt.entities.values()).filter(record=>record.actor?.startsWith(caller+':')).map(record=>record.kind);
+      // Force the native bin-cat rise, preserving its stack assertion and AI.
+      memoryASet(0x1010,0x1d59,20);memoryASet16(0x1010,0x1d5c,64);memoryASet(0x1010,0x1d5e,120);
+      memoryASet16(0x1010,0x1d5a,0);memoryASet16(0x1010,0x579,220);memoryASet(0x1010,0x57b,180);
+      for(let n=0;n<8&&!kinds('sub_19446').length;n++)run(sub_19446());const bin=kinds('sub_19446');
+      // Two native clothesline collision branches: the fight and captured cat.
+      const catches=[];
+      for(const falling of [1,0]){
+        memoryASet16(0x1010,0x1f6c,0);memoryASet16(0x1010,0x1f30,100);memoryASet(0x1010,0x1f36,8);
+        memoryASet16(0x1010,0x1f42,345);memoryASet(0x1010,0x1f50,0);
+        memoryASet16(0x1010,0x579,100);memoryASet(0x1010,0x57b,8);memoryASet(0x1010,0x57c,58);
+        memoryASet(0x1010,0x55c,falling);run(sub_19797());catches.push(kinds('sub_19797'));
+      }
+      // Use an actual native collision tune in gameplay, not a synthetic gate.
+      run(sub_1cd51());const notes=piano.notes;r.ax=1000;r.bx=750;run(sub_1cb6b());
+      const effect={notes:piano.notes-notes,square:speaker.gain.gain.value};
+      game.time=realTime;game.restore(saved);game.suspend();present();return {bin,catches,effect};
+    });
+    assert(encounters.bin.length>0&&encounters.bin.every(kind=>kind==='blackcat'),JSON.stringify(encounters));
+    assert(encounters.catches.every(kinds=>kinds.length>0&&kinds.every(kind=>kind==='blackcat')),JSON.stringify(encounters));
+    assert(encounters.effect.notes>0,JSON.stringify(encounters));assert.equal(encounters.effect.square,0);
     // The native two-piece cat becomes one illustration with exactly the union
     // bounds. Intermediate renders move without executing any native instruction.
     const smooth=await page.evaluate(()=>{
@@ -76,6 +101,6 @@ const {chromium}=require('playwright');
     await page.evaluate(()=>game.resume());await page.keyboard.down('ArrowRight');await page.waitForTimeout(300);await page.keyboard.up('ArrowRight');
     assert.equal(await page.evaluate(()=>alleyCat.state().error),null);assert.deepEqual(errors,[]);
     assert(requests.every(request=>request.startsWith('http://127.0.0.1:')||request.startsWith('data:')));
-    console.log('PASS: offline HD title/menu/gameplay, detailed HD canvas, real sampled piano waveform, live styles preserve native state/dimensions, HD save/load, continued controls.');
+    console.log('PASS: native bin-cat rise, both clothesline catches stay cats, gameplay effects use piano with square oscillator silent, offline HD screens, sampled piano waveform, live styles preserve native state/dimensions, HD save/load and continued controls.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

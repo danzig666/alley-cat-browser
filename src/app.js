@@ -68,7 +68,7 @@ function updateStyleButtons() {
   $('graphics').setAttribute('aria-label',color?'Pixel art graphics; switch to CGA':colorArt.mode==='hd'?'HD graphics; switch to original CGA':'CGA graphics; switch to pixel art');
   $('audio-style').dataset.mode=speaker.style;$('audio-style').setAttribute('aria-pressed',String(fm));
   $('audio-style').querySelector('.toggle-value').textContent=fm?'AdLib ⇄ PC speaker':speaker.style==='piano'?'Piano → PC speaker':'PC speaker ⇄ AdLib';
-  $('audio-style').setAttribute('aria-label',fm?'AdLib-style music and effects; switch to original PC speaker':speaker.style==='piano'?'Piano music; switch to original PC speaker':'Original PC speaker music and effects; switch to AdLib-style FM');
+  $('audio-style').setAttribute('aria-label',fm?'AdLib-style music and effects; switch to original PC speaker':speaker.style==='piano'?'Piano music and effects; switch to original PC speaker':'Original PC speaker music and effects; switch to AdLib-style FM');
   $('hd-style').setAttribute('aria-pressed',String(colorArt.mode==='hd'));
   $('piano-style').setAttribute('aria-pressed',String(speaker.style==='piano'));
 }

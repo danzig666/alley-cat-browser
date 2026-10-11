@@ -103,6 +103,7 @@ function copyByte(ds,di,ss,si) {
   memoryASet(ds,di,memoryAGet(ss,si));
   colorArt.layer.copyWithin(dest*4,src*4,src*4+4);
   hdArt.provenance.copyWithin(dest*4,src*4,src*4+4);
+  colorArt.paintCopy(ds,di,ss,si);
 }
 function rep_movsb() {while(r.cx) {copyByte(r.es,r.di,r.ds,r.si); r.si+=flags.direction?-1:1; r.di+=flags.direction?-1:1; r.cx--;}}
 function rep_movsw() {while(r.cx) {copyByte(r.es,r.di,r.ds,r.si);copyByte(r.es,r.di+1,r.ds,r.si+1); r.si+=flags.direction?-2:2; r.di+=flags.direction?-2:2; r.cx--;}}
@@ -160,9 +161,9 @@ const speaker = {
     this.oscillator.frequency.setValueAtTime(Math.min(this.frequency,this.context.sampleRate/2-1),at);
     const active=!this.muted && !game.suspendedAt && (this.gate&3)===3;
     const music=game.phase==='title'||game.phase==='entering';
-    const pianoActive=active&&this.style==='piano'&&music;
+    const pianoActive=active&&this.style==='piano';
     piano.update(pianoActive,this.frequency,this.divisor);
-    this.gain.gain.setValueAtTime(active && (this.style==='speaker'||this.style==='piano'&&!music)?0.075:0,at);
+    this.gain.gain.setValueAtTime(active && this.style==='speaker'?0.075:0,at);
     const fmActive=active&&this.style==='fm',fm=this.fm;
     if(fmActive && (!this.wasActive||this.lastNote!==this.divisor)) {
       const f=Math.max(20,Math.min(this.frequency,this.context.sampleRate/8));

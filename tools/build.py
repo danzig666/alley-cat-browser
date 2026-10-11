@@ -74,7 +74,7 @@ for match in re.finditer(r'void (\w+)\(\)\s*\{', source):
         body = 'game.phase="paused";\n' + body + '\ngame.phase="playing";'
     # Keep a separate color layer through the original save/restore blitters.
     # The game RAM and the CGA raster remain the authoritative simulation.
-    if name in ('sub_19f65', 'sub_19efc'):
+    if name in ('sub_19f65', 'sub_19efc', 'sub_1a569'):
         body = body.replace('memoryASet16(r.ds, r.bp, r.bx);',
             'memoryASet16(r.ds, r.bp, r.bx); colorArt.saveWord(r.ds,r.bp,r.es,r.di);')
         body = body.replace('stosw();',
@@ -141,7 +141,19 @@ for name in ('sub_19f65', 'sub_19efc'):
 translated += '''\nconst original_sub_19fcd=sub_19fcd;
 sub_19fcd=function*() {
   if(!execution.restoring && r.es===0xb800)colorArt.skinStatic(r.ds,r.si,r.cx);
-  yield* original_sub_19fcd();
+  if(!execution.restoring)colorArt.beginBlit('sub_19fcd');
+  else if(colorArt.blits.at(-1)?.name!=='sub_19fcd')colorArt.blits.push({name:'sub_19fcd',kind:null,width:0,height:0,source:0,bytes:new Uint8Array()});
+  try {yield* original_sub_19fcd();}finally {colorArt.endBlit();}
+};\n'''
+translated += '''\nconst original_sub_1a569=sub_1a569;
+sub_1a569=function*() {
+  if(!execution.restoring) {
+    let index=memoryAGet16(r.ds,0x327a),source=memoryAGet16(r.ds,index+12896);
+    if(!source)source=memoryAGet16(r.ds,12896);
+    colorArt.beginBlit('sub_1a569',{caller:'sub_1a569',source,width:16,height:30,es:0xb800,di:memoryAGet16(r.ds,0x3284)});
+  }
+  else if(colorArt.blits.at(-1)?.name!=='sub_1a569')colorArt.blits.push({name:'sub_1a569',kind:null,width:0,height:0,source:0,bytes:new Uint8Array()});
+  try {yield* original_sub_1a569();}finally {colorArt.endBlit();}
 };\n'''
 translated += '''\nconst original_sub_1b1ce=sub_1b1ce;
 sub_1b1ce=function*() {
@@ -162,7 +174,7 @@ for key, file in [('alley','alley-native.png'), ('rooms','rooms-native.png')]:
     if path.exists():
         art_assets[key] = 'data:image/png;base64,' + base64.b64encode(path.read_bytes()).decode()
 assets += 'const COLOR_ART_ASSETS = ' + json.dumps(art_assets) + ';\n'
-hd_assets={key:'data:image/webp;base64,'+base64.b64encode((ROOT/'art/hd'/f'{key}.webp').read_bytes()).decode() for key in ['alley','rooms','sprites','props','furniture','details','materials']}
+hd_assets={key:'data:image/webp;base64,'+base64.b64encode((ROOT/'art/hd'/f'{key}.webp').read_bytes()).decode() for key in ['alley','rooms','sprites','props','furniture','details','materials','animation']}
 assets += 'const HD_ART_ASSETS = ' + json.dumps(hd_assets) + ';\n'
 piano_assets={path.stem:base64.b64encode(path.read_bytes()).decode() for path in sorted((ROOT/'audio/piano').glob('*.mp3'))}
 assets += 'const PIANO_ASSETS = ' + json.dumps(piano_assets) + ';\n'

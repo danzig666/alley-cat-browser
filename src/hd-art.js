@@ -20,6 +20,7 @@ const hdArt={
       // Trim the transparent padding, then fit to the native sprite rectangle.
       this.sprites[i]=this.trim(cell);
     }
+    this.animation=Array.from({length:16},(_,i)=>this.trim(this.crop(this.images.animation,(i%4)/4,Math.floor(i/4)/4,.25,.25)));
     for(let i=0;i<3;i++)this.props[i]=this.trim(this.crop(this.images.props,i/3,0,1/3,.5));
     this.props[3]=this.trim(this.crop(this.images.props,0,.5,.405,.5));
     this.props[4]=this.trim(this.crop(this.images.props,.41,.5,.285,.5));
@@ -56,24 +57,20 @@ const hdArt={
     }
   },
   begin(frame,es,di){
-    if(!this.ready || es!==0xb800 || frame.width>64 || frame.height>80)return;
+    if(!this.ready || !frame.kind || es!==0xb800 || frame.width>64 || frame.height>80)return;
     const x=((di&8191)%80)*4,y=Math.floor((di&8191)/80)*2+(di>=8192?1:0);
     if(x>=320||y>=200||frame.width<=0||frame.height<=0)return;
-    let kind=frame.kind;
+    const kind=frame.kind;
     const room=memoryAGet16(0x1010,4),playerX=memoryAGet16(0x1010,0x579),playerY=memoryAGet(0x1010,0x57b);
-    if(Math.abs(x-playerX)<9 && Math.abs(y-playerY)<7 && frame.width<=32&&frame.height<=32)kind='player';
-    else if(frame.height>30)kind='broom';
-    else if(room===2 && frame.width<=16)kind='fish';
-    else if(room===5&&kind==='mouse')kind='bird';
-    else if(kind==='hazard')kind='blackcat';
     const now=game.time();let previous=null,distance=Infinity;
     for(const record of this.recent){
-      if(record.kind!==kind||record.room!==room||now-record.at>160||now-record.at<0)continue;
+      if(record.kind!==kind||record.room!==room||record.actor!==frame.actor||now-record.at>160||now-record.at<0)continue;
       const delta=Math.hypot(record.x-x,record.y-y);
       if(delta<distance && delta<32){distance=delta;previous=record;}
     }
     const id=this.nextId++;
-    const record={id,kind,room,x,y,width:frame.width,height:frame.height,source:frame.source,at:now,
+    const pose=kind==='blackcat'&&frame.caller==='sub_19797'?'attack':kind==='player'&&room===2?'swim':kind==='player'&&memoryAGet(0x1010,0x571)!==0?(memoryAGet(0x1010,0x571)===0xff?'jump':'fall'):'walk';
+    const record={id,kind,room,x,y,width:frame.width,height:frame.height,source:frame.source,at:now,actor:frame.actor,pose,
       fromX:previous?.x??x,fromY:previous?.y??y,facing:previous&&x!==previous.x?Math.sign(x-previous.x):previous?.facing||1};
     if(kind==='player'){
       const motion=this.playerMotion;
@@ -193,8 +190,10 @@ const hdArt={
           ctx.beginPath();ctx.moveTo(x+.5,y+.5);ctx.lineTo(x+dx+.5,y+dy+.5);ctx.stroke();
         }
       }ctx.restore();
-      for(const bone of this.components((x,y)=>y>=176&&this.backgroundPixels[y*320+x]===0,true))if(bone.width>=12&&bone.height<=8){
-        ctx.save();ctx.beginPath();ctx.rect(bone.x,bone.y,bone.width,bone.height);ctx.clip();ctx.drawImage(this.materials.ground,0,176,320,24);ctx.restore();ctx.drawImage(this.props[4],bone.x,bone.y,bone.width,bone.height);
+      for(const bone of this.components((x,y)=>y>=176&&!this.staticMetal[y*320+x]&&this.backgroundPixels[y*320+x]===0,true))if(bone.width>=6&&bone.width<=32&&bone.height<=20){
+        ctx.save();ctx.beginPath();ctx.rect(bone.x,bone.y,bone.width,bone.height);ctx.clip();ctx.drawImage(this.materials.ground,0,176,320,24);ctx.restore();
+        const art=this.props[4],height=Math.min(bone.height,bone.width*art.height/art.width);
+        ctx.drawImage(art,bone.x,bone.y+bone.height-height,bone.width,height);
       }
     }else if(scene>=1&&scene<=6&&scene!==2){
       const chairs=ART_CHAIRS[scene]||[],tables={1:[[64,143,116,181],[212,143,254,181]],4:[[256,143,296,181]],5:[[128,143,184,181]]}[scene]||[];
@@ -293,13 +292,24 @@ const hdArt={
       const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
       const x=record.fromX+(record.x-record.fromX)*alpha,y=record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
-      // Native six-row player pieces occupy 24 bytes per gait frame.
-      if(record.kind==='player'||record.kind==='cat')sprite=record.y<record.fromY?3:Math.floor(record.source/24)%3;
+      const gait=Math.floor(game.time()/85+record.source/24)%4;
+      let illustration;
+      if(['player','cat','blackcat'].includes(record.kind)) {
+        const pose={jump:4,fall:5,swim:6,attack:7}[record.pose];
+        illustration=this.animation[pose??(record.x!==record.fromX?gait:0)];
+      }else if(record.kind==='dog')illustration=this.animation[8+gait];
+      else if(record.kind==='fish')illustration=this.animation[12+gait];
+      else if(record.kind==='cage')illustration=this.details[1];
+      else if(record.kind==='object')illustration=this.props[4];
+      else if(record.kind==='impact') {
+        ctx.save();ctx.strokeStyle='#f0d699';ctx.lineWidth=.75;
+        for(let i=0;i<7;i++){const a=i*Math.PI*2/7+game.time()/300;ctx.beginPath();ctx.moveTo(x+record.width/2+Math.cos(a)*record.width*.2,y+record.height/2+Math.sin(a)*record.height*.2);ctx.lineTo(x+record.width/2+Math.cos(a)*record.width*.45,y+record.height/2+Math.sin(a)*record.height*.45);ctx.stroke();}ctx.restore();continue;
+      }
       if(record.kind==='bubble'){
         ctx.strokeStyle='#d9f3ec';ctx.lineWidth=.45;ctx.beginPath();ctx.ellipse(x+record.width/2,y+record.height/2,record.width/2,record.height/2,0,0,Math.PI*2);ctx.stroke();continue;
       }
       ctx.save();ctx.translate(x+(record.facing<0?record.width:0),y);ctx.scale(record.facing<0?-1:1,1);
-      ctx.drawImage(record.kind==='blackcat'?this.props[3]:record.kind==='fish'?this.props[5]:record.kind==='bird'?this.details[5]:this.sprites[sprite],0,0,record.width,record.height);ctx.restore();
+      ctx.drawImage(illustration||(record.kind==='bird'?this.details[5]:this.sprites[sprite]),0,0,record.width,record.height);ctx.restore();
     }
   },
   capture(){return {provenance:sparseLayer(this.provenance),entities:Array.from(this.entities.values(),record=>({...record})),nextId:this.nextId,

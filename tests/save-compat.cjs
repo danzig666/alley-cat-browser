@@ -3,7 +3,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const {execFileSync}=require('node:child_process'),{chromium}=require('playwright');
 const root=path.join(__dirname,'..');
 (async()=>{
-  const previous=execFileSync('git',['show','35a13c1:index.html'],{cwd:root,maxBuffer:16*1024*1024});
+  const previous=execFileSync('git',['show',(process.env.PREVIOUS_REV||'35a13c1')+':index.html'],{cwd:root,maxBuffer:16*1024*1024});
   const server=http.createServer((req,res)=>{res.setHeader('Content-Type','text/html');res.end(req.url==='/previous'?previous:fs.readFileSync(path.join(root,'index.html')));}).listen(0,'127.0.0.1');
   await new Promise(resolve=>server.once('listening',resolve));
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});

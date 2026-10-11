@@ -1,7 +1,7 @@
 // Real Yamaha C5 samples (Alexander Holm, Salamander Grand Piano, CC BY 3.0).
 // Only timbre changes: the recovered PIT frequency, gate and melody remain.
 const piano={
-  context:null,buffers:[],loading:null,voices:[],active:false,lastDivisor:0,notes:0,
+  context:null,buffers:[],loading:null,voices:[],tails:[],active:false,lastDivisor:0,notes:0,
   async enable(context,destination){
     if(this.loading)return this.loading;
     this.context=context;this.destination=destination;
@@ -15,13 +15,14 @@ const piano={
   quiet(){
     if(!this.context)return;
     const now=this.context.currentTime;
-    for(const voice of this.voices){voice.gain.gain.cancelScheduledValues(now);voice.gain.gain.setValueAtTime(0,now);try{voice.source.stop(now);}catch{}}
-    this.voices=[];this.active=false;
+    for(const voice of [...this.voices,...this.tails]){voice.gain.gain.cancelScheduledValues(now);voice.gain.gain.setValueAtTime(0,now);try{voice.source.stop(now);}catch{}}
+    this.voices=[];this.tails=[];this.active=false;
   },
   release(){
     if(!this.context)return;
     const now=this.context.currentTime;
-    for(const voice of this.voices){voice.gain.gain.cancelScheduledValues(now);voice.gain.gain.setTargetAtTime(0,now,.025);try{voice.source.stop(now+.2);}catch{}}
+    for(const voice of this.voices){voice.gain.gain.cancelScheduledValues(now);voice.gain.gain.setTargetAtTime(0,now,.025);try{voice.source.stop(now+.2);}catch{}this.tails.push(voice);}
+    while(this.tails.length>24){const voice=this.tails.shift();voice.gain.gain.setValueAtTime(0,now);try{voice.source.stop(now);}catch{}}
     this.voices=[];this.active=false;
   },
   update(active,frequency,divisor){
@@ -34,6 +35,7 @@ const piano={
     source.playbackRate.value=frequency/sample.frequency;
     gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(.42,at+.003);
     source.connect(gain);gain.connect(this.destination);source.start(at);
-    this.voices=[{source,gain}];this.notes++;this.lastDivisor=divisor;this.active=true;
+    const voice={source,gain};source.onended=()=>{this.tails=this.tails.filter(item=>item!==voice);};
+    this.voices=[voice];this.notes++;this.lastDivisor=divisor;this.active=true;
   }
 };

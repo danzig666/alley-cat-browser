@@ -56,6 +56,11 @@ const root=path.join(__dirname,'..');
       assert.equal(result.error,null,`Room ${room} must process input without errors`);
       assert(result.lit>1000,`Room ${room} must draw its graphics`);
       assert(result.frames>before.frames,`Room ${room} must keep updating`);
+      if(process.env.HD) {
+        const actors=await page.evaluate(()=>Array.from(hdArt.entities.values()).filter(record=>record.room===hdArt.scene).map(({kind,caller,actor})=>({kind,caller,actor})));
+        if(room===2)assert(actors.filter(record=>record.kind==='fish').length>=12,'Swimming fish must use HD entities, including the native copy blitter');
+        if(room===1)assert(actors.some(record=>record.kind==='broom'),'The custom broom blitter must receive HD art');
+      }
       await page.locator('#game').screenshot({path:path.join(__dirname,`room-${room}.png`)});
       if(process.env.HD)await page.locator('#hd-game').screenshot({path:path.join(__dirname,`hd-room-${room}.png`)});
       const restored=await page.evaluate(hd=>{

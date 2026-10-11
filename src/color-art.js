@@ -25,20 +25,41 @@ const colorArt = {
     }
     this.ready=true;
   },
-  beginBlit(name) {
-    const width=r.cl*8,height=r.ch,source=r.si;
+  identity(name,source,caller=execution.frames.at(-1)?.name) {
+    // Identify the recovered drawing routine, never the nearest actor or an
+    // address range: the same RAM buffers also hold backgrounds and effects.
+    const kinds={sub_17b15:'bubble',sub_18299:'player',sub_18375:'player',sub_18396:'player',
+      sub_18a7b:'object',sub_192cb:'dog',sub_19446:'blackcat',sub_195ab:'blackcat',sub_19797:'blackcat',
+      sub_1aee1:'impact',sub_1b044:'spider',sub_1b2f2:'mouse',sub_1b570:'bird',sub_1b7db:'cage',
+      sub_1b989:'cage',sub_1bd4d:'player',sub_1c290:'impact',sub_1c3cb:'dog',sub_1d42a:'romance',sub_1a569:'broom'};
+    if(name==='sub_19fcd') {
+      if(caller==='sub_1a8a5')return source<0x3330?'fish':'bubble';
+      if(caller==='sub_192cb')return 'dog';
+      if(caller==='sub_1a6d0'&&source===0x3350)return 'impact';
+      return null; // Ordinary background restores must carry saved provenance.
+    }
+    return kinds[caller]||null;
+  },
+  beginBlit(name,override={}) {
+    const width=override.width??r.cl*8,height=override.height??r.ch,source=override.source??r.si;
     const bytes=ram.slice(((r.ds<<4)+source)&0xfffff,((r.ds<<4)+source+width*height/4)&0xfffff);
     // The same mask frame supplies the outline, body highlights and animation.
-    let kind='cat';
-    if(source===0x064e) kind='bubble';
-    else if(source>=0x1e30 && source<0x1f00) kind='hazard';
-    else if(source>=0x3000 && source<0x4100) kind='mouse';
-    else if(source>=0x4100 && source<0x4d00) kind='dog';
-    else if(source>=0x4d00 && source<0x5600) kind='spider';
-    else if(source>=0x6f30) kind='romance';
-    if(name==='sub_19efc' && source<0x3000) kind='dog';
-    const frame={name,width,height,source,bytes,kind};
-    hdArt.begin(frame,r.es,r.di);this.blits.push(frame);
+    const caller=override.caller??execution.frames.at(-1)?.name,kind=this.identity(name,source,caller);
+    const slot=caller==='sub_1a8a5'?memoryAGet16(r.ds,0x3415):['sub_195ab','sub_19797'].includes(caller)?memoryAGet16(r.ds,0x1f6c):caller==='sub_1b2f2'?memoryAGet16(r.ds,0x3eda):0;
+    const frame={name,width,height,source,bytes,kind,actor:kind==='player'?'player':caller+':'+slot,caller};
+    hdArt.begin(frame,override.es??r.es,override.di??r.di);this.blits.push(frame);
+  },
+  paintCopy(es,di,ds,si) {
+    const frame=this.blits.at(-1);if(es!==0xb800||frame?.name!=='sub_19fcd'||!frame.kind)return;
+    const offset=(si-frame.source)&65535;if(offset>=frame.bytes.length)return;
+    const row=Math.floor(offset/(frame.width/4)),column=(offset%(frame.width/4))*4;
+    for(let i=0;i<4;i++) {
+      const value=(memoryAGet(ds,si)>>(6-i*2))&3,slot=(0xb8000+(di&65535))*4+i;
+      // The copied sprite includes its opaque background; only the actual
+      // animal pixels become an HD entity, so erasure remains native.
+      if(value===0)continue;
+      this.layer[slot]=this.spriteColor(frame,column+i,row,value);hdArt.provenance[slot]=frame.hdId||0;
+    }
   },
   endBlit() {this.blits.pop();},
   captureCheese() {
@@ -116,6 +137,9 @@ const colorArt = {
   paintWord(es,di,ds,si) {
     if(es!==0xb800) return;
     const frame=this.blits[this.blits.length-1];if(!frame)return;
+    if(!frame.kind){
+      const slot=(0xb8000+(di&65535))*4;this.layer.fill(0,slot,slot+8);hdArt.provenance.fill(0,slot,slot+8);return;
+    }
     const offset=(si-frame.source)&65535;
     const row=Math.floor(offset/(frame.width/4)),column=(offset%(frame.width/4))*4;
     for(let b=0;b<2;b++) {

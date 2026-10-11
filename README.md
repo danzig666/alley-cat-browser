@@ -24,9 +24,9 @@ including fullscreen:
   and sound effects**, and keeps the current sound/mute setting.
 - **Hand-drawn HD:** optional watercolor and ink art with smooth visual
   movement. Press again to return to your previous CGA/pixel-art mode.
-- **Real piano music:** optional sampled Yamaha piano playing the original
-  tune. Effects retain the PC speaker. Press again to restore the previous
-  audio mode; the main audio button also returns directly to PC speaker.
+- **Piano music + sound:** optional sampled Yamaha piano playing the original
+  tune. All music and gameplay effects use piano samples. Press again to restore
+  the previous audio mode; the main audio button also returns directly to PC speaker.
 
 Switching either setting does not restart the game or change its position,
 score, difficulty, timer, collision data, or input. The logical raster stays
@@ -179,7 +179,8 @@ The samples come from the [Tone.js audio mirror](https://github.com/Tonejs/audio
 and retain their [author/license notice](audio/piano/README.source.txt).
 Playback follows the recovered music frequencies and gates, preserving the
 original tune. This option adds no new notes or accompaniment. Native sound
-effects remain on the PC-speaker path; all samples are embedded for offline use.
+effects also follow their original frequencies and gates through the piano
+samples. PC speaker and FM remain selectable; all samples are embedded offline.
 
 Generated masters are `art/alley.png` and `art/rooms.png`; compact native
 rasters are embedded into the HTML. The generated previews are art direction
@@ -281,7 +282,9 @@ Verified in Chromium:
   union bounds; intermediate visual frames move while native execution is frozen.
 - Checkpoints from the previously published version load before Play, retain
   graphics/audio settings, and reproduce continued native execution after upgrading.
-- The embedded sampled piano produces a nonzero audio waveform offline and
+- Native bin cats and both clothesline catch animations retain their species; fish and the custom broom blitter render in HD.
+- The complete HD overlay fits the native screen at desktop, phone and foldable sizes.
+- The embedded sampled piano covers music and gameplay effects, produces a nonzero audio waveform offline and
   can switch back to original PC speaker or FM without restarting the game.
 
 A full winning playthrough and every collision/scoring path have **not** been

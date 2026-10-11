@@ -9917,10 +9917,10 @@ case 0x1a5a0:
     r.cx = memoryAGet16(r.ds, 0x3287);
 case 0x1a5a4:
     r.bx = memoryAGet16(r.es, r.di);
-    memoryASet16(r.ds, r.bp, r.bx);
+    memoryASet16(r.ds, r.bp, r.bx); colorArt.saveWord(r.ds,r.bp,r.es,r.di);
     lodsw();
     r.ax |= r.bx;
-    stosw();
+    colorArt.paintWord(r.es,r.di,r.ds,r.si-2); colorArt.writing=true; stosw(); colorArt.writing=false;
     r.bp += 0x0002;
     if (--r.cx)
         { pc = 0x1a5a4; continue dispatch; }
@@ -20274,7 +20274,20 @@ sub_19efc=function*() {
 const original_sub_19fcd=sub_19fcd;
 sub_19fcd=function*() {
   if(!execution.restoring && r.es===0xb800)colorArt.skinStatic(r.ds,r.si,r.cx);
-  yield* original_sub_19fcd();
+  if(!execution.restoring)colorArt.beginBlit('sub_19fcd');
+  else if(colorArt.blits.at(-1)?.name!=='sub_19fcd')colorArt.blits.push({name:'sub_19fcd',kind:null,width:0,height:0,source:0,bytes:new Uint8Array()});
+  try {yield* original_sub_19fcd();}finally {colorArt.endBlit();}
+};
+
+const original_sub_1a569=sub_1a569;
+sub_1a569=function*() {
+  if(!execution.restoring) {
+    let index=memoryAGet16(r.ds,0x327a),source=memoryAGet16(r.ds,index+12896);
+    if(!source)source=memoryAGet16(r.ds,12896);
+    colorArt.beginBlit('sub_1a569',{caller:'sub_1a569',source,width:16,height:30,es:0xb800,di:memoryAGet16(r.ds,0x3284)});
+  }
+  else if(colorArt.blits.at(-1)?.name!=='sub_1a569')colorArt.blits.push({name:'sub_1a569',kind:null,width:0,height:0,source:0,bytes:new Uint8Array()});
+  try {yield* original_sub_1a569();}finally {colorArt.endBlit();}
 };
 
 const original_sub_1b1ce=sub_1b1ce;
