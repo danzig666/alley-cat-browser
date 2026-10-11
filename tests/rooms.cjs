@@ -13,7 +13,7 @@ const root=path.join(__dirname,'..');
   try {
     const page=await browser.newPage();const errors=[];
     page.on('pageerror',e=>errors.push(e.message));
-    await page.goto('http://127.0.0.1:'+server.address().port);await page.click('#graphics');await page.click('#start');
+    await page.goto('http://127.0.0.1:'+server.address().port);await page.click(process.env.HD?'#hd-style':'#graphics');await page.click('#start');
     const press=key=>page.keyboard.press(key,{delay:120});
     const phase=p=>page.waitForFunction(p=>alleyCat.state().phase===p,p);
     await phase('title'); await press('Enter'); await phase('difficulty'); await press('k'); await phase('ready');
@@ -24,6 +24,7 @@ const root=path.join(__dirname,'..');
     });
     const rooms=process.env.ROOMS?process.env.ROOMS.split(',').map(Number):[1,2,3,4,5,6,7];
     for(const room of rooms) {
+      if(process.env.HD)await page.evaluate(()=>colorArt.mode='hd');
       await page.evaluate(room=>{
         ram.set(roomBaseline.ram);words.set(roomBaseline.words);Object.assign(flags,roomBaseline.flags);
         game.error=null;game.phase='playing';game.suspendedAt=0;
@@ -56,23 +57,25 @@ const root=path.join(__dirname,'..');
       assert(result.lit>1000,`Room ${room} must draw its graphics`);
       assert(result.frames>before.frames,`Room ${room} must keep updating`);
       await page.locator('#game').screenshot({path:path.join(__dirname,`room-${room}.png`)});
-      const restored=await page.evaluate(()=>{
-        game.suspend();releaseKeys();render(context,image);
-        const snapshot=game.capture(),pixels=canvas.getContext('2d').getImageData(0,0,320,200).data.slice();
-        game.restore(snapshot);render(context,image);
-        const after=canvas.getContext('2d').getImageData(0,0,320,200).data;
+      if(process.env.HD)await page.locator('#hd-game').screenshot({path:path.join(__dirname,`hd-room-${room}.png`)});
+      const restored=await page.evaluate(hd=>{
+        game.suspend();releaseKeys();const realTime=game.time,elapsed=game.time();game.time=()=>elapsed;present();
+        const target=hd?hdArt.canvas:canvas,ctx=target.getContext('2d');
+        const snapshot=game.capture(),pixels=ctx.getImageData(0,0,target.width,target.height).data.slice();
+        game.restore(snapshot);present();
+        const after=ctx.getImageData(0,0,target.width,target.height).data;
         const same=pixels.every((value,i)=>value===after[i]);
-        let clock=0;const realTime=game.time;game.time=()=>snapshot.elapsed+clock;
+        let clock=0;game.time=()=>snapshot.elapsed+clock;
         const hash=values=>{let value=2166136261;for(const byte of values)value=Math.imul(value^byte,16777619);return value>>>0;};
         const advance=()=>{
           for(let i=0;i<200;i++){clock+=8;game.iterator.next();}
           return {ram:hash(ram),words:Array.from(words),flags:{...flags},steps:game.steps,phase:game.phase,
-            layer:hash(colorArt.layer),divisor:speaker.divisor,gate:speaker.gate,events:speaker.events};
+            layer:hash(colorArt.layer),hdLayer:hash(hdArt.provenance),divisor:speaker.divisor,gate:speaker.gate,events:speaker.events};
         };
         const expected=advance();clock=0;game.restore(snapshot);const actual=advance();
         const identical=JSON.stringify(expected)===JSON.stringify(actual);
         game.time=realTime;game.restore(snapshot);game.resume();return same&&identical;
-      });
+      },Boolean(process.env.HD));
       assert(restored,`Room ${room} must restore its complete pixel art and sprite state`);
       if(room===4) {
         const cheese=await page.evaluate(()=>{

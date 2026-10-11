@@ -32,9 +32,10 @@ function updateUI() {
   sizeFullscreen();
 }
 function frame() {
-  if(started) {game.pump(); render(context,image); updateUI();}
+  if(started) {game.pump(); present(); updateUI();}
   raf=requestAnimationFrame(frame);
 }
+function present(){render(context,image);hdArt.update();hdArt.render();}
 $('start').addEventListener('click',()=>{
   try {
     keyboardBindings.clear();game.reset(); started=true;
@@ -63,21 +64,36 @@ $('sound').addEventListener('click',()=>{
 function updateStyleButtons() {
   const color=colorArt.mode==='color',fm=speaker.style==='fm';
   $('graphics').dataset.mode=colorArt.mode;$('graphics').setAttribute('aria-pressed',String(color));
-  $('graphics').querySelector('.toggle-value').textContent=color?'Pixel art ⇄ CGA':'CGA ⇄ Pixel art';
-  $('graphics').setAttribute('aria-label',color?'Pixel art graphics; switch to CGA':'CGA graphics; switch to pixel art');
+  $('graphics').querySelector('.toggle-value').textContent=color?'Pixel art ⇄ CGA':colorArt.mode==='hd'?'HD → Original CGA':'CGA ⇄ Pixel art';
+  $('graphics').setAttribute('aria-label',color?'Pixel art graphics; switch to CGA':colorArt.mode==='hd'?'HD graphics; switch to original CGA':'CGA graphics; switch to pixel art');
   $('audio-style').dataset.mode=speaker.style;$('audio-style').setAttribute('aria-pressed',String(fm));
-  $('audio-style').querySelector('.toggle-value').textContent=fm?'AdLib ⇄ PC speaker':'PC speaker ⇄ AdLib';
-  $('audio-style').setAttribute('aria-label',fm?'AdLib-style music and effects; switch to original PC speaker':'Original PC speaker music and effects; switch to AdLib-style FM');
+  $('audio-style').querySelector('.toggle-value').textContent=fm?'AdLib ⇄ PC speaker':speaker.style==='piano'?'Piano → PC speaker':'PC speaker ⇄ AdLib';
+  $('audio-style').setAttribute('aria-label',fm?'AdLib-style music and effects; switch to original PC speaker':speaker.style==='piano'?'Piano music; switch to original PC speaker':'Original PC speaker music and effects; switch to AdLib-style FM');
+  $('hd-style').setAttribute('aria-pressed',String(colorArt.mode==='hd'));
+  $('piano-style').setAttribute('aria-pressed',String(speaker.style==='piano'));
 }
 $('graphics').addEventListener('click',()=>{
-  colorArt.mode=colorArt.mode==='color'?'original':'color';
+  colorArt.mode=colorArt.mode==='hd'?'original':colorArt.mode==='color'?'original':'color';
   $('art-badge').innerHTML='<i></i> '+(colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
   updateStyleButtons();
-  if(started)render(context,image);
+  if(started)present();
   focusGame();
 });
 $('audio-style').addEventListener('click',()=>{
-  speaker.setStyle(speaker.style==='fm'?'speaker':'fm');updateStyleButtons();speaker.enable().catch(()=>{});focusGame();
+  speaker.setStyle(speaker.style==='speaker'?'fm':'speaker');updateStyleButtons();speaker.enable().catch(()=>{});focusGame();
+});
+let previousRaster='original',previousSynth='speaker';
+$('hd-style').addEventListener('click',()=>{
+  if(!hdArt.ready)return;
+  if(colorArt.mode==='hd')colorArt.mode=previousRaster;
+  else{previousRaster=colorArt.mode;colorArt.mode='hd';}
+  $('art-badge').innerHTML='<i></i> '+(colorArt.mode==='hd'?'HAND-DRAWN HD':colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
+  updateStyleButtons();if(started)present();focusGame();
+});
+$('piano-style').addEventListener('click',()=>{
+  if(speaker.style==='piano')speaker.setStyle(previousSynth);
+  else{previousSynth=speaker.style;speaker.setStyle('piano');}
+  updateStyleButtons();speaker.enable().catch(()=>{$('hint').textContent='Piano unavailable; choose PC speaker or AdLib.';});focusGame();
 });
 function isFullscreen() {return document.fullscreenElement===$('arcade') || $('arcade').classList.contains('is-expanded');}
 function sizeFullscreen() {
@@ -143,8 +159,8 @@ async function loadSavedGame(id) {
     keyboardBindings.clear();swipe=null;swipeActions.clear();started=true;lastPhase='';
     $('cover').hidden=true;$('error').hidden=true;
     for(const button of ['sound','pause','restart'])$(button).disabled=false;
-    updateStyleButtons();$('art-badge').innerHTML='<i></i> '+(colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
-    render(context,image);updateUI();
+    updateStyleButtons();$('art-badge').innerHTML='<i></i> '+(colorArt.mode==='hd'?'HAND-DRAWN HD':colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
+    present();updateUI();
     speaker.enable().catch(()=>{});
     $('save-status').textContent='Loaded '+new Date(record.created).toLocaleString()+'.';return record.id;
   } catch(error) {$('save-status').textContent=error.message;return null;}
@@ -243,7 +259,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){keyboardBi
 // Mobile viewers can emit a window blur when a button or canvas is focused,
 // even while the page remains visible. Only visibilitychange pauses the game.
 window.addEventListener('blur',()=>{keyboardBindings.clear();releaseKeys();});
-colorArt.load().then(()=>{
+Promise.all([colorArt.load(),hdArt.load()]).then(()=>{
   $('preview-help').hidden=true;$('start').disabled=false;window.alleyCatPageReady=true;
   updateSaveButtons();
 }).catch(error=>{

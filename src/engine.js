@@ -37,6 +37,7 @@ const game = {
     releaseKeys();
     ram.fill(0); words.fill(0);
     colorArt.reset();
+    hdArt.reset();
     ram.set(GAME_BYTES.subarray(512), 0x10000);
     this.steps=0; this.frames=0; this.error=null; this.phase='booting';
     this.origin=performance.now(); this.suspendedTotal=0; this.suspendedAt=0;
@@ -85,6 +86,7 @@ function memoryASet(seg,ofs,value) {
   // Pixel provenance follows video background saves in ordinary game RAM.
   if(colorArt.writing) return;
   colorArt.layer.fill(0,addr*4,addr*4+4);
+  hdArt.provenance.fill(0,addr*4,addr*4+4);
 }
 function memoryASet16(seg,ofs,value) {memoryASet(seg,ofs,value); memoryASet(seg,(ofs+1)&65535,value>>8);}
 function push(value) { r.sp-=2; memoryASet16(r.ss,r.sp,value); }
@@ -100,6 +102,7 @@ function copyByte(ds,di,ss,si) {
   if(dest===src) return;
   memoryASet(ds,di,memoryAGet(ss,si));
   colorArt.layer.copyWithin(dest*4,src*4,src*4+4);
+  hdArt.provenance.copyWithin(dest*4,src*4,src*4+4);
 }
 function rep_movsb() {while(r.cx) {copyByte(r.es,r.di,r.ds,r.si); r.si+=flags.direction?-1:1; r.di+=flags.direction?-1:1; r.cx--;}}
 function rep_movsw() {while(r.cx) {copyByte(r.es,r.di,r.ds,r.si);copyByte(r.es,r.di+1,r.ds,r.si+1); r.si+=flags.direction?-2:2; r.di+=flags.direction?-2:2; r.cx--;}}
@@ -135,16 +138,19 @@ const speaker = {
       carrier.connect(amp);amp.connect(filter);filter.connect(this.analyser);
       carrier.start();modulator.start();this.fm={carrier,modulator,depth,amp,filter,notes:0};
     }
-    await this.context.resume(); this.update();
+    await this.context.resume();
+    if(this.style==='piano')await piano.enable(this.context,this.analyser);
+    this.update();
   },
   reset() {this.gate=0; this.divisor=0; this.lowByte=null; this.frequency=0; this.events=0; this.quiet();},
   quiet() {
+    piano.quiet();
     if(this.gain)this.gain.gain.setValueAtTime(0,this.context.currentTime);
     if(this.fm){this.fm.amp.gain.cancelScheduledValues(this.context.currentTime);this.fm.amp.gain.setValueAtTime(0,this.context.currentTime);}
     this.wasActive=false;
   },
   setStyle(style) {
-    if(!['fm','speaker'].includes(style))return;
+    if(!['fm','speaker','piano'].includes(style))return;
     this.quiet();this.style=style;this.update();
   },
   update() {
@@ -153,11 +159,13 @@ const speaker = {
     const at=this.context.currentTime;
     this.oscillator.frequency.setValueAtTime(Math.min(this.frequency,this.context.sampleRate/2-1),at);
     const active=!this.muted && !game.suspendedAt && (this.gate&3)===3;
-    this.gain.gain.setValueAtTime(active && this.style==='speaker'?0.075:0,at);
+    const music=game.phase==='title'||game.phase==='entering';
+    const pianoActive=active&&this.style==='piano'&&music;
+    piano.update(pianoActive,this.frequency,this.divisor);
+    this.gain.gain.setValueAtTime(active && (this.style==='speaker'||this.style==='piano'&&!music)?0.075:0,at);
     const fmActive=active&&this.style==='fm',fm=this.fm;
     if(fmActive && (!this.wasActive||this.lastNote!==this.divisor)) {
       const f=Math.max(20,Math.min(this.frequency,this.context.sampleRate/8));
-      const music=game.phase==='title'||game.phase==='entering';
       fm.carrier.frequency.setValueAtTime(f,at);
       fm.modulator.frequency.setValueAtTime(f*(music?2:1),at);
       for(const param of [fm.depth.gain,fm.amp.gain]) {
@@ -211,7 +219,7 @@ function* interrupt(number) {
   if(number===0x11) {r.ax=0x26; return;}
   if(number===0x10) {
     switch(r.ah) {
-      case 0: game.mode=r.al; game.row=game.col=0; ram.fill(0,0xb8000,0xbc000);colorArt.layer.fill(0,0xb8000*4,0xbc000*4); return;
+      case 0: game.mode=r.al; game.row=game.col=0; ram.fill(0,0xb8000,0xbc000);colorArt.layer.fill(0,0xb8000*4,0xbc000*4);hdArt.provenance.fill(0,0xb8000*4,0xbc000*4); return;
       case 2: game.row=r.dh; game.col=r.dl; return;
       case 0x0b:
         if(r.bh===0) game.paletteRegister=(game.paletteRegister&0x20)|(r.bl&31);

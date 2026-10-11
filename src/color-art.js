@@ -37,7 +37,8 @@ const colorArt = {
     else if(source>=0x4d00 && source<0x5600) kind='spider';
     else if(source>=0x6f30) kind='romance';
     if(name==='sub_19efc' && source<0x3000) kind='dog';
-    this.blits.push({name,width,height,source,bytes,kind});
+    const frame={name,width,height,source,bytes,kind};
+    hdArt.begin(frame,r.es,r.di);this.blits.push(frame);
   },
   endBlit() {this.blits.pop();},
   captureCheese() {
@@ -110,6 +111,7 @@ const colorArt = {
   saveWord(ds,di,ss,si) {
     const dest=(((ds<<4)+(di&65535))&0xfffff)*4,src=(((ss<<4)+(si&65535))&0xfffff)*4;
     this.layer.copyWithin(dest,src,src+8);
+    hdArt.provenance.copyWithin(dest,src,src+8);
   },
   paintWord(es,di,ds,si) {
     if(es!==0xb800) return;
@@ -123,6 +125,7 @@ const colorArt = {
         // AND masks use 3 as transparent; the other blitter uses 0.
         if(frame.name==='sub_19f65'?value===3:value===0) continue;
         this.layer[addr*4+i]=this.spriteColor(frame,lx,row,value);
+        hdArt.provenance[addr*4+i]=frame.hdId||0;
       }
     }
   },

@@ -162,7 +162,12 @@ for key, file in [('alley','alley-native.png'), ('rooms','rooms-native.png')]:
     if path.exists():
         art_assets[key] = 'data:image/png;base64,' + base64.b64encode(path.read_bytes()).decode()
 assets += 'const COLOR_ART_ASSETS = ' + json.dumps(art_assets) + ';\n'
+hd_assets={key:'data:image/webp;base64,'+base64.b64encode((ROOT/'art/hd'/f'{key}.webp').read_bytes()).decode() for key in ['alley','rooms','sprites','props','furniture','details','materials']}
+assets += 'const HD_ART_ASSETS = ' + json.dumps(hd_assets) + ';\n'
+piano_assets={path.stem:base64.b64encode(path.read_bytes()).decode() for path in sorted((ROOT/'audio/piano').glob('*.mp3'))}
+assets += 'const PIANO_ASSETS = ' + json.dumps(piano_assets) + ';\n'
 parts = [assets, (ROOT/'src/engine.js').read_text(), (ROOT/'src/color-art.js').read_text(),
+         (ROOT/'src/hd-art.js').read_text(), (ROOT/'src/piano.js').read_text(),
          translated, (ROOT/'src/saves.js').read_text(), (ROOT/'src/app.js').read_text()]
 template = (ROOT/'src/page.html').read_text()
 html = template.replace('/* INLINE_STYLE */', (ROOT/'src/style.css').read_text())

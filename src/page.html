@@ -13,6 +13,7 @@
       <div class="playfield" id="playfield">
       <div class="screen" id="screen">
         <canvas id="game" width="320" height="200" tabindex="0" aria-label="Alley Cat. Arrows or WASD to move, Space to jump, Q or E to jump diagonally, Alt or F for action. Swipe to move and jump, tap for action."></canvas>
+        <canvas id="hd-game" width="1280" height="800" hidden aria-hidden="true"></canvas>
         <div id="cover" class="cover">
           <div class="pixel-cat" aria-hidden="true">/\_/\<br>( o.o )<br> &gt; ^ &lt;</div>
           <h2>Let the mischief begin.</h2>
@@ -41,6 +42,10 @@
       <div class="style-controls" aria-label="Presentation settings">
         <button id="graphics" type="button" data-mode="original" aria-pressed="false" aria-label="CGA graphics; switch to pixel art"><span class="toggle-label">GRAPHICS</span><span class="toggle-value">CGA ⇄ Pixel art</span></button>
         <button id="audio-style" type="button" data-mode="speaker" aria-pressed="false" aria-label="Original PC speaker music and effects; switch to AdLib-style FM"><span class="toggle-label">MUSIC + SOUND</span><span class="toggle-value">PC speaker ⇄ AdLib</span></button>
+      </div>
+      <div class="extra-styles" aria-label="HD presentation options">
+        <button id="hd-style" type="button" aria-pressed="false">Hand-drawn HD</button>
+        <button id="piano-style" type="button" aria-pressed="false">Real piano music</button>
       </div>
       <div class="menu" id="menu" hidden>
         <span id="menu-hint">Press Enter to continue.</span>

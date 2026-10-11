@@ -17,6 +17,7 @@ game.capture=function() {
     game:Object.fromEntries(GAME_FIELDS.map(key=>[key,this[key]])),elapsed:this.time(),
     execution:execution.frames.map(frame=>({...frame})),
     speaker:Object.fromEntries(SPEAKER_FIELDS.map(key=>[key,speaker[key]])),
+    hd:hdArt.ready?hdArt.capture():null,
     art:{mode:colorArt.mode,layer:sparseLayer(colorArt.layer),writing:colorArt.writing,
       blits:colorArt.blits.map(blit=>({...blit,bytes:blit.bytes.slice()})),
       cheeseMask:colorArt.cheeseMask?.slice()||null,cheeseTable:colorArt.cheeseTable?.slice()||null}
@@ -41,8 +42,8 @@ function validateSave(state) {
   for(const key of GAME_FIELDS)if(key!=='phase' && !Number.isFinite(state.game[key]))bad();
   // The recovered C++ sometimes assigns bit values 0/1 to a Boolean flag.
   for(const key of ['carry','zero','direction','interrupts'])if(![true,false,0,1].includes(state.flags[key]))bad();
-  if(!['fm','speaker'].includes(state.speaker.style) || typeof state.speaker.muted!=='boolean' ||
-     !['color','original'].includes(state.art.mode) || !(state.art.layer instanceof Uint32Array) || state.art.layer.length%2 ||
+  if(!['fm','speaker','piano'].includes(state.speaker.style) || typeof state.speaker.muted!=='boolean' ||
+     !['color','original','hd'].includes(state.art.mode) || !(state.art.layer instanceof Uint32Array) || state.art.layer.length%2 ||
      !Array.isArray(state.art.blits) || state.art.blits.length>64)bad();
   for(const key of ['divisor','control','gate','events'])if(!Number.isFinite(state.speaker[key]))bad();
   if(state.speaker.lowByte!==null && !Number.isFinite(state.speaker.lowByte))bad();
@@ -52,6 +53,21 @@ function validateSave(state) {
   for(const blit of state.art.blits)if(!(blit.bytes instanceof Uint8Array) || !Number.isFinite(blit.width) || !Number.isFinite(blit.height))bad();
   if(state.art.cheeseMask!==null && (!(state.art.cheeseMask instanceof Uint8Array) || state.art.cheeseMask.length!==64000))bad();
   if(state.art.cheeseTable!==null && (!(state.art.cheeseTable instanceof Uint32Array) || state.art.cheeseTable.length!==256000))bad();
+  if(state.hd){
+    if(!(state.hd.provenance instanceof Uint32Array)||state.hd.provenance.length%2||!Array.isArray(state.hd.entities)||state.hd.entities.length>10000||
+       !(state.hd.backgroundPixels instanceof Uint8Array)||state.hd.backgroundPixels.length!==64000||!(state.hd.staticMetal instanceof Uint8Array)||state.hd.staticMetal.length!==64000)bad();
+    let last=-1;for(let i=0;i<state.hd.provenance.length;i+=2){const index=state.hd.provenance[i];if(index<=last||index>=hdArt.provenance.length)bad();last=index;}
+    if(!Number.isSafeInteger(state.hd.nextId)||state.hd.nextId<1||!Number.isInteger(state.hd.scene)||state.hd.scene<-1||state.hd.scene>8)bad();
+    const ids=new Set();
+    for(const record of state.hd.entities){
+      if(!record||!Number.isSafeInteger(record.id)||record.id<1||record.id>=state.hd.nextId||ids.has(record.id)||typeof record.kind!=='string')bad();
+      ids.add(record.id);
+      for(const key of ['room','x','y','width','height','source','at','fromX','fromY','facing'])if(!Number.isFinite(record[key]))bad();
+      if(record.width<=0||record.width>64||record.height<=0||record.height>80)bad();
+    }
+    for(let i=1;i<state.hd.provenance.length;i+=2)if(!ids.has(state.hd.provenance[i]))bad();
+    if(state.hd.playerMotion)for(const key of ['room','x','y','fromX','fromY','at','facing'])if(!Number.isFinite(state.hd.playerMotion[key]))bad();
+  }
 }
 game.restore=function(state) {
   validateSave(state); // Check before touching the running game.
@@ -64,6 +80,7 @@ game.restore=function(state) {
   colorArt.mode=state.art.mode;colorArt.writing=state.art.writing;
   colorArt.blits=state.art.blits.map(blit=>({...blit,bytes:blit.bytes.slice()}));
   colorArt.cheeseMask=state.art.cheeseMask?.slice()||null;colorArt.cheeseTable=state.art.cheeseTable?.slice()||null;
+  hdArt.restore(state.hd);
   Object.assign(speaker,state.speaker);speaker.wasActive=false;speaker.lastNote=0;
   execution.restore(state.execution);
   this.iterator=ROUTINES[state.execution[0].name]();

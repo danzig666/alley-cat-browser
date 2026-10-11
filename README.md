@@ -22,6 +22,11 @@ including fullscreen:
 - **Graphics:** Color pixel art / Original CGA.
 - **Audio:** AdLib-style FM / Original PC speaker. This changes **both music
   and sound effects**, and keeps the current sound/mute setting.
+- **Hand-drawn HD:** optional watercolor and ink art with smooth visual
+  movement. Press again to return to your previous CGA/pixel-art mode.
+- **Real piano music:** optional sampled Yamaha piano playing the original
+  tune. Effects retain the PC speaker. Press again to restore the previous
+  audio mode; the main audio button also returns directly to PC speaker.
 
 Switching either setting does not restart the game or change its position,
 score, difficulty, timer, collision data, or input. The logical raster stays
@@ -79,7 +84,7 @@ keeps the existing history.
 
 Snapshots preserve the suspended JavaScript call stack, game RAM, registers,
 flags, position, room, lives, difficulty, timers, enemies, CGA/color sprite
-state, and the original music/sound sequence. Loading also restores graphics,
+state, HD illustrations, and the original music/sound sequence. Loading also restores graphics,
 audio style, and mute, and releases held controls. You can load from the start
 screen after reopening or reloading the site.
 
@@ -99,13 +104,13 @@ key's release canceling another.
 ## Screenshots
 
 Captured from the playable browser version. Each row shows the same frozen
-game frame in both graphics modes; the displayed aspect ratio is 4:3.
+game frame in all three graphics modes; the displayed aspect ratio is 4:3.
 
-| Scene | Original CGA | New pixel art |
-| --- | --- | --- |
-| Title | ![Original CGA title](docs/screenshots/title-cga.png) | ![Pixel art title](docs/screenshots/title-pixel-art.png) |
-| Alley | ![Original CGA alley](docs/screenshots/alley-cga.png) | ![Pixel art alley](docs/screenshots/alley-pixel-art.png) |
-| Cheese room | ![Original CGA cheese room](docs/screenshots/cheese-cga.png) | ![Pixel art cheese room](docs/screenshots/cheese-pixel-art.png) |
+| Scene | Original CGA | New pixel art | Hand-drawn HD |
+| --- | --- | --- | --- |
+| Title | ![Original CGA title](docs/screenshots/title-cga.png) | ![Pixel art title](docs/screenshots/title-pixel-art.png) | ![HD title](docs/screenshots/title-hd.png) |
+| Alley | ![Original CGA alley](docs/screenshots/alley-cga.png) | ![Pixel art alley](docs/screenshots/alley-pixel-art.png) | ![HD alley with original fence graffiti](docs/screenshots/alley-hd.png) |
+| Cheese room | ![Original CGA cheese room](docs/screenshots/cheese-cga.png) | ![Pixel art cheese room](docs/screenshots/cheese-pixel-art.png) | ![HD cheese room](docs/screenshots/cheese-hd.png) |
 
 ## How this version was made
 
@@ -158,10 +163,29 @@ pitch and gates for music and effects. It is **AdLib-inspired synthesis**,
 not an OPL chip emulator or a newly composed soundtrack. Original PC speaker
 selects the original square-wave path with the same recovered sound tables.
 
+`src/hd-art.js` adds a separate 1280×800 watercolor and ink canvas, displayed
+in the same 4:3 picture. Illustrated props fit the native object bounds and
+platform positions; room artwork supplies materials rather than replacement
+layouts. The original fence markings become rounded brush strokes at their
+native coordinates. The player's separately drawn upper/lower pieces compose
+one HD cat. Visual interpolation smooths movement between native updates;
+the game's clocks, input, collisions and occupied CGA pixels remain unchanged.
+HD title, difficulty and pause screens use the same browser menu controls.
+
+`src/piano.js` uses real Yamaha C5 recordings from **Salamander Grand Piano**,
+by **Alexander Holm**, licensed under
+[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+The samples come from the [Tone.js audio mirror](https://github.com/Tonejs/audio/tree/master/salamander)
+and retain their [author/license notice](audio/piano/README.source.txt).
+Playback follows the recovered music frequencies and gates, preserving the
+original tune. This option adds no new notes or accompaniment. Native sound
+effects remain on the PC-speaker path; all samples are embedded for offline use.
+
 Generated masters are `art/alley.png` and `art/rooms.png`; compact native
 rasters are embedded into the HTML. The generated previews are art direction
 and material sheets. The playable version constrains them to the original
 pixel geometry, including the romance room.
+HD masters and compact assets are documented in [art/hd/README.md](art/hd/README.md).
 
 ## Development
 
@@ -177,6 +201,7 @@ The build produces the identical standalone `index.html` and `alley-cat.html`, a
 To regenerate the compact rasters after replacing either art master, run
 `node tools/prepare-art.cjs` first. This optional asset step uses Chromium and
 Playwright for the same nearest-neighbor rasterization as the game.
+For HD masters, run `node tools/prepare-hd.cjs` before the Python build.
 
 Browser checks use Node.js, Playwright, and Chromium:
 
@@ -188,6 +213,9 @@ node tests/presentation.cjs
 node tests/controls.cjs
 node tests/layout.cjs
 node tests/saves.cjs
+node tests/hd.cjs
+HD=1 node tests/rooms.cjs
+node tests/save-compat.cjs
 ```
 
 Playwright must be available to Node. `CHROMIUM_PATH` can select a browser
@@ -195,9 +223,10 @@ executable; the default is `/usr/bin/chromium`. Each test creates and closes
 its own temporary HTTP server and browser. The room tests select each room at
 the original main-loop dispatch; they do not remove game assertions or
 substitute gameplay routines.
+The save compatibility check reads published commit `35a13c1` from Git history,
+creates a real checkpoint with that version, and loads it with the current page.
 
-To refresh the README screenshots, run `ROOMS=4 node tests/rooms.cjs`, then
-`node tools/capture-screenshots.cjs`.
+To refresh the nine README screenshots, run `node tools/capture-screenshots.cjs`.
 
 ## GitHub Pages
 
@@ -246,6 +275,14 @@ Verified in Chromium:
 - Save/load reproduces continued native execution, restores every room's
   complete rendered state, persists across reloads and tabs on the same
   origin, retains eleven snapshots, and preserves history on storage failure.
+- HD renders title, menus, alley and all seven rooms; HD saves restore the
+  rendered state and continued native execution. Graphics switches leave
+  game RAM and registers unchanged. The composed player uses the original
+  union bounds; intermediate visual frames move while native execution is frozen.
+- Checkpoints from the previously published version load before Play, retain
+  graphics/audio settings, and reproduce continued native execution after upgrading.
+- The embedded sampled piano produces a nonzero audio waveform offline and
+  can switch back to original PC speaker or FM without restarting the game.
 
 A full winning playthrough and every collision/scoring path have **not** been
 verified. Browser frame scheduling and the PC-speaker output may differ in
