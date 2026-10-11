@@ -12,8 +12,13 @@ const root=path.join(__dirname,'..');
     page.on('pageerror',error=>errors.push(error.message));
     await page.goto(url+'/previous');await page.click('#graphics');await page.click('#audio-style');await page.click('#start');
     const phase=value=>page.waitForFunction(value=>game.phase===value,value);
-    await phase('title');await page.keyboard.press('Enter',{delay:120});await phase('difficulty');
-    await page.keyboard.press('k',{delay:120});await phase('ready');await page.keyboard.press('Enter',{delay:120});await phase('playing');
+    await phase('title');
+    if(previous.includes(Buffer.from('function chooseCat('))){
+      await page.locator('#menu-options button').first().click();await phase('playing');
+    }else{
+      await page.keyboard.press('Enter',{delay:120});await phase('difficulty');
+      await page.keyboard.press('k',{delay:120});await phase('ready');await page.keyboard.press('Enter',{delay:120});await phase('playing');
+    }
     const old=await page.evaluate(async()=>{
       game.suspend();releaseKeys();const snapshot=game.capture(),id=await alleyCat.save();
       let clock=0;game.time=()=>snapshot.elapsed+clock;
@@ -33,6 +38,6 @@ const root=path.join(__dirname,'..');
     assert.equal(migrated.id,old.id);assert.deepEqual(migrated.actual,old.expected);assert.equal(migrated.graphics,'color');assert.equal(migrated.audio,'fm');
     await page.click('#hd-style');await page.evaluate(()=>game.resume());await page.waitForTimeout(500);
     assert.equal(await page.evaluate(()=>game.state().error),null);assert(await page.locator('#hd-game').isVisible());assert.deepEqual(errors,[]);
-    console.log('PASS: checkpoint from published pre-HD version loads before Play, retains color/FM settings and reproduces 400 native continuation steps, then switches to HD.');
+    console.log('PASS: checkpoint from published '+(process.env.PREVIOUS_REV||'35a13c1')+' loads before Play, retains color/FM settings and reproduces 400 native continuation steps, then switches to HD.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

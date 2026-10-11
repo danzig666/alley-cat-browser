@@ -72,7 +72,7 @@ const {chromium}=require('playwright');
         memoryASet16(0x1010,0x1f6c,0);memoryASet16(0x1010,0x1f30,100);memoryASet(0x1010,0x1f36,8);
         memoryASet16(0x1010,0x1f42,345);memoryASet(0x1010,0x1f50,0);
         memoryASet16(0x1010,0x579,100);memoryASet(0x1010,0x57b,8);memoryASet(0x1010,0x57c,58);
-        memoryASet(0x1010,0x55c,falling);run(sub_19797());catches.push(kinds('sub_19797'));
+        memoryASet(0x1010,0x55c,falling);const first=hdArt.nextId;run(sub_19797());catches.push(Array.from(hdArt.entities.values()).filter(record=>record.id>=first).map(record=>record.kind));
       }
       // The original dog collision draws a fight cloud, not an oversized cat.
       run(sub_18396());const fight=kinds('sub_18396');
@@ -82,7 +82,8 @@ const {chromium}=require('playwright');
       game.time=realTime;game.restore(saved);game.suspend();present();return {bin,catches,fight,effect};
     });
     assert(encounters.bin.length>0&&encounters.bin.every(kind=>kind==='blackcat'),JSON.stringify(encounters));
-    assert(encounters.catches.every(kinds=>kinds.length>0&&kinds.every(kind=>kind==='blackcat')),JSON.stringify(encounters));
+    assert(encounters.catches[0].length>0&&encounters.catches[0].every(kind=>kind==='impact'),JSON.stringify(encounters));
+    assert(encounters.catches[1].length>0&&encounters.catches[1].every(kind=>kind==='blackcat'),JSON.stringify(encounters));
     assert(encounters.fight.length>0&&encounters.fight.every(kind=>kind==='impact'),JSON.stringify(encounters));
     assert(encounters.effect.notes>0,JSON.stringify(encounters));assert.equal(encounters.effect.square,0);
     // The native two-piece cat becomes one illustration with exactly the union
@@ -112,6 +113,6 @@ const {chromium}=require('playwright');
     await page.evaluate(()=>game.resume());await page.keyboard.down('ArrowRight');await page.waitForTimeout(300);await page.keyboard.up('ArrowRight');
     assert.equal(await page.evaluate(()=>alleyCat.state().error),null);assert.deepEqual(errors,[]);
     assert(requests.every(request=>request.startsWith('http://127.0.0.1:')||request.startsWith('data:')));
-    console.log('PASS: native bin-cat rise, both clothesline catches stay cats, gameplay effects use piano with square oscillator silent, offline HD screens, sampled piano waveform, live styles preserve native state/dimensions, HD save/load and continued controls.');
+    console.log('PASS: native bin-cat rise, clothesline knock-off cloud and captured cat, gameplay effects use piano with square oscillator silent, offline HD screens, sampled piano waveform, live styles preserve native state/dimensions, HD save/load and continued controls.');
   }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

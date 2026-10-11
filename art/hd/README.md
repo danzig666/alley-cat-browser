@@ -2,7 +2,8 @@
 
 Generated watercolor and ink masters: `alley.png`, `rooms.png`, `sprites.png`,
 `props.png`, `furniture.png`, `details.png`, `materials.png`, `animation.png`,
-and the isolated clothesline pose `hanging.png`.
+the isolated clothesline pose `hanging.png`, the frontal bin face
+`bin-cat.png`, and compact enemy walk cycle `line-cats.png`.
 The corresponding WebP files are embedded in the standalone HTML.
 
 The alley master includes weathered fence graffiti. The playable renderer
@@ -23,6 +24,13 @@ individual source rectangles so the mouse has no neighboring cat paw and the
 broom retains its full handle. The isolated hanging illustration is anchored
 to the original clothesline sprite rectangle. Partially visible jump
 sprites crop the corresponding illustration rows at their full original scale.
+Bin cats likewise reveal a prefix of their full 16×13 illustration as they
+rise, instead of compressing the whole animal into a partial mask. Enemy
+walk frames fit the original 16×8 box with the corrected pixel aspect;
+their facing and identity follow the native clothesline slot. The 48×8
+knock-off effect is a fight cloud, and the captured enemy stays a compact cat.
+Open window rows come from the live native raster and cover the closed-pane
+donor at their exact 32×15 entry rectangles, including shutter animation.
 Background provenance follows the original save/restore blitters, and browser
 checkpoints preserve the HD presentation state too.
 

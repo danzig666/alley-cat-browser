@@ -39,6 +39,15 @@ function updateUI() {
     $('status').textContent='HANGING';
     $('hint').textContent='Hanging: Left / Right to move · Space / Q / E to jump · Down / S to drop · Swipe in the same directions';
   }
+  if(phase==='playing'&&memoryAGet16(0x1010,4)===0){
+    const opening=memoryAGet(0x1010,0x1665);
+    if(opening>=5&&opening<25){
+      $('status').textContent='WINDOW OPEN';
+      $('hint').textContent+=' · Drop into the dark window from the line above.';
+    }else if(memoryAGet(0x1010,0x57b)>96){
+      $('hint').textContent+=' · Climb above the fence to reach opening windows.';
+    }
+  }
   $('pause').textContent=phase==='paused'?'Resume':'Pause';
   $('sound').textContent=speaker.muted || !memoryAGet(0x1010,0)?'Sound off':'Sound on';
   if(game.error) {

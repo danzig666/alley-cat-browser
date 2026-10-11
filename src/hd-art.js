@@ -34,6 +34,8 @@ const hdArt={
       return this.trim(this.crop(this.images.animation,x/1448,y/1086,(animationColumns[row][col+1]-x)/1448,(animationRows[row+1]-y)/1086));
     });
     this.hanging=this.trim(this.crop(this.images.hanging,0,0,1,1));
+    this.binCat=this.fit(this.trim(this.crop(this.images['bin-cat'],0,0,1,1)),16,13);
+    this.lineCats=Array.from({length:4},(_,i)=>this.fit(this.trim(this.crop(this.images['line-cats'],(i%2)/2,(i>>1)/2,.5,.5)),16,8));
     for(let i=0;i<3;i++)this.props[i]=this.trim(this.crop(this.images.props,i/3,0,1/3,.5));
     this.props[3]=this.trim(this.crop(this.images.props,0,.5,.405,.5));
     this.props[4]=this.trim(this.crop(this.images.props,.41,.5,.285,.5));
@@ -55,6 +57,13 @@ const hdArt={
     let x0=cell.width,y0=cell.height,x1=-1,y1=-1;
     for(let y=0;y<cell.height;y++)for(let x=0;x<cell.width;x++)if(data[(y*cell.width+x)*4+3]>32){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
     return x1<0?cell:this.crop(cell,x0/cell.width,y0/cell.height,(x1-x0+1)/cell.width,(y1-y0+1)/cell.height);
+  },
+  fit(image,width,height){
+    // A native pixel is 5/6 as wide as it is tall on the corrected 4:3
+    // display. Fit the donor within its native box without changing anatomy.
+    const canvas=document.createElement('canvas');canvas.width=width*32;canvas.height=height*32;
+    const ratio=image.width/image.height,w=Math.min(canvas.width,canvas.height*ratio*6/5),h=w*5/6/ratio;
+    canvas.getContext('2d').drawImage(image,(canvas.width-w)/2,canvas.height-h,w,h);return canvas;
   },
   makePatterns(){
     const definitions={
@@ -82,9 +91,19 @@ const hdArt={
       if(delta<distance && delta<32){distance=delta;previous=record;}
     }
     const id=this.nextId++;
-    const pose=kind==='blackcat'&&frame.caller==='sub_19797'?'attack':kind==='player'&&frame.source===0x09da?'hang':kind==='player'&&room===2?'swim':kind==='player'&&memoryAGet(0x1010,0x571)!==0?(memoryAGet(0x1010,0x571)===0xff?'jump':'fall'):kind==='player'&&memoryAGet(0x1010,0x56e)===0?'idle':'walk';
+    const lineCat=kind==='blackcat'&&['sub_195ab','sub_19797'].includes(frame.caller);
+    const pose=kind==='blackcat'&&frame.caller==='sub_19446'?'peek':lineCat&&(frame.source===0x1e30||frame.caller==='sub_19797')?'idle':kind==='player'&&frame.source===0x09da?'hang':kind==='player'&&room===2?'swim':kind==='player'&&memoryAGet(0x1010,0x571)!==0?(memoryAGet(0x1010,0x571)===0xff?'jump':'fall'):kind==='player'&&memoryAGet(0x1010,0x56e)===0?'idle':'walk';
     const record={id,kind,room,x,y,width:frame.width,height:frame.height,source:frame.source,at:now,actor:frame.actor,pose,
       fromX:previous?.x??x,fromY:previous?.y??y,facing:previous&&x!==previous.x?Math.sign(x-previous.x):previous?.facing||1};
+    if(pose==='peek'){
+      // The bin routine always copies a prefix of its 16x13 face sprite,
+      // revealing the ears first. Its one-row draw is never a whole cat.
+      record.artTop=0;record.artHeight=13;record.fromX=x;record.fromY=y;
+    }
+    if(lineCat){
+      const direction=memoryAGet(0x1010,0x1f3c+memoryAGet16(0x1010,0x1f6c));
+      record.facing=direction===0xff?-1:direction===1?1:previous?.facing||1;
+    }
     if(kind==='player'&&frame.caller==='sub_18375'){
       // The native jump blitter omits rows outside the screen. Crop the same
       // fraction of the illustration instead of squashing a whole cat into
@@ -193,6 +212,17 @@ const hdArt={
     if(scene===0){
       const image=this.images.alley;
       for(let row=0;row<3;row++)for(let col=0;col<4;col++)ctx.drawImage(image,image.width*.048,image.height*.112,image.width*.133,image.height*.092,20+col*80,24+row*32,40,16);
+      // Closed panes contain only native cyan/white pixels. Black rows inside
+      // each 32x15 pane are the actual opening, including partially raised
+      // shutters. Paint those rows over the donor, with no change to the entry
+      // rectangle or window timer. Objects are drawn afterwards as usual.
+      for(let row=0;row<3;row++)for(let col=0;col<4;col++){
+        const x0=24+col*80,y0=24+row*32,hole=new Path2D();
+        for(let y=y0;y<y0+15;y++)for(let x=x0;x<x0+32;x++)if(this.backgroundPixels[y*320+x]===0)hole.rect(x,y,1,1);
+        ctx.save();ctx.clip(hole);
+        const interior=ctx.createLinearGradient(0,y0,0,y0+15);interior.addColorStop(0,'#101c24');interior.addColorStop(1,'#3f3029');
+        ctx.fillStyle=interior;ctx.fillRect(x0,y0,32,15);ctx.restore();
+      }
       ctx.save();ctx.clip(masks.get('cream'));ctx.fillStyle=this.patterns.brick;
       for(let row=0;row<3;row++)ctx.fillRect(0,8+row*32,320,3);ctx.restore();
       ctx.strokeStyle='#b59b63';ctx.lineWidth=.6;
@@ -304,7 +334,14 @@ const hdArt={
     for(let y=0;y<200;y++)for(let x=0;x<320;x++){
       const addr=0xb8000+(y&1)*8192+(y>>1)*80+(x>>2);const id=this.provenance[addr*4+(x&3)];if(id)visibleIds.add(id);
     }
-    const records=Array.from(visibleIds,id=>this.entities.get(id)).filter(record=>record?.room===this.scene);
+    const records=Array.from(visibleIds,id=>this.entities.get(id)).filter(record=>record?.room===this.scene).map(record=>{
+      // Older browser saves used the walking illustration for these states.
+      // Upgrade their presentation too, without rewriting saved native state.
+      if(record.kind==='blackcat'&&record.source===0x1d70)return {...record,kind:'impact'};
+      if(record.kind==='blackcat'&&record.source===0x1cf0)return {...record,pose:'peek',artTop:0,artHeight:13,fromX:record.x,fromY:record.y};
+      if(record.kind==='blackcat'&&record.actor?.startsWith('sub_19797:'))return {...record,actor:record.actor.replace('sub_19797:','sub_195ab:'),pose:'idle'};
+      return record;
+    });
     const player=records.filter(record=>record.kind==='player');
     if(player.length>1){
       const x=Math.min(...player.map(record=>record.x)),y=Math.min(...player.map(record=>record.y));
@@ -314,7 +351,10 @@ const hdArt={
       const top=player.reduce((a,b)=>a.y<=b.y?a:b);
       records.splice(0,records.length,...records.filter(record=>record.kind!=='player'),{...top,id:Math.max(...player.map(record=>record.id)),x,y,width:x1-x,height:y1-y});
     }
-    this.renderedRecords=records.sort((a,b)=>a.id-b.id);
+    // Native restores can briefly retain pixels from the previous mask of
+    // the same enemy. Draw that actor once, using its newest visible frame.
+    const cats=new Map();for(const record of records)if(record.kind==='blackcat'&&(!cats.has(record.actor)||cats.get(record.actor).id<record.id))cats.set(record.actor,record);
+    this.renderedRecords=records.filter(record=>record.kind!=='blackcat'||cats.get(record.actor)===record).sort((a,b)=>a.id-b.id);
     for(const record of this.renderedRecords){
       const hanging=record.kind==='player'&&record.source===0x09da;
       const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
@@ -322,7 +362,8 @@ const hdArt={
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
       const gait=Math.floor(game.time()/85)%4;
       let illustration;
-      if(['player','cat','blackcat'].includes(record.kind)) {
+      if(record.kind==='blackcat')illustration=record.pose==='peek'?this.binCat:this.lineCats[record.pose==='idle'?0:gait];
+      else if(['player','cat'].includes(record.kind)) {
         const pose={jump:4,fall:5,swim:6,attack:7}[record.pose];
         illustration=hanging?this.hanging:this.animation[pose??(record.pose!=='idle'&&record.x!==record.fromX?gait:0)];
       }else if(record.kind==='dog')illustration=this.animation[8+gait];

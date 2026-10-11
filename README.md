@@ -37,6 +37,11 @@ Press **Play Alley Cat**, then choose **Kitten**, **House Cat**, **Tomcat**, or
 with no Enter/Continue confirmation. **K/H/T/A** also selects a cat from this
 screen. Keyboard and touch controls are selected automatically.
 
+Climb from the bins to the fence and clotheslines. As in the original game,
+windows start opening when you reach the upper alley. Drop into a dark open
+pane from the clothesline above it; entry happens while descending. The
+controls panel indicates an open window, and HD shows the live shutter state.
+
 | Control | Action |
 | --- | --- |
 | Arrow keys | Original movement and jumping |
@@ -112,6 +117,7 @@ game frame in all three graphics modes; the displayed aspect ratio is 4:3.
 | --- | --- | --- | --- |
 | Title | ![Original CGA title](docs/screenshots/title-cga.png) | ![Pixel art title](docs/screenshots/title-pixel-art.png) | ![HD title](docs/screenshots/title-hd.png) |
 | Alley | ![Original CGA alley](docs/screenshots/alley-cga.png) | ![Pixel art alley](docs/screenshots/alley-pixel-art.png) | ![HD alley with original fence graffiti](docs/screenshots/alley-hd.png) |
+| Open window | ![Original CGA open window](docs/screenshots/open-window-cga.png) | ![Pixel art open window](docs/screenshots/open-window-pixel-art.png) | ![HD open window and enemy cats](docs/screenshots/open-window-hd.png) |
 | Cheese room | ![Original CGA cheese room](docs/screenshots/cheese-cga.png) | ![Pixel art cheese room](docs/screenshots/cheese-pixel-art.png) | ![HD cheese room](docs/screenshots/cheese-hd.png) |
 
 ## How this version was made
@@ -179,6 +185,12 @@ and Down/S or a downward swipe to drop. Jump across gaps. HD shows this
 pose at the original line height and the controls panel explains it. Animation
 frames are cut at the atlas's actual transparent gutters; jumps at the screen
 edge crop the illustration instead of compressing it into the visible rows.
+The bin cat's face is revealed at full scale through its original 16×13
+mask. Clothesline enemies have a compact 16×8 walk cycle fitted for the
+corrected pixel aspect. Knock-off clouds and captured cats use their distinct
+native drawing states. Open windows follow the actual native shutter pixels
+inside the original entry rectangles, so the closed-window donor cannot hide
+an opening.
 The browser allows horizontal movement from the hanging state through the
 original walking step, support checks, gravity and enemy collisions. Rechecking
 support preserves the current horizontal position instead of repeating the
@@ -228,6 +240,7 @@ node tests/layout.cjs
 node tests/menu.cjs
 node tests/saves.cjs
 node tests/hd.cjs
+node tests/alley-encounters.cjs
 node tests/player-animation.cjs
 HD=1 node tests/rooms.cjs
 node tests/save-compat.cjs
@@ -241,7 +254,7 @@ substitute gameplay routines.
 The save compatibility check reads published commit `35a13c1` from Git history,
 creates a real checkpoint with that version, and loads it with the current page.
 
-To refresh the nine README screenshots, run `node tools/capture-screenshots.cjs`.
+To refresh the twelve README screenshots, run `node tools/capture-screenshots.cjs`.
 
 ## GitHub Pages
 

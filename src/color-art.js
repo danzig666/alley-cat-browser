@@ -32,6 +32,7 @@ const colorArt = {
       sub_18a7b:'object',sub_192cb:'dog',sub_19446:'blackcat',sub_195ab:'blackcat',sub_19797:'blackcat',
       sub_1aee1:'impact',sub_1b044:'spider',sub_1b2f2:'mouse',sub_1b570:'bird',sub_1b7db:'cage',
       sub_1b989:'cage',sub_1bd4d:'player',sub_1c290:'impact',sub_1c3cb:'dog',sub_1d42a:'romance',sub_1a569:'broom'};
+    if(caller==='sub_19797'&&source===0x1d70&&name!=='sub_19fcd')return 'impact';
     if(name==='sub_19fcd') {
       if(caller==='sub_1a8a5')return source<0x3330?'fish':'bubble';
       if(caller==='sub_192cb')return 'dog';
@@ -46,7 +47,8 @@ const colorArt = {
     // The same mask frame supplies the outline, body highlights and animation.
     const caller=override.caller??execution.frames.at(-1)?.name,kind=this.identity(name,source,caller);
     const slot=caller==='sub_1a8a5'?memoryAGet16(r.ds,0x3415):['sub_195ab','sub_19797'].includes(caller)?memoryAGet16(r.ds,0x1f6c):caller==='sub_1b2f2'?memoryAGet16(r.ds,0x3eda):0;
-    const frame={name,width,height,source,bytes,kind,actor:kind==='player'?'player':caller+':'+slot,caller};
+    const actor=kind==='player'?'player':kind==='blackcat'&&caller==='sub_19797'?'sub_195ab:'+slot:caller+':'+slot;
+    const frame={name,width,height,source,bytes,kind,actor,caller};
     hdArt.begin(frame,override.es??r.es,override.di??r.di);this.blits.push(frame);
   },
   paintCopy(es,di,ds,si) {

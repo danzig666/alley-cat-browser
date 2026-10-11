@@ -46,7 +46,7 @@ const {chromium}=require('playwright');
         run(sub_18413());
         let x=-1;for(let candidate=40;candidate<260;candidate+=8){
           let supported=true;
-          const offsets=key==='ArrowLeft'?[0,-6]:key==='ArrowRight'?[0,6]:[0];
+          const offsets=key==='ArrowLeft'?[0,-6,-12,-18]:key==='ArrowRight'?[0,6,12,18]:[0];
           for(const dx of offsets){
             memoryASet16(0x1010,0x579,candidate+dx);memoryASet(0x1010,0x57b,line);
             memoryASet(0x1010,0x55c,0);run(sub_189dd());supported&&=flags.carry;
@@ -61,9 +61,13 @@ const {chromium}=require('playwright');
         for(const at of [0x551,0x558,0x559,0x55a,0x55b,0x56c])memoryASet(0x1010,at,0);
         memoryASet(0x1010,0x55c,1);memoryASet(0x1010,0x571,0);memoryASet(0x1010,0x56e,0);
         run(sub_18342());execution.restore([{name:'sub_17230',pc:0x17385,parked:null,budget:false}]);
-        game.iterator=sub_17230();game.resume();return {x,y:line};
+        game.iterator=sub_17230();return {x,y:line};
       },{line,key});
-      await page.waitForFunction(()=>memoryAGet(0x1010,0x55c)===2&&hdArt.renderedRecords?.some(r=>r.kind==='player'&&r.pose==='hang'));
+      await page.evaluate(()=>game.resume());
+      await page.waitForFunction(()=>{
+        if(memoryAGet(0x1010,0x55c)!==2||!hdArt.renderedRecords?.some(r=>r.kind==='player'&&r.pose==='hang'))return false;
+        game.suspend();return true;
+      });
       assert.match(await page.locator('#hint').textContent(),/jump.*drop/);
       const hanging=await page.evaluate(()=>{game.suspend();return {
         ram:Array.from(ram),words:Array.from(words),record:hdArt.renderedRecords.find(r=>r.kind==='player')};});
@@ -72,7 +76,7 @@ const {chromium}=require('playwright');
       await page.click('#hd-style');assert.deepEqual(await page.evaluate(()=>Array.from(ram)),hanging.ram);
       assert.deepEqual(await page.evaluate(()=>Array.from(words)),hanging.words);
       if(mode==='hd')await page.click('#hd-style');
-      await page.evaluate(()=>{game.resume();focusGame();});
+      await page.evaluate(()=>focusGame());
       if(key==='ArrowLeft'||key==='ArrowRight')await page.evaluate(()=>{
         window.slideTrace=[];window.normalPlayerBegin=hdArt.begin;
         // Observe actual native draws: a narrow section can be traversed and
@@ -85,6 +89,7 @@ const {chromium}=require('playwright');
         };
       });
       await page.keyboard.down(key);
+      await page.evaluate(()=>game.resume());
       await page.waitForFunction(({x,y,key})=>{
         const state=game.state();
         if(key==='ArrowLeft'||key==='ArrowRight')return slideTrace.some(point=>point.y===y&&
