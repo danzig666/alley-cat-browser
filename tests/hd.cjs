@@ -19,6 +19,15 @@ const {chromium}=require('playwright');
       const values=new Float32Array(speaker.analyser.fftSize);speaker.analyser.getFloatTimeDomainData(values);
       return {notes:piano.notes,peak:Math.max(window.observedPianoPeak,...values.map(Math.abs)),square:speaker.gain.gain.value};
     });assert(audio.notes>3);assert(audio.peak>.001);assert.equal(audio.square,0);
+    const logo=await page.evaluate(()=>{
+      const pixels=hdArt.ctx.getImageData(0,0,1280,800).data;let top=130,count=0;
+      for(let y=0;y<130;y++)for(let x=500;x<800;x++){
+        const at=(y*1280+x)*4;
+        if(pixels[at+1]>pixels[at]+15&&pixels[at+2]>pixels[at]+25){top=Math.min(top,y);count++;}
+      }
+      return {top,count};
+    });
+    assert(logo.count>1500&&logo.top>=24,`The full blue IBM logo must have space above it: ${JSON.stringify(logo)}`);
     await page.locator('#screen').screenshot({path:path.join(__dirname,'hd-title.png')});
     await page.keyboard.press('Enter',{delay:150});await phase('difficulty');
     await page.locator('#screen').screenshot({path:path.join(__dirname,'hd-skill.png')});

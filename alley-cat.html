@@ -740,6 +740,9 @@ const hdArt={
     this.bg=this.background.getContext('2d',{alpha:false});
     this.scenes=[this.images.alley];
     for(let i=0;i<8;i++)this.scenes[i+1]=this.crop(this.images.rooms,(i%2)/2,Math.floor(i/2)/4,.5,.25);
+    // The title panel starts at row 1120 in the 1536px atlas, above the
+    // uniform fourth-row boundary. Include its full IBM logo and top margin.
+    this.scenes[8]=this.crop(this.images.rooms,.5,35/48,.5,13/48);
     for(let i=0;i<12;i++){
       const cell=this.crop(this.images.sprites,(i%4)/4,Math.floor(i/4)/3,.25,1/3);
       // Trim the transparent padding, then fit to the native sprite rectangle.
