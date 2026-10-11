@@ -28,7 +28,7 @@ const colorArt = {
   identity(name,source,caller=execution.frames.at(-1)?.name) {
     // Identify the recovered drawing routine, never the nearest actor or an
     // address range: the same RAM buffers also hold backgrounds and effects.
-    const kinds={sub_17b15:'bubble',sub_18299:'player',sub_18375:'player',sub_18396:'player',
+    const kinds={sub_17b15:'bubble',sub_18299:'player',sub_18375:'player',sub_18396:'impact',
       sub_18a7b:'object',sub_192cb:'dog',sub_19446:'blackcat',sub_195ab:'blackcat',sub_19797:'blackcat',
       sub_1aee1:'impact',sub_1b044:'spider',sub_1b2f2:'mouse',sub_1b570:'bird',sub_1b7db:'cage',
       sub_1b989:'cage',sub_1bd4d:'player',sub_1c290:'impact',sub_1c3cb:'dog',sub_1d42a:'romance',sub_1a569:'broom'};

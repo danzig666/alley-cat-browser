@@ -18,12 +18,22 @@ const hdArt={
     // The title panel starts at row 1120 in the 1536px atlas, above the
     // uniform fourth-row boundary. Include its full IBM logo and top margin.
     this.scenes[8]=this.crop(this.images.rooms,.5,35/48,.5,13/48);
-    for(let i=0;i<12;i++){
-      const cell=this.crop(this.images.sprites,(i%4)/4,Math.floor(i/4)/3,.25,1/3);
-      // Trim the transparent padding, then fit to the native sprite rectangle.
-      this.sprites[i]=this.trim(cell);
-    }
-    this.animation=Array.from({length:16},(_,i)=>this.trim(this.crop(this.images.animation,(i%4)/4,Math.floor(i/4)/4,.25,.25)));
+    // The donor sheet is uneven too. Use each complete illustration's source
+    // bounds so the mouse has no neighboring paw and the broom keeps its handle.
+    const spriteRects=[[35,55,376,340],[401,60,714,341],[732,68,1067,340],[1090,80,1432,306],
+      [18,376,385,665],[372,506,718,666],[805,357,1010,668],[1097,425,1424,660],
+      [104,673,306,1027],[444,898,653,992],[733,784,1025,1013],[1082,672,1434,1023]];
+    this.sprites=spriteRects.map(([x,y,right,bottom])=>this.crop(this.images.sprites,x/1448,y/1086,(right-x)/1448,(bottom-y)/1086));
+    // Generated atlas cells are separated by transparent gutters, but their
+    // rows and columns are not an equal grid. Cut at the measured gutters so
+    // no paw, tail or fragment from a neighboring frame enters the sprite.
+    const animationRows=[0,323,581,842,1086];
+    const animationColumns=[[0,404,730,1096,1448],[0,437,737,1098,1448],[0,408,706,1090,1448],[0,382,728,1090,1448]];
+    this.animation=Array.from({length:16},(_,i)=>{
+      const row=i>>2,col=i%4,x=animationColumns[row][col],y=animationRows[row];
+      return this.trim(this.crop(this.images.animation,x/1448,y/1086,(animationColumns[row][col+1]-x)/1448,(animationRows[row+1]-y)/1086));
+    });
+    this.hanging=this.trim(this.crop(this.images.hanging,0,0,1,1));
     for(let i=0;i<3;i++)this.props[i]=this.trim(this.crop(this.images.props,i/3,0,1/3,.5));
     this.props[3]=this.trim(this.crop(this.images.props,0,.5,.405,.5));
     this.props[4]=this.trim(this.crop(this.images.props,.41,.5,.285,.5));
@@ -72,13 +82,27 @@ const hdArt={
       if(delta<distance && delta<32){distance=delta;previous=record;}
     }
     const id=this.nextId++;
-    const pose=kind==='blackcat'&&frame.caller==='sub_19797'?'attack':kind==='player'&&room===2?'swim':kind==='player'&&memoryAGet(0x1010,0x571)!==0?(memoryAGet(0x1010,0x571)===0xff?'jump':'fall'):'walk';
+    const pose=kind==='blackcat'&&frame.caller==='sub_19797'?'attack':kind==='player'&&frame.source===0x09da?'hang':kind==='player'&&room===2?'swim':kind==='player'&&memoryAGet(0x1010,0x571)!==0?(memoryAGet(0x1010,0x571)===0xff?'jump':'fall'):kind==='player'&&memoryAGet(0x1010,0x56e)===0?'idle':'walk';
     const record={id,kind,room,x,y,width:frame.width,height:frame.height,source:frame.source,at:now,actor:frame.actor,pose,
       fromX:previous?.x??x,fromY:previous?.y??y,facing:previous&&x!==previous.x?Math.sign(x-previous.x):previous?.facing||1};
+    if(kind==='player'&&frame.caller==='sub_18375'){
+      // The native jump blitter omits rows outside the screen. Crop the same
+      // fraction of the illustration instead of squashing a whole cat into
+      // the remaining one or two rows. Keep the native destination unchanged.
+      const dimensions=memoryAGet16(0x1010,0x567),fullHeight=dimensions>>8;
+      const skipped=(frame.source-memoryAGet16(0x1010,0x569))/(frame.width/4);
+      if((dimensions&255)*8===frame.width&&Number.isInteger(skipped)&&skipped>=0&&
+         skipped+frame.height<=fullHeight&&frame.height<fullHeight){
+        record.artTop=skipped;record.artHeight=fullHeight;
+      }
+    }
     if(kind==='player'){
       const motion=this.playerMotion;
       if(!motion||motion.room!==room)this.playerMotion={room,x:playerX,y:playerY,fromX:playerX,fromY:playerY,at:now,facing:1};
-      else if(motion.x!==playerX||motion.y!==playerY)this.playerMotion={room,x:playerX,y:playerY,fromX:motion.x,fromY:motion.y,at:now,facing:playerX!==motion.x?Math.sign(playerX-motion.x):motion.facing};
+      else if(motion.x!==playerX||motion.y!==playerY){
+        const teleport=Math.hypot(motion.x-playerX,motion.y-playerY)>32;
+        this.playerMotion={room,x:playerX,y:playerY,fromX:teleport?playerX:motion.x,fromY:teleport?playerY:motion.y,at:now,facing:playerX!==motion.x?Math.sign(playerX-motion.x):motion.facing};
+      }
       const current=this.playerMotion;
       record.fromX=x+current.fromX-playerX;record.fromY=y+current.fromY-playerY;record.at=current.at;record.facing=current.facing;
     }
@@ -292,14 +316,15 @@ const hdArt={
     }
     this.renderedRecords=records.sort((a,b)=>a.id-b.id);
     for(const record of this.renderedRecords){
-      const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
+      const hanging=record.kind==='player'&&record.source===0x09da;
+      const alpha=game.phase==='playing'&&!hanging?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
       const x=record.fromX+(record.x-record.fromX)*alpha,y=record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
-      const gait=Math.floor(game.time()/85+record.source/24)%4;
+      const gait=Math.floor(game.time()/85)%4;
       let illustration;
       if(['player','cat','blackcat'].includes(record.kind)) {
         const pose={jump:4,fall:5,swim:6,attack:7}[record.pose];
-        illustration=this.animation[pose??(record.x!==record.fromX?gait:0)];
+        illustration=hanging?this.hanging:this.animation[pose??(record.pose!=='idle'&&record.x!==record.fromX?gait:0)];
       }else if(record.kind==='dog')illustration=this.animation[8+gait];
       else if(record.kind==='fish')illustration=this.animation[12+gait];
       else if(record.kind==='cage')illustration=this.details[1];
@@ -312,7 +337,10 @@ const hdArt={
         ctx.strokeStyle='#d9f3ec';ctx.lineWidth=.45;ctx.beginPath();ctx.ellipse(x+record.width/2,y+record.height/2,record.width/2,record.height/2,0,0,Math.PI*2);ctx.stroke();continue;
       }
       ctx.save();ctx.translate(x+(record.facing<0?record.width:0),y);ctx.scale(record.facing<0?-1:1,1);
-      ctx.drawImage(illustration||(record.kind==='bird'?this.details[5]:this.sprites[sprite]),0,0,record.width,record.height);ctx.restore();
+      const art=illustration||(record.kind==='bird'?this.details[5]:this.sprites[sprite]);
+      if(record.artHeight)ctx.drawImage(art,0,art.height*record.artTop/record.artHeight,art.width,art.height*record.height/record.artHeight,0,0,record.width,record.height);
+      else ctx.drawImage(art,0,0,record.width,record.height);
+      ctx.restore();
     }
   },
   capture(){return {provenance:sparseLayer(this.provenance),entities:Array.from(this.entities.values(),record=>({...record})),nextId:this.nextId,

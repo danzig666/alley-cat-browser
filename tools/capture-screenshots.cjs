@@ -38,7 +38,8 @@ const output = path.join(root, 'docs', 'screenshots');
     await phase('ready');
     await page.keyboard.press('Enter', { delay: 120 });
     await phase('playing');
-    await page.waitForTimeout(500);
+    await page.waitForFunction(()=>hdArt.renderedRecords?.some(record=>record.kind==='player'));
+    await page.waitForTimeout(300);
     await pair('alley');
     await page.evaluate(()=>{
       game.suspend();releaseKeys();const nativeSet=memoryASet16;

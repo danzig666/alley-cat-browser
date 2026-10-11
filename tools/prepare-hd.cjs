@@ -4,7 +4,7 @@ const {chromium}=require('playwright');
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox']});
   try{
     const page=await browser.newPage();
-    for(const name of ['alley','rooms','sprites','props','furniture','details','materials','animation']){
+    for(const name of ['alley','rooms','sprites','props','furniture','details','materials','animation','hanging']){
       const file=path.join(__dirname,'../art/hd',name+'.png');
       const encoded=await page.evaluate(async data=>{
         const image=new Image();image.src='data:image/png;base64,'+data;await image.decode();

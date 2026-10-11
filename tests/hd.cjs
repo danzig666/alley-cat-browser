@@ -74,13 +74,16 @@ const {chromium}=require('playwright');
         memoryASet16(0x1010,0x579,100);memoryASet(0x1010,0x57b,8);memoryASet(0x1010,0x57c,58);
         memoryASet(0x1010,0x55c,falling);run(sub_19797());catches.push(kinds('sub_19797'));
       }
+      // The original dog collision draws a fight cloud, not an oversized cat.
+      run(sub_18396());const fight=kinds('sub_18396');
       // Use an actual native collision tune in gameplay, not a synthetic gate.
       run(sub_1cd51());const notes=piano.notes;r.ax=1000;r.bx=750;run(sub_1cb6b());
       const effect={notes:piano.notes-notes,square:speaker.gain.gain.value};
-      game.time=realTime;game.restore(saved);game.suspend();present();return {bin,catches,effect};
+      game.time=realTime;game.restore(saved);game.suspend();present();return {bin,catches,fight,effect};
     });
     assert(encounters.bin.length>0&&encounters.bin.every(kind=>kind==='blackcat'),JSON.stringify(encounters));
     assert(encounters.catches.every(kinds=>kinds.length>0&&kinds.every(kind=>kind==='blackcat')),JSON.stringify(encounters));
+    assert(encounters.fight.length>0&&encounters.fight.every(kind=>kind==='impact'),JSON.stringify(encounters));
     assert(encounters.effect.notes>0,JSON.stringify(encounters));assert.equal(encounters.effect.square,0);
     // The native two-piece cat becomes one illustration with exactly the union
     // bounds. Intermediate renders move without executing any native instruction.
@@ -93,12 +96,11 @@ const {chromium}=require('playwright');
       const height=Math.max(...pieces.map(r=>r.y+r.height))-Math.min(...pieces.map(r=>r.y));
       if(composed[0].width!==width||composed[0].height!==height)return {ok:false,width,height,composed};
       const originalTime=game.time,records=pieces.map(record=>({...record})),now=game.time();
-      for(const record of pieces){record.fromX=record.x-4;record.at=now;}
+      for(const record of pieces){record.fromX=record.x-4;record.at=now;record.pose='walk';}
       const stages=[];
       const pixels=t=>{game.time=()=>now+t;hdArt.render();stages.push(hdArt.renderedRecords.filter(r=>r.kind==='player'));return hdArt.ctx.getImageData(0,0,1280,800).data.slice();};
       const a=pixels(10),b=pixels(30),c=pixels(55);
-      for(const record of pieces)record.source+=24;
-      const gait=pixels(55);
+      const gait=pixels(140);
       for(const record of records)Object.assign(hdArt.entities.get(record.id),record);
       game.time=originalTime;hdArt.render();
       return {ok:a.some((value,i)=>value!==b[i])&&b.some((value,i)=>value!==c[i])&&c.some((value,i)=>value!==gait[i]),phase:game.phase,stages,diffs:[a.filter((v,i)=>v!==b[i]).length,b.filter((v,i)=>v!==c[i]).length,c.filter((v,i)=>v!==gait[i]).length]};

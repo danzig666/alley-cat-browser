@@ -14,6 +14,10 @@ function updateUI() {
   updateSaveButtons();
   $('status').textContent=phase==='playing' && memoryAGet16(0x1010,4)!==0 ? 'ROOM CHALLENGE' : phaseInfo[phase]?.[0] || 'ALLEY CAT';
   $('hint').textContent=phaseInfo[phase]?.[1] || 'Keyboard & touch controls';
+  if(phase==='playing'&&memoryAGet(0x1010,0x55c)>=1){
+    $('status').textContent='HANGING';
+    $('hint').textContent='Hanging: Space / Q / E to jump · Down / S to drop · Swipe up or down';
+  }
   $('pause').textContent=phase==='paused'?'Resume':'Pause';
   $('sound').textContent=speaker.muted || !memoryAGet(0x1010,0)?'Sound off':'Sound on';
   if(game.error) {

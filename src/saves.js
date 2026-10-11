@@ -64,6 +64,10 @@ function validateSave(state) {
       ids.add(record.id);
       for(const key of ['room','x','y','width','height','source','at','fromX','fromY','facing'])if(!Number.isFinite(record[key]))bad();
       if(record.width<=0||record.width>64||record.height<=0||record.height>80)bad();
+      if(record.artHeight!==undefined||record.artTop!==undefined){
+        if(!Number.isInteger(record.artHeight)||record.artHeight<record.height||record.artHeight>80||
+           !Number.isInteger(record.artTop)||record.artTop<0||record.artTop+record.height>record.artHeight)bad();
+      }
     }
     for(let i=1;i<state.hd.provenance.length;i+=2)if(!ids.has(state.hd.provenance[i]))bad();
     if(state.hd.playerMotion)for(const key of ['room','x','y','fromX','fromY','at','facing'])if(!Number.isFinite(state.hd.playerMotion[key]))bad();

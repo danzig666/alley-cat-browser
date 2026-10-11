@@ -45,6 +45,7 @@ is skipped. Desktop players can press **Enter**, choose **K**, **H**, **T**, or
 | F | Special action during play |
 | Space | Jump; hold left or right first to jump sideways |
 | Q / E | Jump left / right with a single key |
+| Down / S while hanging | Let go of the clothesline and drop |
 | Z / C | Down-left / down-right, useful underwater |
 | Home / Page Up | Original diagonal jump keys |
 | Escape | Original “paws” mode; any key resumes |
@@ -171,6 +172,11 @@ native coordinates. The player's separately drawn upper/lower pieces compose
 one HD cat. Visual interpolation smooths movement between native updates;
 the game's clocks, input, collisions and occupied CGA pixels remain unchanged.
 HD title, difficulty and pause screens use the same browser menu controls.
+On a clothesline the original cat hangs by its paws: use Space, Q/E or an
+upward swipe to jump, and Down/S or a downward swipe to drop. HD shows this
+pose at the original line height and the controls panel explains it. Animation
+frames are cut at the atlas's actual transparent gutters; jumps at the screen
+edge crop the illustration instead of compressing it into the visible rows.
 
 `src/piano.js` uses real Yamaha C5 recordings from **Salamander Grand Piano**,
 by **Alexander Holm**, licensed under
@@ -215,6 +221,7 @@ node tests/controls.cjs
 node tests/layout.cjs
 node tests/saves.cjs
 node tests/hd.cjs
+node tests/player-animation.cjs
 HD=1 node tests/rooms.cjs
 node tests/save-compat.cjs
 ```
