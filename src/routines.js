@@ -1,43 +1,88 @@
 // Ahead-of-time translation of the matching Alley Cat binary.
 function* start() {
   let pc=0;
-  
+  const frame=execution.enter('start',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
-r.cs=0x1723; r.ds=0x1713; r.es=0x1713; r.ss=0x1000; r.sp=0x100; yield* sub_17230();
+r.cs=0x1723; r.ds=0x1713; r.es=0x1713; r.ss=0x1000; r.sp=0x100; frame.pc=2097153;
+case 2097153:
+yield* sub_17230();
+frame.pc=2097154;
+case 2097154:;
       return;
     default: throw new Error("Invalid control flow in start");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_17230() {
   let pc=0;
-  
+  const frame=execution.enter('sub_17230',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     push(r.ds);
     r.ax = 0x0000;
     push(r.ax);
-    yield* sub_1ce90();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1ce90();
+frame.pc=2097154;
+case 2097154:;
     r.ax = 0x1010;
     r.ds = r.ax;
-    yield* sub_185da();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_185da();
+frame.pc=2097156;
+case 2097156:;
     memoryASet(r.ds, 0x0690, 0x04);
     memoryASet16(r.ds, 0x6df8, 0x0000);
     memoryASet(r.ds, 0x069b, 0x00);
-    yield* sub_18649();
-    yield* sub_18618();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18649();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18618();
+frame.pc=2097160;
+case 2097160:;
     r.ax = memoryAGet16(r.ds, 0x0693);
     r.ax += 0x0240;
     memoryASet16(r.ds, 0x6e00, r.ax);
     r.ax = 0x0004;
-    yield* interrupt(0x10);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x10);
+frame.pc=2097162;
+case 2097162:;
     r.al = 0x04;
     if (memoryAGet(r.ds, 0x0697) == 0xfd)
         { pc = 0x1726f; continue dispatch; }
@@ -46,56 +91,124 @@ case 0x1726f:
     memoryASet(r.ds, 0x0690, r.al);
     r.ah = 0x0b;
     r.bx = 0x0101;
-    yield* interrupt(0x10);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x10);
+frame.pc=2097164;
+case 2097164:;
     memoryASet16(r.ds, 0x0416, 0x0000);
     memoryASet16(r.ds, 0x0004, 0x0000);
-    yield* sub_18f61();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18f61();
+frame.pc=2097166;
+case 2097166:;
     if (memoryAGet(r.ds, 0x0697) == 0xfd)
         { pc = 0x17295; continue dispatch; }
     r.dx = 0x03d9;
     r.al = 0x20;
     out(r.dx, r.al);
 case 0x17295:
-    yield* sub_1a040();
-    yield* sub_19911();
-    yield* sub_1990a();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1a040();
+frame.pc=2097168;
+case 2097168:;
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19911();
+frame.pc=2097170;
+case 2097170:;
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1990a();
+frame.pc=2097172;
+case 2097172:;
     memoryASet(r.ds, 0x041a, 0x00);
     r.ax = 0xffff;
     memoryASet16(r.ds, 0x041d, r.ax);
     memoryASet16(r.ds, 0x041f, r.ax);
     memoryASet(r.ds, 0x0000, 0xff);
 case 0x172b1:
-    yield* sub_198c0();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_198c0();
+frame.pc=2097174;
+case 2097174:;
     memoryASet16(r.ds, 0x0008, 0x0000);
     memoryASet16(r.ds, 0x0004, 0x0000);
-    yield* sub_18f61();
-    yield* sub_1cd51();
-    yield* sub_1cee0();
-    yield* sub_1cd51();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_18f61();
+frame.pc=2097176;
+case 2097176:;
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1cd51();
+frame.pc=2097178;
+case 2097178:;
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1cee0();
+frame.pc=2097180;
+case 2097180:;
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1cd51();
+frame.pc=2097182;
+case 2097182:;
     if (memoryAGet(r.ds, 0x041a) != 0x00)
         { pc = 0x172de; continue dispatch; }
 case 0x172d3:
-    yield* sub_1cd51();
-    yield* sub_1d115();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1cd51();
+frame.pc=2097184;
+case 2097184:;
+    frame.pc=2097185;
+case 2097185:
+yield* sub_1d115();
+frame.pc=2097186;
+case 2097186:;
     memoryASet(r.ds, 0x041a, 0x01);
 case 0x172de: game.phase="booting";
     r.ax = memoryAGet16(r.ds, 0x6df8);
     memoryASet16(r.ds, 0x0008, r.ax);
     memoryASet(r.ds, 0x1f80, 0x03);
-    yield* sub_1990a();
+    frame.pc=2097187;
+case 2097187:
+yield* sub_1990a();
+frame.pc=2097188;
+case 2097188:;
     memoryASet16(r.ds, 0x0004, 0x0000);
-    yield* sub_18f61();
-    yield* sub_1cd51();
+    frame.pc=2097189;
+case 2097189:
+yield* sub_18f61();
+frame.pc=2097190;
+case 2097190:;
+    frame.pc=2097191;
+case 2097191:
+yield* sub_1cd51();
+frame.pc=2097192;
+case 2097192:;
     memoryASet16(r.ds, 0x1c30, 0x0000);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097193;
+case 2097193:
+yield* interrupt(0x1a);
+frame.pc=2097194;
+case 2097194:;
     memoryASet16(r.ds, 0x0412, r.dx);
     memoryASet16(r.ds, 0x0414, 0x0000);
     memoryASet(r.ds, 0x0418, 0x00);
     memoryASet(r.ds, 0x0419, 0x00);
     memoryASet(r.ds, 0x041c, 0x00);
     memoryASet(r.ds, 0x041b, 0x00);
-    yield* sub_1cd51();
+    frame.pc=2097195;
+case 2097195:
+yield* sub_1cd51();
+frame.pc=2097196;
+case 2097196:;
 case 0x17323:
     if (memoryAGet(r.ds, 0x1f80) == 0x00)
         { pc = 0x172b1; continue dispatch; }
@@ -103,35 +216,87 @@ case 0x17323:
         { pc = 0x172de; continue dispatch; }
     if (memoryAGet(r.ds, 0x041c) != 0x00)
         { pc = 0x172d3; continue dispatch; }
-    yield* sub_19c30();
-    yield* sub_1c630();
+    frame.pc=2097197;
+case 2097197:
+yield* sub_19c30();
+frame.pc=2097198;
+case 2097198:;
+    frame.pc=2097199;
+case 2097199:
+yield* sub_1c630();
+frame.pc=2097200;
+case 2097200:;
     memoryASet(r.ds, 0x1f81, 0xff);
-    yield* sub_1cd51();
+    frame.pc=2097201;
+case 2097201:
+yield* sub_1cd51();
+frame.pc=2097202;
+case 2097202:;
     memoryASet16(r.ds, 0x0004, 0x0000);
     if (memoryAGet(r.ds, 0x0419) == 0x00)
         { pc = 0x17367; continue dispatch; }
-    yield* sub_179d1();
+    frame.pc=2097203;
+case 2097203:
+yield* sub_179d1();
+frame.pc=2097204;
+case 2097204:;
     memoryASet(r.ds, 0x0550, 0x02);
     memoryASet(r.ds, 0x0576, 0x01);
     memoryASet(r.ds, 0x0578, 0x20);
     { pc = 0x17370; continue dispatch; }
 case 0x17367:
     memoryASet16(r.ds, 0x0579, 0x0000);
-    yield* sub_1793d();
+    frame.pc=2097205;
+case 2097205:
+yield* sub_1793d();
+frame.pc=2097206;
+case 2097206:;
 case 0x17370:
-    yield* sub_19070();
-    yield* sub_18a60();
-    yield* sub_19440();
-    yield* sub_19560();
-    yield* sub_19922();
-    yield* sub_1992c();
-    yield* sub_1caed();
+    frame.pc=2097207;
+case 2097207:
+yield* sub_19070();
+frame.pc=2097208;
+case 2097208:;
+    frame.pc=2097209;
+case 2097209:
+yield* sub_18a60();
+frame.pc=2097210;
+case 2097210:;
+    frame.pc=2097211;
+case 2097211:
+yield* sub_19440();
+frame.pc=2097212;
+case 2097212:;
+    frame.pc=2097213;
+case 2097213:
+yield* sub_19560();
+frame.pc=2097214;
+case 2097214:;
+    frame.pc=2097215;
+case 2097215:
+yield* sub_19922();
+frame.pc=2097216;
+case 2097216:;
+    frame.pc=2097217;
+case 2097217:
+yield* sub_1992c();
+frame.pc=2097218;
+case 2097218:;
+    frame.pc=2097219;
+case 2097219:
+yield* sub_1caed();
+frame.pc=2097220;
+case 2097220:;
 case 0x17385: game.phase="playing";
     if (memoryAGet(r.ds, 0x1f80) != 0x00)
         { pc = 0x1738f; continue dispatch; }
     { pc = 0x172b1; continue dispatch; }
 case 0x1738f:
-    yield* sub_18568();
+    frame.pc=2097221;
+case 2097221:
+yield* sub_18568();
+frame.pc=2097222;
+case 2097222:;
     if (memoryAGet(r.ds, 0x041c) == 0x00)
         { pc = 0x1739c; continue dispatch; }
     { pc = 0x172d3; continue dispatch; }
@@ -140,22 +305,62 @@ case 0x1739c:
         { pc = 0x173a6; continue dispatch; }
     { pc = 0x172de; continue dispatch; }
 case 0x173a6:
-    yield* sub_18430();
-    yield* sub_17b15();
-    yield* sub_19093();
+    frame.pc=2097223;
+case 2097223:
+yield* sub_18430();
+frame.pc=2097224;
+case 2097224:;
+    frame.pc=2097225;
+case 2097225:
+yield* sub_17b15();
+frame.pc=2097226;
+case 2097226:;
+    frame.pc=2097227;
+case 2097227:
+yield* sub_19093();
+frame.pc=2097228;
+case 2097228:;
     if (memoryAGet(r.ds, 0x1cb8) != 0x00)
         { pc = 0x173c1; continue dispatch; }
     memoryASet(r.ds, 0x040f, memoryAGet(r.ds, 0x040f) + 1);
     if (memoryAGet(r.ds, 0x040f) & 0x03)
         { pc = 0x17385; continue dispatch; }
 case 0x173c1:
-    yield* sub_1c69d();
-    yield* sub_176d0();
-    yield* sub_18b66();
-    yield* sub_18a7b();
-    yield* sub_19446();
-    yield* sub_195ab();
-    yield* sub_198e3();
+    frame.pc=2097229;
+case 2097229:
+yield* sub_1c69d();
+frame.pc=2097230;
+case 2097230:;
+    frame.pc=2097231;
+case 2097231:
+yield* sub_176d0();
+frame.pc=2097232;
+case 2097232:;
+    frame.pc=2097233;
+case 2097233:
+yield* sub_18b66();
+frame.pc=2097234;
+case 2097234:;
+    frame.pc=2097235;
+case 2097235:
+yield* sub_18a7b();
+frame.pc=2097236;
+case 2097236:;
+    frame.pc=2097237;
+case 2097237:
+yield* sub_19446();
+frame.pc=2097238;
+case 2097238:;
+    frame.pc=2097239;
+case 2097239:
+yield* sub_195ab();
+frame.pc=2097240;
+case 2097240:;
+    frame.pc=2097241;
+case 2097241:
+yield* sub_198e3();
+frame.pc=2097242;
+case 2097242:;
     if (memoryAGet(r.ds, 0x0551) == 0x00)
         { pc = 0x17385; continue dispatch; }
     if (memoryAGet(r.ds, 0x1f80) != 0x00)
@@ -163,7 +368,11 @@ case 0x173c1:
     { pc = 0x172b1; continue dispatch; }
 case 0x173e7: game.phase="entering";
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097243;
+case 2097243:
+yield* interrupt(0x1a);
+frame.pc=2097244;
+case 2097244:;
     memoryASet16(r.ds, 0x0410, r.dx);
     r.ax = memoryAGet16(r.ds, 0x0579);
     memoryASet16(r.ds, 0x0001, r.ax);
@@ -176,7 +385,11 @@ case 0x173e7: game.phase="entering";
     memoryASet16(r.ds, 0x0004, 0x0007);
     { pc = 0x17468; continue dispatch; }
 case 0x17415:
-    yield* sub_1a02d();
+    frame.pc=2097245;
+case 2097245:
+yield* sub_1a02d();
+frame.pc=2097246;
+case 2097246:;
     if (!(r.dl & 0xa0))
         { pc = 0x1743a; continue dispatch; }
     r.bx = memoryAGet16(r.ds, 0x0008);
@@ -190,7 +403,11 @@ case 0x17415:
     r.al = memoryAGet(r.ds, r.bx + 1057);
     { pc = 0x1744c; continue dispatch; }
 case 0x1743a:
-    yield* sub_1a02d();
+    frame.pc=2097247;
+case 2097247:
+yield* sub_1a02d();
+frame.pc=2097248;
+case 2097248:;
     r.dx &= 0x0007;
     if (r.dx >= 0x0005)
         { pc = 0x1743a; continue dispatch; }
@@ -224,26 +441,90 @@ if (r.bx == 10) { pc = 0x1752e; continue dispatch; }
 if (r.bx == 12) { pc = 0x174da; continue dispatch; }
 if (r.bx == 14) { pc = 0x17490; continue dispatch; }
 throw new Error("Invalid room dispatch");
-    
+
 case 0x17490:
     memoryASet16(r.ds, 0x0004, 0x0007);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_179d1();
-    yield* sub_19070();
-    yield* sub_1a635();
-    yield* sub_1d330();
-    yield* sub_1c189();
-    yield* sub_1caed();
+    frame.pc=2097249;
+case 2097249:
+yield* sub_18e20();
+frame.pc=2097250;
+case 2097250:;
+    frame.pc=2097251;
+case 2097251:
+yield* sub_199c0();
+frame.pc=2097252;
+case 2097252:;
+    frame.pc=2097253;
+case 2097253:
+yield* sub_179d1();
+frame.pc=2097254;
+case 2097254:;
+    frame.pc=2097255;
+case 2097255:
+yield* sub_19070();
+frame.pc=2097256;
+case 2097256:;
+    frame.pc=2097257;
+case 2097257:
+yield* sub_1a635();
+frame.pc=2097258;
+case 2097258:;
+    frame.pc=2097259;
+case 2097259:
+yield* sub_1d330();
+frame.pc=2097260;
+case 2097260:;
+    frame.pc=2097261;
+case 2097261:
+yield* sub_1c189();
+frame.pc=2097262;
+case 2097262:;
+    frame.pc=2097263;
+case 2097263:
+yield* sub_1caed();
+frame.pc=2097264;
+case 2097264:;
 case 0x174ae: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_17b15();
-    yield* sub_1d336();
-    yield* sub_1a196();
-    yield* sub_1a090();
-    yield* sub_1be40();
+    frame.pc=2097265;
+case 2097265:
+yield* sub_18568();
+frame.pc=2097266;
+case 2097266:;
+    frame.pc=2097267;
+case 2097267:
+yield* sub_18430();
+frame.pc=2097268;
+case 2097268:;
+    frame.pc=2097269;
+case 2097269:
+yield* sub_1c69d();
+frame.pc=2097270;
+case 2097270:;
+    frame.pc=2097271;
+case 2097271:
+yield* sub_17b15();
+frame.pc=2097272;
+case 2097272:;
+    frame.pc=2097273;
+case 2097273:
+yield* sub_1d336();
+frame.pc=2097274;
+case 2097274:;
+    frame.pc=2097275;
+case 2097275:
+yield* sub_1a196();
+frame.pc=2097276;
+case 2097276:;
+    frame.pc=2097277;
+case 2097277:
+yield* sub_1a090();
+frame.pc=2097278;
+case 2097278:;
+    frame.pc=2097279;
+case 2097279:
+yield* sub_1be40();
+frame.pc=2097280;
+case 2097280:;
     r.al = memoryAGet(r.ds, 0x0551);
     r.al |= memoryAGet(r.ds, 0x0553);
     r.al |= memoryAGet(r.ds, 0x041c);
@@ -253,26 +534,86 @@ case 0x174ae: game.phase="playing";
     { pc = 0x17657; continue dispatch; }
 case 0x174da:
     memoryASet16(r.ds, 0x0004, 0x0006);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_1be30();
-    yield* sub_179d1();
-    yield* sub_1a635();
-    yield* sub_19070();
-    yield* sub_1caed();
+    frame.pc=2097281;
+case 2097281:
+yield* sub_18e20();
+frame.pc=2097282;
+case 2097282:;
+    frame.pc=2097283;
+case 2097283:
+yield* sub_199c0();
+frame.pc=2097284;
+case 2097284:;
+    frame.pc=2097285;
+case 2097285:
+yield* sub_1be30();
+frame.pc=2097286;
+case 2097286:;
+    frame.pc=2097287;
+case 2097287:
+yield* sub_179d1();
+frame.pc=2097288;
+case 2097288:;
+    frame.pc=2097289;
+case 2097289:
+yield* sub_1a635();
+frame.pc=2097290;
+case 2097290:;
+    frame.pc=2097291;
+case 2097291:
+yield* sub_19070();
+frame.pc=2097292;
+case 2097292:;
+    frame.pc=2097293;
+case 2097293:
+yield* sub_1caed();
+frame.pc=2097294;
+case 2097294:;
 case 0x174f5: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_1bb73();
-    yield* sub_1ba06();
-    yield* sub_17b15();
+    frame.pc=2097295;
+case 2097295:
+yield* sub_18568();
+frame.pc=2097296;
+case 2097296:;
+    frame.pc=2097297;
+case 2097297:
+yield* sub_18430();
+frame.pc=2097298;
+case 2097298:;
+    frame.pc=2097299;
+case 2097299:
+yield* sub_1c69d();
+frame.pc=2097300;
+case 2097300:;
+    frame.pc=2097301;
+case 2097301:
+yield* sub_1bb73();
+frame.pc=2097302;
+case 2097302:;
+    frame.pc=2097303;
+case 2097303:
+yield* sub_1ba06();
+frame.pc=2097304;
+case 2097304:;
+    frame.pc=2097305;
+case 2097305:
+yield* sub_17b15();
+frame.pc=2097306;
+case 2097306:;
     if (memoryAGet(r.ds, 0x1cb8) == 0x00)
         { pc = 0x17513; continue dispatch; }
-    yield* sub_19093();
+    frame.pc=2097307;
+case 2097307:
+yield* sub_19093();
+frame.pc=2097308;
+case 2097308:;
     { pc = 0x17516; continue dispatch; }
 case 0x17513:
-    yield* sub_1a380();
+    frame.pc=2097309;
+case 2097309:
+yield* sub_1a380();
+frame.pc=2097310;
+case 2097310:;
 case 0x17516:
     r.al = memoryAGet(r.ds, 0x0551);
     r.al |= memoryAGet(r.ds, 0x0552);
@@ -284,22 +625,82 @@ case 0x17516:
     { pc = 0x17657; continue dispatch; }
 case 0x1752e:
     memoryASet16(r.ds, 0x0004, 0x0005);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_1b7aa();
-    yield* sub_179d1();
-    yield* sub_1a635();
-    yield* sub_19070();
-    yield* sub_1caed();
+    frame.pc=2097311;
+case 2097311:
+yield* sub_18e20();
+frame.pc=2097312;
+case 2097312:;
+    frame.pc=2097313;
+case 2097313:
+yield* sub_199c0();
+frame.pc=2097314;
+case 2097314:;
+    frame.pc=2097315;
+case 2097315:
+yield* sub_1b7aa();
+frame.pc=2097316;
+case 2097316:;
+    frame.pc=2097317;
+case 2097317:
+yield* sub_179d1();
+frame.pc=2097318;
+case 2097318:;
+    frame.pc=2097319;
+case 2097319:
+yield* sub_1a635();
+frame.pc=2097320;
+case 2097320:;
+    frame.pc=2097321;
+case 2097321:
+yield* sub_19070();
+frame.pc=2097322;
+case 2097322:;
+    frame.pc=2097323;
+case 2097323:
+yield* sub_1caed();
+frame.pc=2097324;
+case 2097324:;
 case 0x17549: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_1b7db();
-    yield* sub_1b570();
-    yield* sub_17b15();
-    yield* sub_1a380();
-    yield* sub_19093();
+    frame.pc=2097325;
+case 2097325:
+yield* sub_18568();
+frame.pc=2097326;
+case 2097326:;
+    frame.pc=2097327;
+case 2097327:
+yield* sub_18430();
+frame.pc=2097328;
+case 2097328:;
+    frame.pc=2097329;
+case 2097329:
+yield* sub_1c69d();
+frame.pc=2097330;
+case 2097330:;
+    frame.pc=2097331;
+case 2097331:
+yield* sub_1b7db();
+frame.pc=2097332;
+case 2097332:;
+    frame.pc=2097333;
+case 2097333:
+yield* sub_1b570();
+frame.pc=2097334;
+case 2097334:;
+    frame.pc=2097335;
+case 2097335:
+yield* sub_17b15();
+frame.pc=2097336;
+case 2097336:;
+    frame.pc=2097337;
+case 2097337:
+yield* sub_1a380();
+frame.pc=2097338;
+case 2097338:;
+    frame.pc=2097339;
+case 2097339:
+yield* sub_19093();
+frame.pc=2097340;
+case 2097340:;
     r.al = memoryAGet(r.ds, 0x0552);
     r.al |= memoryAGet(r.ds, 0x0553);
     r.al |= memoryAGet(r.ds, 0x0551);
@@ -310,22 +711,82 @@ case 0x17549: game.phase="playing";
     { pc = 0x17657; continue dispatch; }
 case 0x17579:
     memoryASet16(r.ds, 0x0004, 0x0004);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_179d1();
-    yield* sub_1a635();
-    yield* sub_19070();
-    yield* sub_1b2c0();
-    yield* sub_1caed();
+    frame.pc=2097341;
+case 2097341:
+yield* sub_18e20();
+frame.pc=2097342;
+case 2097342:;
+    frame.pc=2097343;
+case 2097343:
+yield* sub_199c0();
+frame.pc=2097344;
+case 2097344:;
+    frame.pc=2097345;
+case 2097345:
+yield* sub_179d1();
+frame.pc=2097346;
+case 2097346:;
+    frame.pc=2097347;
+case 2097347:
+yield* sub_1a635();
+frame.pc=2097348;
+case 2097348:;
+    frame.pc=2097349;
+case 2097349:
+yield* sub_19070();
+frame.pc=2097350;
+case 2097350:;
+    frame.pc=2097351;
+case 2097351:
+yield* sub_1b2c0();
+frame.pc=2097352;
+case 2097352:;
+    frame.pc=2097353;
+case 2097353:
+yield* sub_1caed();
+frame.pc=2097354;
+case 2097354:;
 case 0x17594: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_17b15();
-    yield* sub_1b0c0();
-    yield* sub_1b2f2();
-    yield* sub_1a380();
-    yield* sub_19093();
+    frame.pc=2097355;
+case 2097355:
+yield* sub_18568();
+frame.pc=2097356;
+case 2097356:;
+    frame.pc=2097357;
+case 2097357:
+yield* sub_18430();
+frame.pc=2097358;
+case 2097358:;
+    frame.pc=2097359;
+case 2097359:
+yield* sub_1c69d();
+frame.pc=2097360;
+case 2097360:;
+    frame.pc=2097361;
+case 2097361:
+yield* sub_17b15();
+frame.pc=2097362;
+case 2097362:;
+    frame.pc=2097363;
+case 2097363:
+yield* sub_1b0c0();
+frame.pc=2097364;
+case 2097364:;
+    frame.pc=2097365;
+case 2097365:
+yield* sub_1b2f2();
+frame.pc=2097366;
+case 2097366:;
+    frame.pc=2097367;
+case 2097367:
+yield* sub_1a380();
+frame.pc=2097368;
+case 2097368:;
+    frame.pc=2097369;
+case 2097369:
+yield* sub_19093();
+frame.pc=2097370;
+case 2097370:;
     r.al = memoryAGet(r.ds, 0x0552);
     r.al |= memoryAGet(r.ds, 0x0553);
     r.al |= memoryAGet(r.ds, 0x0551);
@@ -336,23 +797,87 @@ case 0x17594: game.phase="playing";
     { pc = 0x17657; continue dispatch; }
 case 0x175c4:
     memoryASet16(r.ds, 0x0004, 0x0003);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_179d1();
-    yield* sub_1a635();
-    yield* sub_19070();
-    yield* sub_1ad60();
-    yield* sub_1aec0();
-    yield* sub_1caed();
+    frame.pc=2097371;
+case 2097371:
+yield* sub_18e20();
+frame.pc=2097372;
+case 2097372:;
+    frame.pc=2097373;
+case 2097373:
+yield* sub_199c0();
+frame.pc=2097374;
+case 2097374:;
+    frame.pc=2097375;
+case 2097375:
+yield* sub_179d1();
+frame.pc=2097376;
+case 2097376:;
+    frame.pc=2097377;
+case 2097377:
+yield* sub_1a635();
+frame.pc=2097378;
+case 2097378:;
+    frame.pc=2097379;
+case 2097379:
+yield* sub_19070();
+frame.pc=2097380;
+case 2097380:;
+    frame.pc=2097381;
+case 2097381:
+yield* sub_1ad60();
+frame.pc=2097382;
+case 2097382:;
+    frame.pc=2097383;
+case 2097383:
+yield* sub_1aec0();
+frame.pc=2097384;
+case 2097384:;
+    frame.pc=2097385;
+case 2097385:
+yield* sub_1caed();
+frame.pc=2097386;
+case 2097386:;
 case 0x175e2: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_17b15();
-    yield* sub_1aee1();
-    yield* sub_1ad72();
-    yield* sub_1a380();
-    yield* sub_19093();
+    frame.pc=2097387;
+case 2097387:
+yield* sub_18568();
+frame.pc=2097388;
+case 2097388:;
+    frame.pc=2097389;
+case 2097389:
+yield* sub_18430();
+frame.pc=2097390;
+case 2097390:;
+    frame.pc=2097391;
+case 2097391:
+yield* sub_1c69d();
+frame.pc=2097392;
+case 2097392:;
+    frame.pc=2097393;
+case 2097393:
+yield* sub_17b15();
+frame.pc=2097394;
+case 2097394:;
+    frame.pc=2097395;
+case 2097395:
+yield* sub_1aee1();
+frame.pc=2097396;
+case 2097396:;
+    frame.pc=2097397;
+case 2097397:
+yield* sub_1ad72();
+frame.pc=2097398;
+case 2097398:;
+    frame.pc=2097399;
+case 2097399:
+yield* sub_1a380();
+frame.pc=2097400;
+case 2097400:;
+    frame.pc=2097401;
+case 2097401:
+yield* sub_19093();
+frame.pc=2097402;
+case 2097402:;
     r.al = memoryAGet(r.ds, 0x0552);
     r.al |= memoryAGet(r.ds, 0x0553);
     r.al |= memoryAGet(r.ds, 0x0551);
@@ -363,20 +888,72 @@ case 0x175e2: game.phase="playing";
     { pc = 0x17657; continue dispatch; }
 case 0x17612:
     memoryASet16(r.ds, 0x0004, 0x0001);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_179d1();
-    yield* sub_1a635();
-    yield* sub_19070();
-    yield* sub_1caed();
+    frame.pc=2097403;
+case 2097403:
+yield* sub_18e20();
+frame.pc=2097404;
+case 2097404:;
+    frame.pc=2097405;
+case 2097405:
+yield* sub_199c0();
+frame.pc=2097406;
+case 2097406:;
+    frame.pc=2097407;
+case 2097407:
+yield* sub_179d1();
+frame.pc=2097408;
+case 2097408:;
+    frame.pc=2097409;
+case 2097409:
+yield* sub_1a635();
+frame.pc=2097410;
+case 2097410:;
+    frame.pc=2097411;
+case 2097411:
+yield* sub_19070();
+frame.pc=2097412;
+case 2097412:;
+    frame.pc=2097413;
+case 2097413:
+yield* sub_1caed();
+frame.pc=2097414;
+case 2097414:;
 case 0x1762a: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_17b15();
-    yield* sub_1a380();
-    yield* sub_19093();
-    yield* sub_1aa80();
+    frame.pc=2097415;
+case 2097415:
+yield* sub_18568();
+frame.pc=2097416;
+case 2097416:;
+    frame.pc=2097417;
+case 2097417:
+yield* sub_18430();
+frame.pc=2097418;
+case 2097418:;
+    frame.pc=2097419;
+case 2097419:
+yield* sub_1c69d();
+frame.pc=2097420;
+case 2097420:;
+    frame.pc=2097421;
+case 2097421:
+yield* sub_17b15();
+frame.pc=2097422;
+case 2097422:;
+    frame.pc=2097423;
+case 2097423:
+yield* sub_1a380();
+frame.pc=2097424;
+case 2097424:;
+    frame.pc=2097425;
+case 2097425:
+yield* sub_19093();
+frame.pc=2097426;
+case 2097426:;
+    frame.pc=2097427;
+case 2097427:
+yield* sub_1aa80();
+frame.pc=2097428;
+case 2097428:;
     if (memoryAGet(r.ds, 0x0554) != 0x00)
         { pc = 0x17689; continue dispatch; }
     r.al = memoryAGet(r.ds, 0x0552);
@@ -401,24 +978,72 @@ case 0x17677:
     r.ax = memoryAGet16(r.ds, 0x0004);
     memoryASet16(r.ds, 0x0006, r.ax);
     memoryASet16(r.ds, 0x0004, 0x0000);
-    yield* sub_18e20();
+    frame.pc=2097429;
+case 2097429:
+yield* sub_18e20();
+frame.pc=2097430;
+case 2097430:;
     { pc = 0x17323; continue dispatch; }
 case 0x17689:
     memoryASet16(r.ds, 0x0004, 0x0002);
-    yield* sub_18e20();
-    yield* sub_199c0();
-    yield* sub_1a7f9();
-    yield* sub_179d1();
+    frame.pc=2097431;
+case 2097431:
+yield* sub_18e20();
+frame.pc=2097432;
+case 2097432:;
+    frame.pc=2097433;
+case 2097433:
+yield* sub_199c0();
+frame.pc=2097434;
+case 2097434:;
+    frame.pc=2097435;
+case 2097435:
+yield* sub_1a7f9();
+frame.pc=2097436;
+case 2097436:;
+    frame.pc=2097437;
+case 2097437:
+yield* sub_179d1();
+frame.pc=2097438;
+case 2097438:;
     memoryASet(r.ds, 0x1cbf, 0x00);
     memoryASet(r.ds, 0x1cb8, 0x00);
-    yield* sub_1caed();
+    frame.pc=2097439;
+case 2097439:
+yield* sub_1caed();
+frame.pc=2097440;
+case 2097440:;
 case 0x176a8: game.phase="playing";
-    yield* sub_18568();
-    yield* sub_18430();
-    yield* sub_1c69d();
-    yield* sub_17b15();
-    yield* sub_1a8a5();
-    yield* sub_1aa15();
+    frame.pc=2097441;
+case 2097441:
+yield* sub_18568();
+frame.pc=2097442;
+case 2097442:;
+    frame.pc=2097443;
+case 2097443:
+yield* sub_18430();
+frame.pc=2097444;
+case 2097444:;
+    frame.pc=2097445;
+case 2097445:
+yield* sub_1c69d();
+frame.pc=2097446;
+case 2097446:;
+    frame.pc=2097447;
+case 2097447:
+yield* sub_17b15();
+frame.pc=2097448;
+case 2097448:;
+    frame.pc=2097449;
+case 2097449:
+yield* sub_1a8a5();
+frame.pc=2097450;
+case 2097450:;
+    frame.pc=2097451;
+case 2097451:
+yield* sub_1aa15();
+frame.pc=2097452;
+case 2097452:;
     r.al = memoryAGet(r.ds, 0x0552);
     r.al |= memoryAGet(r.ds, 0x0553);
     r.al |= memoryAGet(r.ds, 0x041c);
@@ -431,13 +1056,24 @@ case 0x176a8: game.phase="playing";
     default: throw new Error("Invalid control flow in sub_17230");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_176d0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_176d0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -449,7 +1085,11 @@ case 0x176d6:
     return;
 case 0x176d7:
     memoryASet(r.ds, 0x0531, memoryAGet(r.ds, 0x0531) + 1);
-    yield* sub_18608();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_18608();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.zero)
         { pc = 0x176d6; continue dispatch; }
     if (memoryAGet(r.ds, 0x055a) != 0x00)
@@ -457,7 +1097,11 @@ case 0x176d7:
     if (memoryAGet(r.ds, 0x1673) != 0x00)
         { pc = 0x176d6; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     if (r.dx == memoryAGet16(r.ds, 0x0544))
         { pc = 0x176d6; continue dispatch; }
     memoryASet16(r.ds, 0x0544, r.dx);
@@ -470,7 +1114,11 @@ case 0x176d7:
 case 0x1770f:
     memoryASet(r.ds, 0x0531, r.al);
     r.bx = memoryAGet16(r.ds, 0x052f);
-    yield* sub_17888();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_17888();
+frame.pc=2097158;
+case 2097158:;
     if (flags.zero)
         { pc = 0x1773c; continue dispatch; }
     r.al = memoryAGet(r.ds, 0x0525);
@@ -478,7 +1126,11 @@ case 0x1770f:
     if (r.al < 0x04)
         { pc = 0x176d6; continue dispatch; }
 case 0x17726:
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     r.dl &= 0x03;
     if (r.dl == memoryAGet(r.ds, 0x052f))
         { pc = 0x17726; continue dispatch; }
@@ -491,16 +1143,28 @@ case 0x1773c:
     memoryASet(r.ds, 0x0525, memoryAGet(r.ds, 0x0525) + r.al);
     if (memoryAGet(r.ds, 0x0525) < 0x04)
         { pc = 0x177b3; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1a02d();
+frame.pc=2097162;
+case 2097162:;
     if (r.dl > 0x40)
         { pc = 0x17769; continue dispatch; }
 case 0x17753:
-    yield* sub_1a02d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1a02d();
+frame.pc=2097164;
+case 2097164:;
     r.dl &= 0x03;
     if (r.dl == 0x03)
         { pc = 0x17753; continue dispatch; }
     r.bl = r.dl;
-    yield* sub_17888();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_17888();
+frame.pc=2097166;
+case 2097166:;
     if (!flags.zero)
         { pc = 0x17753; continue dispatch; }
 case 0x17765:
@@ -515,12 +1179,20 @@ case 0x17769:
     r.bx = memoryAGet16(r.ds, 0x0008);
     r.bl = memoryAGet(r.ds, r.bx + 10938);
     r.bh = r.ah;
-    yield* sub_178ad();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_178ad();
+frame.pc=2097168;
+case 2097168:;
     if (memoryAGet16(r.ds, 0x052f) == 0x0001)
         { pc = 0x1779e; continue dispatch; }
     flags.carry = memoryAGet(r.ds, 0x0540) & 1;
     memoryASet(r.ds, 0x0540, memoryAGet(r.ds, 0x0540) >> 1);
-    yield* sub_17863();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_17863();
+frame.pc=2097170;
+case 2097170:;
     flags.carry = memoryAGet(r.ds, 0x0540) & 1;
     memoryASet(r.ds, 0x0540, memoryAGet(r.ds, 0x0540) >> 1);
     { pc = 0x177ac; continue dispatch; }
@@ -529,11 +1201,19 @@ case 0x1779e:
     r.al >>= 1;
     flags.carry = r.al & 1;
     r.al >>= 1;
-    yield* sub_17863();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_17863();
+frame.pc=2097172;
+case 2097172:;
     flags.carry = memoryAGet(r.ds, 0x0540) & 1;
     memoryASet(r.ds, 0x0540, memoryAGet(r.ds, 0x0540) >> 1);
 case 0x177ac:
-    yield* sub_17863();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_17863();
+frame.pc=2097174;
+case 2097174:;
     r.bx = memoryAGet16(r.ds, 0x052f);
 case 0x177b3:
     if (memoryAGet(r.ds, 0x04d6) == 0x00)
@@ -614,13 +1294,24 @@ case 0x17860:
     default: throw new Error("Invalid control flow in sub_176d0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_17863() {
   let pc=0;
-  
+  const frame=execution.enter('sub_17863',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -652,13 +1343,24 @@ case 0x1787e:
     default: throw new Error("Invalid control flow in sub_17863");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_17888() {
   let pc=0;
-  
+  const frame=execution.enter('sub_17888',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -681,13 +1383,24 @@ case 0x178a9:
     default: throw new Error("Invalid control flow in sub_17888");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_178ad() {
   let pc=0;
-  
+  const frame=execution.enter('sub_178ad',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -700,7 +1413,11 @@ function* sub_178ad() {
     r.ax = 0x4444;
     memoryASet16(r.es, r.di + 4, r.ax);
     memoryASet16(r.es, r.di + 6, r.ax);
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     if (r.dl < r.bl)
         { pc = 0x178d4; continue dispatch; }
     if (r.dh > r.bh)
@@ -708,18 +1425,30 @@ function* sub_178ad() {
 case 0x178d4:
     return;
 case 0x178d5:
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     if (r.dl < 0x18)
         { pc = 0x178f7; continue dispatch; }
     if (r.dl < 0x60)
         { pc = 0x17900; continue dispatch; }
     push(r.di);
-    yield* sub_1790e();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1790e();
+frame.pc=2097158;
+case 2097158:;
     r.al <<= 1;
     memoryASet(r.ds, 0x0540, r.al);
     r.di = pop();
     r.di += 0x0002;
-    yield* sub_1790e();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1790e();
+frame.pc=2097160;
+case 2097160:;
     memoryASet(r.ds, 0x0540, memoryAGet(r.ds, 0x0540) | r.al);
     return;
 case 0x178f7:
@@ -737,17 +1466,32 @@ case 0x17906:
     default: throw new Error("Invalid control flow in sub_178ad");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1790e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1790e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dx &= 0x0006;
     if (r.dl != 0x06)
         { pc = 0x1791d; continue dispatch; }
@@ -769,13 +1513,24 @@ case 0x17926:
     default: throw new Error("Invalid control flow in sub_1790e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_17930() {
   let pc=0;
-  
+  const frame=execution.enter('sub_17930',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -786,13 +1541,24 @@ function* sub_17930() {
     default: throw new Error("Invalid control flow in sub_17930");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1793d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1793d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -810,10 +1576,18 @@ case 0x1794f:
     memoryASet16(r.ds, 0x0579, r.cx);
     memoryASet(r.ds, 0x057b, r.dl);
     memoryASet(r.ds, 0x057c, 0xe6);
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x055f, r.ax);
     memoryASet16(r.ds, 0x0561, 0x0b03);
-    yield* sub_18354();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18354();
+frame.pc=2097156;
+case 2097156:;
     memoryASet(r.ds, 0x0571, 0x00);
     memoryASet16(r.ds, 0x0572, 0x0002);
     memoryASet(r.ds, 0x0576, 0x01);
@@ -830,19 +1604,34 @@ case 0x1794f:
     memoryASet16(r.ds, 0x0554, 0x0000);
     memoryASet(r.ds, 0x0553, 0x00);
     memoryASet(r.ds, 0x127c, 0x00);
-    yield* sub_17930();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_17930();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1793d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_179d1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_179d1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -862,14 +1651,22 @@ case 0x179ef:
     r.al = r.dl;
     r.al += 0x32;
     memoryASet(r.ds, 0x057c, r.al);
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x055f, r.ax);
     r.ax = memoryAGet16(r.ds, 0x0fb2);
     memoryASet16(r.ds, 0x0569, r.ax);
     r.ax = memoryAGet16(r.ds, 0x0fbe);
     memoryASet16(r.ds, 0x0567, r.ax);
     memoryASet16(r.ds, 0x0561, r.ax);
-    yield* sub_18354();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18354();
+frame.pc=2097156;
+case 2097156:;
     memoryASet(r.ds, 0x0571, 0x01);
     memoryASet(r.ds, 0x056e, 0x00);
     memoryASet(r.ds, 0x0576, 0x01);
@@ -892,13 +1689,21 @@ case 0x17a35:
     memoryASet16(r.ds, 0x0554, 0x0000);
     memoryASet(r.ds, 0x0553, 0x00);
     memoryASet(r.ds, 0x127c, 0x00);
-    yield* sub_17930();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_17930();
+frame.pc=2097158;
+case 2097158:;
     if (memoryAGet16(r.ds, 0x0004) != 0x0002)
         return;
     memoryASet(r.ds, 0x0576, 0x10);
     memoryASet16(r.ds, 0x0574, 0x0010);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     memoryASet16(r.ds, 0x05f1, r.dx);
     memoryASet(r.ds, 0x05f3, 0x00);
     memoryASet(r.ds, 0x05f4, 0x05);
@@ -908,13 +1713,24 @@ case 0x17a35:
     default: throw new Error("Invalid control flow in sub_179d1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_17aa2() {
   let pc=0;
-  
+  const frame=execution.enter('sub_17aa2',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -968,18 +1784,33 @@ case 0x17ae9:
     default: throw new Error("Invalid control flow in sub_17aa2");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_17b15() {
   let pc=0;
-  
+  const frame=execution.enter('sub_17b15',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x057d))
         { pc = 0x17b2d; continue dispatch; }
     if (memoryAGet16(r.ds, 0x0684) == 0x0000)
@@ -1007,7 +1838,11 @@ case 0x17b3c:
 case 0x17b4d:
     push(r.dx);
     push(r.ax);
-    yield* sub_18608();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18608();
+frame.pc=2097156;
+case 2097156:;
     r.ax = pop();
     r.dx = pop();
     if (flags.zero)
@@ -1043,7 +1878,11 @@ case 0x17ba1:
     memoryASet(r.ds, 0x05f5, memoryAGet(r.ds, 0x05f5) - 1);
     if (r.tl != 1)
         { pc = 0x17be9; continue dispatch; }
-    yield* sub_1cbaf();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cbaf();
+frame.pc=2097158;
+case 2097158:;
     memoryASet(r.ds, 0x05f5, 0x06);
     r.al = memoryAGet(r.ds, 0x05f4);
     if (memoryAGet(r.ds, 0x057b) < 0xb3)
@@ -1062,14 +1901,22 @@ case 0x17bc2:
 case 0x17bcc:
     r.cx = memoryAGet16(r.ds, 0x0579);
     r.dl &= 0xf8;
-    yield* sub_19ee0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19ee0();
+frame.pc=2097160;
+case 2097160:;
     r.di = r.ax;
     r.si = 0x064e;
     r.ax = 0xb800;
     r.es = r.ax;
     r.bp = 0x000e;
     r.cx = 0x0503;
-    yield* sub_19f65();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19f65();
+frame.pc=2097162;
+case 2097162:;
 case 0x17be9:
     memoryASet(r.ds, 0x056e, 0x00);
     memoryASet(r.ds, 0x0571, 0x01);
@@ -1077,7 +1924,11 @@ case 0x17be9:
     memoryASet(r.ds, 0x0576, 0x20);
     r.bx = 0;
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x10);
+frame.pc=2097164;
+case 2097164:;
     { pc = 0x17cb6; continue dispatch; }
 case 0x17c06:
     r.si = memoryAGet16(r.ds, 0x0008);
@@ -1094,7 +1945,11 @@ case 0x17c06:
     r.bl--;
 case 0x17c26:
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097165;
+case 2097165:
+yield* interrupt(0x10);
+frame.pc=2097166;
+case 2097166:;
     r.al = memoryAGet(r.ds, 0x056e);
     memoryASet(r.ds, 0x056f, r.al);
     r.al = memoryAGet(r.ds, 0x0571);
@@ -1127,7 +1982,11 @@ case 0x17c67:
     r.ax = memoryAGet16(r.ds, r.bx + 1644);
 case 0x17c7e:
     memoryASet16(r.ds, 0x0572, r.ax);
-    yield* sub_181f9();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_181f9();
+frame.pc=2097168;
+case 2097168:;
     r.al = memoryAGet(r.ds, 0x0699);
     if (r.al != 0x00)
         { pc = 0x17c9a; continue dispatch; }
@@ -1184,7 +2043,11 @@ case 0x17cfc:
 case 0x17cfe:
     memoryASet(r.ds, 0x057b, r.dl);
     r.cx = memoryAGet16(r.ds, 0x0579);
-    yield* sub_19ee0();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19ee0();
+frame.pc=2097170;
+case 2097170:;
     memoryASet16(r.ds, 0x0563, r.ax);
     if (memoryAGet(r.ds, 0x05f3) == 0x00)
         { pc = 0x17d19; continue dispatch; }
@@ -1255,29 +2118,57 @@ case 0x17db5:
     if (memoryAGet(r.ds, 0x057b) > r.al)
         { pc = 0x17dc7; continue dispatch; }
 case 0x17dbb:
-    yield* sub_18608();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_18608();
+frame.pc=2097172;
+case 2097172:;
     if (!flags.zero)
         { pc = 0x17dbb; continue dispatch; }
 case 0x17dc0:
-    yield* sub_18608();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_18608();
+frame.pc=2097174;
+case 2097174:;
     if (flags.zero)
         { pc = 0x17dc0; continue dispatch; }
 case 0x17dc5:
     if (--r.cx)
         { pc = 0x17dc5; continue dispatch; }
 case 0x17dc7:
-    yield* sub_18413();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_18413();
+frame.pc=2097176;
+case 2097176:;
     r.ax = memoryAGet16(r.ds, 0x0563);
     memoryASet16(r.ds, 0x055f, r.ax);
-    yield* sub_18375();
-    yield* sub_1a6d0();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_18375();
+frame.pc=2097178;
+case 2097178:;
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1a6d0();
+frame.pc=2097180;
+case 2097180:;
     if (!flags.carry)
         { pc = 0x17ddb; continue dispatch; }
-    yield* sub_18375();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_18375();
+frame.pc=2097182;
+case 2097182:;
 case 0x17ddb:
     return;
 case 0x17ddc:
-    yield* sub_18daa();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_18daa();
+frame.pc=2097184;
+case 2097184:;
     if (!flags.carry)
         { pc = 0x17de2; continue dispatch; }
 case 0x17de1:
@@ -1300,29 +2191,61 @@ case 0x17e03:
     if (r.tl != 1)
         { pc = 0x17e15; continue dispatch; }
     memoryASet16(r.ds, 0x0572, 0x0008);
-    yield* sub_181f9();
+    frame.pc=2097185;
+case 2097185:
+yield* sub_181f9();
+frame.pc=2097186;
+case 2097186:;
     { pc = 0x17e4c; continue dispatch; }
 case 0x17e15:
-    yield* sub_18250();
+    frame.pc=2097187;
+case 2097187:
+yield* sub_18250();
+frame.pc=2097188;
+case 2097188:;
     memoryASet16(r.ds, 0x055d, r.bx);
     r.al = memoryAGet(r.ds, 0x0558);
     r.ah = memoryAGet(r.ds, 0x056e);
-    yield* sub_181b7();
+    frame.pc=2097189;
+case 2097189:
+yield* sub_181b7();
+frame.pc=2097190;
+case 2097190:;
     if (memoryAGet(r.ds, 0x0558) == 0x02)
         { pc = 0x17e30; continue dispatch; }
-    yield* sub_18413();
+    frame.pc=2097191;
+case 2097191:
+yield* sub_18413();
+frame.pc=2097192;
+case 2097192:;
 case 0x17e30:
-    yield* sub_18daa();
+    frame.pc=2097193;
+case 2097193:
+yield* sub_18daa();
+frame.pc=2097194;
+case 2097194:;
     if (flags.carry)
         { pc = 0x17e4b; continue dispatch; }
-    yield* sub_19325();
+    frame.pc=2097195;
+case 2097195:
+yield* sub_19325();
+frame.pc=2097196;
+case 2097196:;
     if (flags.carry)
         { pc = 0x17e4b; continue dispatch; }
     r.dl = memoryAGet(r.ds, 0x057b);
     r.cx = memoryAGet16(r.ds, 0x0579);
-    yield* sub_19ee0();
+    frame.pc=2097197;
+case 2097197:
+yield* sub_19ee0();
+frame.pc=2097198;
+case 2097198:;
     memoryASet16(r.ds, 0x055f, r.ax);
-    yield* sub_18375();
+    frame.pc=2097199;
+case 2097199:
+yield* sub_18375();
+frame.pc=2097200;
+case 2097200:;
 case 0x17e4b:
     return;
 case 0x17e4c:
@@ -1334,20 +2257,40 @@ case 0x17e4c:
     memoryASet16(r.ds, 0x0572, 0x0006);
     r.dl = memoryAGet(r.ds, 0x057b);
     r.cx = memoryAGet16(r.ds, 0x0579);
-    yield* sub_19ee0();
+    frame.pc=2097201;
+case 2097201:
+yield* sub_19ee0();
+frame.pc=2097202;
+case 2097202:;
     memoryASet16(r.ds, 0x0563, r.ax);
-    yield* sub_18413();
-    yield* sub_18daa();
+    frame.pc=2097203;
+case 2097203:
+yield* sub_18413();
+frame.pc=2097204;
+case 2097204:;
+    frame.pc=2097205;
+case 2097205:
+yield* sub_18daa();
+frame.pc=2097206;
+case 2097206:;
     if (flags.carry)
         { pc = 0x17e96; continue dispatch; }
-    yield* sub_19325();
+    frame.pc=2097207;
+case 2097207:
+yield* sub_19325();
+frame.pc=2097208;
+case 2097208:;
     if (flags.carry)
         { pc = 0x17e96; continue dispatch; }
     r.ax = memoryAGet16(r.ds, 0x0563);
     memoryASet16(r.ds, 0x055f, r.ax);
     memoryASet16(r.ds, 0x0565, 0x0e03);
     memoryASet16(r.ds, 0x055d, 0x09da);
-    yield* sub_18375();
+    frame.pc=2097209;
+case 2097209:
+yield* sub_18375();
+frame.pc=2097210;
+case 2097210:;
 case 0x17e8f:
     if (memoryAGet(r.ds, 0x0699) != 0x00)
         { pc = 0x17e97; continue dispatch; }
@@ -1360,7 +2303,11 @@ case 0x17e9a:
         { pc = 0x17ea4; continue dispatch; }
     { pc = 0x18053; continue dispatch; }
 case 0x17ea4:
-    yield* sub_181f9();
+    frame.pc=2097211;
+case 2097211:
+yield* sub_181f9();
+frame.pc=2097212;
+case 2097212:;
     if (!flags.carry)
         { pc = 0x17ec0; continue dispatch; }
     memoryASet(r.ds, 0x056e, 0x00);
@@ -1399,7 +2346,11 @@ case 0x17ef1:
 case 0x17f05:
     if (memoryAGet(r.ds, 0x0571) != 0x01)
         { pc = 0x17f17; continue dispatch; }
-    yield* sub_18838();
+    frame.pc=2097213;
+case 2097213:
+yield* sub_18838();
+frame.pc=2097214;
+case 2097214:;
     if (!flags.carry)
         { pc = 0x17f17; continue dispatch; }
     r.al = memoryAGet(r.ds, 0x057c);
@@ -1439,7 +2390,11 @@ case 0x17f59:
     if (memoryAGet(r.ds, 0x055c) == 0x00)
         { pc = 0x17f7f; continue dispatch; }
     push(r.ax);
-    yield* sub_1ccf2();
+    frame.pc=2097215;
+case 2097215:
+yield* sub_1ccf2();
+frame.pc=2097216;
+case 2097216:;
     r.ax = pop();
 case 0x17f7f:
     memoryASet(r.ds, 0x057c, r.al);
@@ -1452,16 +2407,32 @@ case 0x17f88:
     memoryASet(r.ds, 0x057b, r.al);
     r.dl = memoryAGet(r.ds, 0x057b);
     r.cx = memoryAGet16(r.ds, 0x0579);
-    yield* sub_19ee0();
+    frame.pc=2097217;
+case 2097217:
+yield* sub_19ee0();
+frame.pc=2097218;
+case 2097218:;
     memoryASet16(r.ds, 0x0563, r.ax);
     if (memoryAGet(r.ds, 0x0583) != 0x00)
         { pc = 0x17fa3; continue dispatch; }
-    yield* sub_18413();
+    frame.pc=2097219;
+case 2097219:
+yield* sub_18413();
+frame.pc=2097220;
+case 2097220:;
 case 0x17fa3:
-    yield* sub_18daa();
+    frame.pc=2097221;
+case 2097221:
+yield* sub_18daa();
+frame.pc=2097222;
+case 2097222:;
     if (flags.carry)
         { pc = 0x17ff4; continue dispatch; }
-    yield* sub_19325();
+    frame.pc=2097223;
+case 2097223:
+yield* sub_19325();
+frame.pc=2097224;
+case 2097224:;
     if (flags.carry)
         { pc = 0x17ff4; continue dispatch; }
     r.ax = memoryAGet16(r.ds, 0x0563);
@@ -1539,14 +2510,26 @@ case 0x18032:
     memoryASet(r.ds, 0x0551, 0x01);
     return;
 case 0x1803f:
-    yield* sub_1793d();
-    yield* sub_1cbfb();
+    frame.pc=2097225;
+case 2097225:
+yield* sub_1793d();
+frame.pc=2097226;
+case 2097226:;
+    frame.pc=2097227;
+case 2097227:
+yield* sub_1cbfb();
+frame.pc=2097228;
+case 2097228:;
     return;
 case 0x18046:
     memoryASet16(r.ds, 0x0565, r.bx);
     memoryASet(r.ds, 0x0576, 0x02);
 case 0x1804f:
-    yield* sub_18375();
+    frame.pc=2097229;
+case 2097229:
+yield* sub_18375();
+frame.pc=2097230;
+case 2097230:;
     return;
 case 0x18053:
     if (memoryAGet16(r.ds, 0x0004) == 0x0007)
@@ -1554,7 +2537,11 @@ case 0x18053:
     if (memoryAGet(r.ds, 0x057b) >= 0xb4)
         { pc = 0x180a8; continue dispatch; }
 case 0x18061:
-    yield* sub_18838();
+    frame.pc=2097231;
+case 2097231:
+yield* sub_18838();
+frame.pc=2097232;
+case 2097232:;
     if (flags.carry)
         { pc = 0x18073; continue dispatch; }
     memoryASet(r.ds, 0x056e, 0x00);
@@ -1563,7 +2550,11 @@ case 0x18061:
 case 0x18073:
     if (memoryAGet16(r.ds, 0x0004) != 0x0000)
         { pc = 0x180a8; continue dispatch; }
-    yield* sub_19527();
+    frame.pc=2097233;
+case 2097233:
+yield* sub_19527();
+frame.pc=2097234;
+case 2097234:;
     if (flags.carry)
         { pc = 0x18086; continue dispatch; }
     memoryASet(r.ds, 0x056c, 0x00);
@@ -1571,11 +2562,19 @@ case 0x18073:
 case 0x18086:
     if (memoryAGet(r.ds, 0x056c) != 0x00)
         { pc = 0x18090; continue dispatch; }
-    yield* sub_1cb4f();
+    frame.pc=2097235;
+case 2097235:
+yield* sub_1cb4f();
+frame.pc=2097236;
+case 2097236:;
 case 0x18090:
     memoryASet(r.ds, 0x0699, 0x01);
     memoryASet(r.ds, 0x056c, 0x01);
-    yield* sub_1a02d();
+    frame.pc=2097237;
+case 2097237:
+yield* sub_1a02d();
+frame.pc=2097238;
+case 2097238:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x180a4; continue dispatch; }
@@ -1646,7 +2645,11 @@ case 0x18144:
     memoryASet(r.ds, 0x39e0, 0x00);
     if (memoryAGet(r.ds, 0x127c) == 0x00)
         { pc = 0x18163; continue dispatch; }
-    yield* sub_1cb28();
+    frame.pc=2097239;
+case 2097239:
+yield* sub_1cb28();
+frame.pc=2097240;
+case 2097240:;
 case 0x18163:
     return;
 case 0x18164:
@@ -1654,45 +2657,92 @@ case 0x18164:
         { pc = 0x18175; continue dispatch; }
     if (memoryAGet16(r.ds, 0x0004) == 0x0007)
         { pc = 0x18175; continue dispatch; }
-    yield* sub_1a675();
+    frame.pc=2097241;
+case 2097241:
+yield* sub_1a675();
+frame.pc=2097242;
+case 2097242:;
 case 0x18175:
-    yield* sub_181f9();
+    frame.pc=2097243;
+case 2097243:
+yield* sub_181f9();
+frame.pc=2097244;
+case 2097244:;
     r.dl = memoryAGet(r.ds, 0x057b);
     r.cx = memoryAGet16(r.ds, 0x0579);
-    yield* sub_19ee0();
+    frame.pc=2097245;
+case 2097245:
+yield* sub_19ee0();
+frame.pc=2097246;
+case 2097246:;
     memoryASet16(r.ds, 0x0563, r.ax);
     r.al = memoryAGet(r.ds, 0x056e);
     r.al |= memoryAGet(r.ds, 0x0571);
     if (r.al)
         { pc = 0x18193; continue dispatch; }
-    yield* sub_18299();
+    frame.pc=2097247;
+case 2097247:
+yield* sub_18299();
+frame.pc=2097248;
+case 2097248:;
     return;
 case 0x18193:
-    yield* sub_18250();
+    frame.pc=2097249;
+case 2097249:
+yield* sub_18250();
+frame.pc=2097250;
+case 2097250:;
     memoryASet16(r.ds, 0x055d, r.bx);
-    yield* sub_18413();
-    yield* sub_18daa();
+    frame.pc=2097251;
+case 2097251:
+yield* sub_18413();
+frame.pc=2097252;
+case 2097252:;
+    frame.pc=2097253;
+case 2097253:
+yield* sub_18daa();
+frame.pc=2097254;
+case 2097254:;
     if (flags.carry)
         return;
-    yield* sub_19325();
+    frame.pc=2097255;
+case 2097255:
+yield* sub_19325();
+frame.pc=2097256;
+case 2097256:;
     if (flags.carry)
         return;
     r.ax = memoryAGet16(r.ds, 0x0563);
     memoryASet16(r.ds, 0x055f, r.ax);
     memoryASet16(r.ds, 0x0565, 0x0b03);
-    yield* sub_18375();
+    frame.pc=2097257;
+case 2097257:
+yield* sub_18375();
+frame.pc=2097258;
+case 2097258:;
 
       return;
     default: throw new Error("Invalid control flow in sub_17b15");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_181b7() {
   let pc=0;
-  
+  const frame=execution.enter('sub_181b7',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1719,20 +2769,35 @@ case 0x181e4:
     r.si = memoryAGet16(r.ds, 0x055d);
     r.di = 0x000e;
     r.al = 0x03;
-    yield* sub_19fa0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fa0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x055d, 0x000e);
 
       return;
     default: throw new Error("Invalid control flow in sub_181b7");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_181f9() {
   let pc=0;
-  
+  const frame=execution.enter('sub_181f9',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1777,13 +2842,24 @@ case 0x1824e:
     default: throw new Error("Invalid control flow in sub_181f9");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18250() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18250',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1820,13 +2896,24 @@ case 0x18290:
     default: throw new Error("Invalid control flow in sub_18250");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18299() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18299',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1838,14 +2925,30 @@ function* sub_18299() {
     if (memoryAGet(r.ds, 0x056d) & 0x07)
         return;
 case 0x182b7:
-    yield* sub_18413();
-    yield* sub_18daa();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_18413();
+frame.pc=2097154;
+case 2097154:;
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18daa();
+frame.pc=2097156;
+case 2097156:;
     if (flags.carry)
         return;
-    yield* sub_19325();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19325();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         return;
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     r.bl = r.dl;
     r.bx &= 0x000e;
     r.si = memoryAGet16(r.ds, r.bx + 3986);
@@ -1855,8 +2958,16 @@ case 0x182b7:
     r.bp = 0x05fa;
     memoryASet16(r.ds, 0x0561, 0x0c02);
     r.cx = 0x0602;
-    yield* sub_19f65();
-    yield* sub_1a02d();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19f65();
+frame.pc=2097162;
+case 2097162:;
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1a02d();
+frame.pc=2097164;
+case 2097164:;
     r.bl = r.dl;
     r.bx &= 0x0006;
     r.si = memoryAGet16(r.ds, r.bx + 4002);
@@ -1864,20 +2975,35 @@ case 0x182b7:
     r.di += 0x00f0;
     r.bp = 0x0612;
     r.cx = 0x0602;
-    yield* sub_19f65();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19f65();
+frame.pc=2097166;
+case 2097166:;
     memoryASet(r.ds, 0x0583, 0x00);
 
       return;
     default: throw new Error("Invalid control flow in sub_18299");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1830d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1830d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1898,33 +3024,63 @@ function* sub_1830d() {
     default: throw new Error("Invalid control flow in sub_1830d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18342() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18342',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.cx = memoryAGet16(r.ds, 0x0579);
     r.dl = memoryAGet(r.ds, 0x057b);
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x055f, r.ax);
-    yield* sub_18354();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18354();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18342");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18354() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18354',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1936,7 +3092,11 @@ function* sub_18354() {
     r.ax = 0xb800;
     r.ds = r.ax;
     r.cx = memoryAGet16(r.es, 0x0561);
-    yield* sub_19ffa();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ffa();
+frame.pc=2097154;
+case 2097154:;
     r.ds = pop();
     memoryASet(r.ds, 0x0583, 0x00);
 
@@ -1944,13 +3104,24 @@ function* sub_18354() {
     default: throw new Error("Invalid control flow in sub_18354");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18375() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18375',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1962,19 +3133,34 @@ function* sub_18375() {
     r.cx = memoryAGet16(r.ds, 0x0565);
     memoryASet16(r.ds, 0x0561, r.cx);
     memoryASet(r.ds, 0x0583, 0x00);
-    yield* sub_19f65();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19f65();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18375");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18396() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18396',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -1990,7 +3176,11 @@ case 0x183a5:
         { pc = 0x183ae; continue dispatch; }
     r.cx = 0x010e;
 case 0x183ae:
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x0581, r.ax);
     r.di = r.ax;
     r.ax = 0xb800;
@@ -1998,25 +3188,49 @@ case 0x183ae:
     r.bp = 0x000e;
     r.si = 0x1679;
     r.cx = 0x1205;
-    yield* sub_19efc();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19efc();
+frame.pc=2097156;
+case 2097156:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x1a);
+frame.pc=2097158;
+case 2097158:;
     memoryASet16(r.ds, 0x057f, r.dx);
     memoryASet16(r.ds, 0x5a3c, 0x0000);
     memoryASet16(r.ds, 0x5a3e, 0x0000);
 case 0x183db:
-    yield* sub_1cc4c();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1cc4c();
+frame.pc=2097160;
+case 2097160:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     r.dx -= memoryAGet16(r.ds, 0x057f);
     if (r.dx < 0x000a)
         { pc = 0x183db; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1cd51();
+frame.pc=2097164;
+case 2097164:;
     r.di = memoryAGet16(r.ds, 0x0581);
     r.si = 0x000e;
     r.cx = 0x1205;
     memoryASet(r.ds, 0x0583, 0x00);
-    yield* sub_19fcd();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19fcd();
+frame.pc=2097166;
+case 2097166:;
     if (memoryAGet(r.ds, 0x1678) == 0x00)
         return;
     if (memoryAGet(r.ds, 0x1f80) == 0x00)
@@ -2027,13 +3241,24 @@ case 0x183db:
     default: throw new Error("Invalid control flow in sub_18396");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18413() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18413',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2042,24 +3267,43 @@ function* sub_18413() {
     r.di = memoryAGet16(r.ds, 0x055f);
     r.si = 0x05fa;
     r.cx = memoryAGet16(r.ds, 0x0561);
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18413");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18430() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18430',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x069f);
     if (r.ax >= 0x0002)
@@ -2069,8 +3313,13 @@ case 0x18440:
     memoryASet16(r.ds, 0x069f, r.dx);
     if (memoryAGet(r.ds, 0x069b) != 0x00)
         { pc = 0x1845e; continue dispatch; }
-    yield* sub_184f1();
-    yield 1;
+    frame.pc=2097155;
+case 2097155:
+yield* sub_184f1();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;frame.parked=1;yield 1;
+case 2097157: frame.parked=null;
 
 
 
@@ -2085,7 +3334,11 @@ case 0x1845e:
     r.al &= 0x10;
     memoryASet(r.ds, 0x069a, r.al);
     memoryASet(r.ds, 0x069e, 0x03);
-    yield* sub_185e7();
+    frame.pc=2097158;
+case 2097158:
+yield* sub_185e7();
+frame.pc=2097159;
+case 2097159:;
     memoryASet16(r.ds, 0x069c, r.ax);
     out(r.dx, r.al);
     r.cx = 0x07d0;
@@ -2096,7 +3349,11 @@ case 0x18476:
     if (!(memoryAGet(r.ds, 0x069e) & 0x01))
         { pc = 0x1848e; continue dispatch; }
     memoryASet(r.ds, 0x069e, memoryAGet(r.ds, 0x069e) & 0xfe);
-    yield* sub_184d1();
+    frame.pc=2097160;
+case 2097160:
+yield* sub_184d1();
+frame.pc=2097161;
+case 2097161:;
     memoryASet(r.ds, 0x0698, r.bl);
 case 0x1848e:
     if (r.al & 0x02)
@@ -2104,12 +3361,20 @@ case 0x1848e:
     if (!(memoryAGet(r.ds, 0x069e) & 0x02))
         { pc = 0x184a5; continue dispatch; }
     memoryASet(r.ds, 0x069e, memoryAGet(r.ds, 0x069e) & 0xfd);
-    yield* sub_184d1();
+    frame.pc=2097162;
+case 2097162:
+yield* sub_184d1();
+frame.pc=2097163;
+case 2097163:;
     memoryASet(r.ds, 0x0699, r.bl);
 case 0x184a5:
     if (!(memoryAGet(r.ds, 0x069e) & 0x03))
         return;
-    yield* sub_185e7();
+    frame.pc=2097164;
+case 2097164:
+yield* sub_185e7();
+frame.pc=2097165;
+case 2097165:;
     r.ax -= memoryAGet16(r.ds, 0x069c);
     if (--r.cx && r.ax != 0x1964)
         { pc = 0x18476; continue dispatch; }
@@ -2125,18 +3390,33 @@ case 0x184c4:
     default: throw new Error("Invalid control flow in sub_18430");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_184d1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_184d1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     push(r.ax);
-    yield* sub_185e7();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_185e7();
+frame.pc=2097154;
+case 2097154:;
     r.ax -= memoryAGet16(r.ds, 0x069c);
     r.bx = r.ax;
     r.ax = pop();
@@ -2156,13 +3436,24 @@ case 0x184ee:
     default: throw new Error("Invalid control flow in sub_184d1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_184f1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_184f1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2221,13 +3512,24 @@ case 0x1855d:
     default: throw new Error("Invalid control flow in sub_184f1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18568() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18568',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2240,7 +3542,11 @@ function* sub_18568() {
     r.ax = memoryAGet16(r.ds, 0x0693);
     if (r.ax == memoryAGet16(r.ds, 0x6e00))
         { pc = 0x18587; continue dispatch; }
-    yield* sub_1d0a0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1d0a0();
+frame.pc=2097154;
+case 2097154:;
 case 0x18587:
     return;
 case 0x18588:
@@ -2270,13 +3576,21 @@ case 0x185be:
     memoryASet(r.ds, 0x0000, ~memoryAGet(r.ds, 0x0000));
     if (memoryAGet(r.ds, 0x0000) != 0x00)
         { pc = 0x185d3; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cd51();
+frame.pc=2097156;
+case 2097156:;
 case 0x185d3:
     return;
 case 0x185d4:
     return;
 case 0x185d5:
-    yield* sub_186af();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_186af();
+frame.pc=2097158;
+case 2097158:;
     r.ax = pop();
     stop();
 
@@ -2284,13 +3598,24 @@ case 0x185d5:
     default: throw new Error("Invalid control flow in sub_18568");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_185da() {
   let pc=0;
-  
+  const frame=execution.enter('sub_185da',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2303,27 +3628,50 @@ function* sub_185da() {
     default: throw new Error("Invalid control flow in sub_185da");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_185e7() {
   let pc=0;
-  
+  const frame=execution.enter('sub_185e7',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
-yield 1; r.ax=(0x10000-Math.floor(game.time()*1193.182)) & 0xffff;
+frame.pc=2097153;frame.parked=1;yield 1;
+case 2097153: frame.parked=null; r.ax=(0x10000-Math.floor(game.time()*1193.182)) & 0xffff;
       return;
     default: throw new Error("Invalid control flow in sub_185e7");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18608() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18608',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2336,13 +3684,24 @@ function* sub_18608() {
     default: throw new Error("Invalid control flow in sub_18608");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18618() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18618',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2373,13 +3732,24 @@ function* sub_18618() {
     default: throw new Error("Invalid control flow in sub_18618");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18649() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18649',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2417,13 +3787,24 @@ case 0x186ad:
     default: throw new Error("Invalid control flow in sub_18649");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_186af() {
   let pc=0;
-  
+  const frame=execution.enter('sub_186af',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2447,20 +3828,35 @@ case 0x186e1:
     default: throw new Error("Invalid control flow in sub_186af");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18800() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18800',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.bx = memoryAGet16(r.ds, 0x0008);
     r.cl = memoryAGet(r.ds, r.bx + 4110);
 case 0x18808:
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dl &= 0x07;
     if (r.dl > r.cl)
         { pc = 0x18808; continue dispatch; }
@@ -2483,34 +3879,61 @@ case 0x1882f:
     default: throw new Error("Invalid control flow in sub_18800");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18838() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18838',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet16(r.ds, 0x0004) != 0x0007)
         { pc = 0x18843; continue dispatch; }
-    yield* sub_1a32a();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a32a();
+frame.pc=2097154;
+case 2097154:;
     return;
 case 0x18843:
     if (memoryAGet16(r.ds, 0x0004) == 0x0000)
         { pc = 0x1884e; continue dispatch; }
-    yield* sub_188f6();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_188f6();
+frame.pc=2097156;
+case 2097156:;
     return;
 case 0x1884e:
     r.al = memoryAGet(r.ds, 0x057b);
     r.al &= 0xf8;
     if (r.al == 0x60)
         { pc = 0x18860; continue dispatch; }
-    yield* sub_18887();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18887();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         return;
-    yield* sub_189dd();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_189dd();
+frame.pc=2097160;
+case 2097160:;
     return;
 case 0x18860:
     if (memoryAGet(r.ds, 0x0550) >= 0x02)
@@ -2522,7 +3945,11 @@ case 0x18860:
         { pc = 0x18883; continue dispatch; }
     memoryASet(r.ds, 0x0550, 0x01);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     memoryASet16(r.ds, 0x0556, r.dx);
 case 0x18883:
     flags.carry = true;
@@ -2534,13 +3961,24 @@ case 0x18885:
     default: throw new Error("Invalid control flow in sub_18838");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18887() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18887',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2584,7 +4022,11 @@ case 0x188b1:
     if (memoryAGet(r.ds, 0x127c) != 0x00)
         { pc = 0x188f4; continue dispatch; }
     memoryASet(r.ds, 0x127c, 0x01);
-    yield* sub_1cb3e();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cb3e();
+frame.pc=2097154;
+case 2097154:;
 case 0x188f4:
     flags.carry = true;
 
@@ -2592,13 +4034,24 @@ case 0x188f4:
     default: throw new Error("Invalid control flow in sub_18887");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_188f6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_188f6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2614,7 +4067,11 @@ function* sub_188f6() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e10;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         { pc = 0x1892c; continue dispatch; }
     memoryASet(r.ds, 0x0551, 0x01);
@@ -2623,7 +4080,11 @@ function* sub_188f6() {
 case 0x1892c:
     if (memoryAGet16(r.ds, 0x0004) != 0x0003)
         { pc = 0x1893e; continue dispatch; }
-    yield* sub_1ae73();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1ae73();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         { pc = 0x1893e; continue dispatch; }
     flags.carry = true;
@@ -2693,13 +4154,24 @@ case 0x189c7:
     default: throw new Error("Invalid control flow in sub_188f6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_189c9() {
   let pc=0;
-  
+  const frame=execution.enter('sub_189c9',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2717,13 +4189,24 @@ function* sub_189c9() {
     default: throw new Error("Invalid control flow in sub_189c9");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_189dd() {
   let pc=0;
-  
+  const frame=execution.enter('sub_189dd',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2764,7 +4247,11 @@ case 0x18a2c:
     r.si = r.bx;
     r.bx = r.ax;
     r.bx += 0x000a;
-    yield* sub_189c9();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_189c9();
+frame.pc=2097154;
+case 2097154:;
     if (memoryAGet(r.ds, r.bx + r.si + 4118) & r.ch)
         { pc = 0x18a42; continue dispatch; }
 case 0x18a40:
@@ -2782,13 +4269,24 @@ case 0x18a42:
     default: throw new Error("Invalid control flow in sub_189dd");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18a60() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18a60',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2802,20 +4300,35 @@ function* sub_18a60() {
     default: throw new Error("Invalid control flow in sub_18a60");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18a7b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18a7b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x1673) == 0x00)
         { pc = 0x18a8c; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x17ec))
         { pc = 0x18a8d; continue dispatch; }
 case 0x18a8c:
@@ -2876,20 +4389,36 @@ case 0x18ae5:
 case 0x18b03:
     memoryASet(r.ds, 0x1673, 0x00);
     memoryASet(r.ds, 0x1678, 0x00);
-    yield* sub_18b52();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18b52();
+frame.pc=2097156;
+case 2097156:;
 case 0x18b10:
     return;
 case 0x18b11:
     memoryASet(r.ds, 0x1673, r.dl);
     r.cx = memoryAGet16(r.ds, 0x1671);
     memoryASet16(r.ds, 0x17e1, r.bx);
-    yield* sub_19ee0();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19ee0();
+frame.pc=2097158;
+case 2097158:;
     memoryASet16(r.ds, 0x17e7, r.ax);
     if (memoryAGet(r.ds, 0x17e9) == 0x02)
         { pc = 0x18b2d; continue dispatch; }
-    yield* sub_18b52();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18b52();
+frame.pc=2097160;
+case 2097160:;
 case 0x18b2d:
-    yield* sub_18daa();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18daa();
+frame.pc=2097162;
+case 2097162:;
     if (flags.carry)
         { pc = 0x18b10; continue dispatch; }
     r.di = memoryAGet16(r.ds, 0x17e7);
@@ -2900,19 +4429,34 @@ case 0x18b2d:
     r.es = r.ax;
     r.si = memoryAGet16(r.ds, 0x17dd);
     r.bp = 0x17ee;
-    yield* sub_19efc();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19efc();
+frame.pc=2097164;
+case 2097164:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18a7b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18b52() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18b52',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2921,19 +4465,34 @@ function* sub_18b52() {
     r.di = memoryAGet16(r.ds, 0x17e5);
     r.si = 0x17ee;
     r.cx = memoryAGet16(r.ds, 0x17e3);
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18b52");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18b66() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18b66',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -2945,12 +4504,20 @@ case 0x18b6c:
     return;
 case 0x18b6d:
     memoryASet(r.ds, 0x166a, 0x0d);
-    yield* sub_18608();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_18608();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.zero)
         { pc = 0x18b6c; continue dispatch; }
     if (memoryAGet(r.ds, 0x1665) == 0x00)
         { pc = 0x18b81; continue dispatch; }
-    yield* sub_18d35();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18d35();
+frame.pc=2097156;
+case 2097156:;
 case 0x18b81:
     if (memoryAGet(r.ds, 0x1673) != 0x00)
         { pc = 0x18b6c; continue dispatch; }
@@ -2964,13 +4531,21 @@ case 0x18b81:
     if (memoryAGet(r.ds, 0x0418) != 0x00)
         { pc = 0x18bba; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x1a);
+frame.pc=2097158;
+case 2097158:;
     r.dx -= memoryAGet16(r.ds, 0x0556);
     if (r.dx < 0x0048)
         { pc = 0x18bba; continue dispatch; }
     memoryASet(r.ds, 0x1677, memoryAGet(r.ds, 0x1677) + 1);
 case 0x18bba:
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     if (memoryAGet(r.ds, 0x1677) == 0x00)
         { pc = 0x18bca; continue dispatch; }
     r.dl &= 0x03;
@@ -2981,10 +4556,18 @@ case 0x18bca:
         { pc = 0x18b6c; continue dispatch; }
 case 0x18bd2:
     memoryASet(r.ds, 0x1669, r.dl);
-    yield* sub_18d1a();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18d1a();
+frame.pc=2097162;
+case 2097162:;
     memoryASet16(r.ds, 0x1666, r.cx);
     memoryASet(r.ds, 0x1668, r.dl);
-    yield* sub_18d35();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_18d35();
+frame.pc=2097164;
+case 2097164:;
     if (flags.carry)
         { pc = 0x18bba; continue dispatch; }
     memoryASet(r.ds, 0x1665, 0x1d);
@@ -2994,11 +4577,19 @@ case 0x18bd2:
     memoryASet16(r.ds, 0x166c, r.ax);
     memoryASet(r.ds, 0x1670, 0x01);
 case 0x18bfd:
-    yield* sub_18d35();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18d35();
+frame.pc=2097166;
+case 2097166:;
     if (flags.carry)
         { pc = 0x18c10; continue dispatch; }
     memoryASet(r.ds, 0x1664, 0x00);
-    yield* sub_18d7c();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_18d7c();
+frame.pc=2097168;
+case 2097168:;
     if (!flags.carry)
         { pc = 0x18c11; continue dispatch; }
     memoryASet(r.ds, 0x1664, memoryAGet(r.ds, 0x1664) + 1);
@@ -3008,13 +4599,21 @@ case 0x18c11:
     if (memoryAGet(r.ds, 0x1665) != 0x10)
         { pc = 0x18c20; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097169;
+case 2097169:
+yield* interrupt(0x1a);
+frame.pc=2097170;
+case 2097170:;
     memoryASet16(r.ds, 0x166e, r.dx);
 case 0x18c20:
     if (memoryAGet(r.ds, 0x1665) != 0x0f)
         { pc = 0x18ca6; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097171;
+case 2097171:
+yield* interrupt(0x1a);
+frame.pc=2097172;
+case 2097172:;
     r.dx -= memoryAGet16(r.ds, 0x166e);
     if (r.dx >= memoryAGet16(r.ds, 0x166c))
         { pc = 0x18ca6; continue dispatch; }
@@ -3028,7 +4627,11 @@ case 0x18c20:
     memoryASet(r.ds, 0x1678, 0x01);
     r.al = memoryAGet(r.ds, 0x1668);
     memoryASet(r.ds, 0x1673, r.al);
-    yield* sub_1a02d();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1a02d();
+frame.pc=2097174;
+case 2097174:;
     r.dx &= 0x000f;
     r.dx += memoryAGet16(r.ds, 0x1666);
     memoryASet16(r.ds, 0x1671, r.dx);
@@ -3038,7 +4641,11 @@ case 0x18c20:
     r.al = 0xff;
 case 0x18c72:
     memoryASet(r.ds, 0x1674, r.al);
-    yield* sub_1a02d();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1a02d();
+frame.pc=2097176;
+case 2097176:;
     r.bl = r.dl;
     r.bx &= 0x0006;
     r.ax = memoryAGet16(r.ds, r.bx + 6089);
@@ -3067,7 +4674,11 @@ case 0x18cc3:
     r.dl -= memoryAGet(r.ds, 0x1665);
 case 0x18cca:
     memoryASet(r.ds, 0x166b, r.dl);
-    yield* sub_19ee0();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_19ee0();
+frame.pc=2097178;
+case 2097178:;
     r.di = r.ax;
     r.ax = 0xb800;
     r.es = r.ax;
@@ -3104,13 +4715,24 @@ case 0x18d07:
     default: throw new Error("Invalid control flow in sub_18b66");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18d1a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18d1a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3129,13 +4751,24 @@ function* sub_18d1a() {
     default: throw new Error("Invalid control flow in sub_18d1a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18d35() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18d35',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3146,7 +4779,11 @@ function* sub_18d35() {
     r.si = 0x0020;
     r.di = 0x0018;
     r.cx = 0x0e0f;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     if (memoryAGet(r.ds, 0x0571) != 0x01)
@@ -3167,13 +4804,24 @@ case 0x18d7a:
     default: throw new Error("Invalid control flow in sub_18d35");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18d7c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18d7c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3206,13 +4854,24 @@ case 0x18da8:
     default: throw new Error("Invalid control flow in sub_18d7c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18daa() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18daa',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3231,16 +4890,36 @@ function* sub_18daa() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.ch = 0x0e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
-    yield* sub_18413();
-    yield* sub_18b52();
-    yield* sub_1830d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18413();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18b52();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1830d();
+frame.pc=2097160;
+case 2097160:;
     if (memoryAGet(r.ds, 0x1675) != 0x00)
         { pc = 0x18e0f; continue dispatch; }
     memoryASet(r.ds, 0x1675, 0x01);
-    yield* sub_18396();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18396();
+frame.pc=2097162;
+case 2097162:;
     r.dl = 0x01;
     if (memoryAGet(r.ds, 0x1674) == 0xff)
         { pc = 0x18dfb; continue dispatch; }
@@ -3260,24 +4939,43 @@ case 0x18e11:
     default: throw new Error("Invalid control flow in sub_18daa");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18e20() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18e20',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.bx = 0;
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
     if (memoryAGet16(r.ds, 0x0006) != 0x0007)
         { pc = 0x18e42; continue dispatch; }
     if (memoryAGet(r.ds, 0x0553) == 0x00)
         { pc = 0x18e42; continue dispatch; }
-    yield* sub_1c4bb();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1c4bb();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x0579, 0x0098);
     memoryASet(r.ds, 0x057b, 0x5f);
 case 0x18e42:
@@ -3285,22 +4983,46 @@ case 0x18e42:
     r.es = r.ax;
     flags.direction = false;
     memoryASet16(r.ds, 0x1839, 0x0000);
-    yield* sub_18e97();
-    yield* sub_1cd51();
-    yield* sub_18f61();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18e97();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1cd51();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18f61();
+frame.pc=2097162;
+case 2097162:;
     if (memoryAGet16(r.ds, 0x0004) != 0x0000)
         { pc = 0x18e79; continue dispatch; }
     if (memoryAGet(r.ds, 0x0553) == 0x00)
         { pc = 0x18e76; continue dispatch; }
     if (memoryAGet16(r.ds, 0x0006) != 0x0007)
         { pc = 0x18e71; continue dispatch; }
-    yield* sub_1c543();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1c543();
+frame.pc=2097164;
+case 2097164:;
     { pc = 0x18e79; continue dispatch; }
 case 0x18e71:
-    yield* sub_1aae0();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1aae0();
+frame.pc=2097166;
+case 2097166:;
     { pc = 0x18e79; continue dispatch; }
 case 0x18e76:
-    yield* sub_18fa6();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_18fa6();
+frame.pc=2097168;
+case 2097168:;
 case 0x18e79:
     if (memoryAGet16(r.ds, 0x0004) == 0x0007)
         { pc = 0x18e8a; continue dispatch; }
@@ -3311,24 +5033,47 @@ case 0x18e8a:
     r.ax = 0x5555;
 case 0x18e8d:
     memoryASet16(r.ds, 0x1839, r.ax);
-    yield* sub_18e97();
-    yield* sub_1cd51();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_18e97();
+frame.pc=2097170;
+case 2097170:;
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1cd51();
+frame.pc=2097172;
+case 2097172:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18e20");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18e97() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18e97',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* sub_1cac6();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cac6();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x1835, 0x0001);
     memoryASet(r.ds, 0x1837, 0x08);
     r.cx = memoryAGet16(r.ds, 0x0579);
@@ -3338,10 +5083,18 @@ function* sub_18e97() {
     r.dl += 0x08;
     memoryASet(r.ds, 0x1838, 0x00);
 case 0x18ebc:
-    yield* sub_1cac7();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cac7();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x1832, r.cx);
     memoryASet(r.ds, 0x1834, r.dl);
-    yield* sub_19ee0();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19ee0();
+frame.pc=2097158;
+case 2097158:;
     r.di = r.ax;
     r.bl = memoryAGet(r.ds, 0x1837);
 case 0x18ed0:
@@ -3365,7 +5118,8 @@ case 0x18efa:
     r.bl--;
     if (r.tl != 1)
         { pc = 0x18ed0; continue dispatch; }
-    yield 1;
+    frame.pc=2097159;frame.parked=1;yield 1;
+case 2097159: frame.parked=null;
 
     if (memoryAGet(r.ds, 0x1838) != 0x0f)
         { pc = 0x18f06; continue dispatch; }
@@ -3417,13 +5171,24 @@ case 0x18f5e:
     default: throw new Error("Invalid control flow in sub_18e97");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18f61() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18f61',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3433,63 +5198,117 @@ function* sub_18f61() {
     r.bh = 0x01;
     r.si = memoryAGet16(r.ds, 0x0004);
     r.bl = memoryAGet(r.ds, r.si + 6227);
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
     { pc = 0x18f97; continue dispatch; }
 case 0x18f78:
     r.si = memoryAGet16(r.ds, 0x0004);
     r.bl = 0x01;
     r.bh = memoryAGet(r.ds, r.si + 6203);
-    yield* sub_18f9e();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18f9e();
+frame.pc=2097156;
+case 2097156:;
     r.bl = 0x02;
     r.bh = memoryAGet(r.ds, r.si + 6211);
-    yield* sub_18f9e();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18f9e();
+frame.pc=2097158;
+case 2097158:;
     r.bl = 0x03;
     r.bh = memoryAGet(r.ds, r.si + 6219);
-    yield* sub_18f9e();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18f9e();
+frame.pc=2097160;
+case 2097160:;
 case 0x18f97:
     r.ah = 0x0b;
     r.bx = 0;
-    yield* interrupt(0x10);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x10);
+frame.pc=2097162;
+case 2097162:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18f61");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18f9e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18f9e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ax = 0x1000;
     push(r.si);
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
     r.si = pop();
 
       return;
     default: throw new Error("Invalid control flow in sub_18f9e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_18fa6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_18fa6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet16(r.ds, 0x0006) != 0x0007)
         { pc = 0x18fb1; continue dispatch; }
-    yield* sub_1d270();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1d270();
+frame.pc=2097154;
+case 2097154:;
     return;
 case 0x18fb1:
-    yield* sub_1ca05();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1ca05();
+frame.pc=2097156;
+case 2097156:;
     r.ax = 0x185b;
     if (memoryAGet(r.ds, 0x0552) == 0x00)
         { pc = 0x18ff6; continue dispatch; }
@@ -3507,22 +5326,46 @@ case 0x18fda:
         { pc = 0x18ff6; continue dispatch; }
     if (memoryAGet(r.ds, 0x1f80) < 0x01)
         { pc = 0x18ff6; continue dispatch; }
-    yield* sub_1ce10();
-    yield* sub_1cd51();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1ce10();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1cd51();
+frame.pc=2097160;
+case 2097160:;
     return;
 case 0x18ff6:
     memoryASet16(r.ds, 0x1c2e, r.ax);
     memoryASet16(r.ds, 0x1c1b, 0x8080);
     memoryASet(r.ds, 0x1c1d, 0x1c);
 case 0x19004:
-    yield* sub_19047();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19047();
+frame.pc=2097162;
+case 2097162:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x1a);
+frame.pc=2097164;
+case 2097164:;
     memoryASet16(r.ds, 0x1830, r.dx);
 case 0x1900f:
-    yield* sub_1ca14();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1ca14();
+frame.pc=2097166;
+case 2097166:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097167;
+case 2097167:
+yield* interrupt(0x1a);
+frame.pc=2097168;
+case 2097168:;
     if (r.dx == memoryAGet16(r.ds, 0x1830))
         { pc = 0x1900f; continue dispatch; }
     if (memoryAGet(r.ds, 0x1c1d) > 0x14)
@@ -3543,19 +5386,34 @@ case 0x1903a:
     memoryASet(r.ds, 0x1c1d, memoryAGet(r.ds, 0x1c1d) - 1);
     if (r.tl != 1)
         { pc = 0x19004; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1cd51();
+frame.pc=2097170;
+case 2097170:;
 
       return;
     default: throw new Error("Invalid control flow in sub_18fa6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19047() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19047',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3576,19 +5434,34 @@ case 0x19054:
     r.si = 0x000e;
     r.di = 0x0ed0;
     r.cx = 0x0c08;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19047");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19070() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19070',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3598,24 +5471,43 @@ function* sub_19070() {
     memoryASet(r.ds, 0x1cc1, 0x00);
     memoryASet(r.ds, 0x1cb8, 0x00);
     memoryASet(r.ds, 0x1cc8, 0xb1);
-    yield* sub_1c680();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1c680();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19070");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19093() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19093',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.cx = r.dx;
     r.dx -= memoryAGet16(r.ds, 0x1cc9);
     r.ax = memoryAGet16(r.ds, 0x1ce1);
@@ -3626,7 +5518,11 @@ function* sub_19093() {
 case 0x190aa:
     return;
 case 0x190ab:
-    yield* sub_18608();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18608();
+frame.pc=2097156;
+case 2097156:;
     if (flags.zero)
         { pc = 0x190aa; continue dispatch; }
     memoryASet16(r.ds, 0x1cc9, r.cx);
@@ -3637,7 +5533,11 @@ case 0x190ab:
     memoryASet(r.ds, 0x1cc1, memoryAGet(r.ds, 0x1cc1) - 1);
     if (r.tl != 1)
         { pc = 0x190f9; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cd51();
+frame.pc=2097158;
+case 2097158:;
     if (memoryAGet(r.ds, 0x1cb8) == 0x00)
         { pc = 0x190f2; continue dispatch; }
     if (memoryAGet16(r.ds, 0x0004) == 0x0000)
@@ -3651,18 +5551,34 @@ case 0x190e7:
         { pc = 0x190f2; continue dispatch; }
     memoryASet(r.ds, 0x1f80, memoryAGet(r.ds, 0x1f80) - 1);
 case 0x190f2:
-    yield* sub_19311();
-    yield* sub_19070();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19311();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19070();
+frame.pc=2097162;
+case 2097162:;
     return;
 case 0x190f9:
-    yield* sub_19252();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19252();
+frame.pc=2097164;
+case 2097164:;
     r.ax = 0x0104;
     r.al -= memoryAGet(r.ds, 0x1cc1);
     if (memoryAGet(r.ds, 0x1cd0) == 0xff)
         { pc = 0x1910c; continue dispatch; }
     r.ah = 0xff;
 case 0x1910c:
-    yield* sub_19289();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19289();
+frame.pc=2097166;
+case 2097166:;
     { pc = 0x1922b; continue dispatch; }
 case 0x19112:
     if (memoryAGet(r.ds, 0x1cb8) == 0x00)
@@ -3671,7 +5587,11 @@ case 0x19112:
     if (memoryAGet16(r.ds, 0x1cb9) == 0x0000)
         { pc = 0x19132; continue dispatch; }
     memoryASet16(r.ds, 0x1cb9, memoryAGet16(r.ds, 0x1cb9) - 1);
-    yield* sub_1a02d();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1a02d();
+frame.pc=2097168;
+case 2097168:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x19132; continue dispatch; }
@@ -3691,7 +5611,11 @@ case 0x1913c:
         { pc = 0x1916c; continue dispatch; }
     if (memoryAGet(r.ds, 0x0558) != 0x00)
         { pc = 0x1916c; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1a02d();
+frame.pc=2097170;
+case 2097170:;
     r.bx = memoryAGet16(r.ds, 0x0008);
     if (r.dl < memoryAGet(r.ds, r.bx + 7377))
         { pc = 0x1916d; continue dispatch; }
@@ -3714,10 +5638,18 @@ case 0x19187:
     memoryASet(r.ds, 0x1cbf, 0x01);
     { pc = 0x191a5; continue dispatch; }
 case 0x19195:
-    yield* sub_19252();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19252();
+frame.pc=2097172;
+case 2097172:;
     r.al = memoryAGet(r.ds, 0x1cc0);
     r.ah = memoryAGet(r.ds, 0x1cd0);
-    yield* sub_19289();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_19289();
+frame.pc=2097174;
+case 2097174:;
     { pc = 0x1922b; continue dispatch; }
 case 0x191a5:
     memoryASet(r.ds, 0x1d58, 0x00);
@@ -3726,7 +5658,11 @@ case 0x191a5:
         { pc = 0x191db; continue dispatch; }
     if (memoryAGet(r.ds, 0x0558) != 0x00)
         { pc = 0x191db; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1a02d();
+frame.pc=2097176;
+case 2097176:;
     r.bx = memoryAGet16(r.ds, 0x0008);
     if (r.dl > memoryAGet(r.ds, r.bx + 7385))
         { pc = 0x191db; continue dispatch; }
@@ -3768,35 +5704,66 @@ case 0x19212:
     { pc = 0x191eb; continue dispatch; }
 case 0x1921f:
     memoryASet16(r.ds, 0x1cc6, r.ax);
-    yield* sub_19252();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_19252();
+frame.pc=2097178;
+case 2097178:;
     memoryASet16(r.ds, 0x1cc4, 0x0f04);
 case 0x1922b:
     r.cx = memoryAGet16(r.ds, 0x1cc6);
     r.dl = memoryAGet(r.ds, 0x1cc8);
-    yield* sub_19ee0();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_19ee0();
+frame.pc=2097180;
+case 2097180:;
     memoryASet16(r.ds, 0x1ccd, r.ax);
     if (memoryAGet(r.ds, 0x1cc0) == 0x03)
         { pc = 0x19243; continue dispatch; }
-    yield* sub_19311();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_19311();
+frame.pc=2097182;
+case 2097182:;
 case 0x19243:
-    yield* sub_19325();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_19325();
+frame.pc=2097184;
+case 2097184:;
     if (flags.carry)
         return;
     r.ax = memoryAGet16(r.ds, 0x1ccd);
     memoryASet16(r.ds, 0x1cbd, r.ax);
-    yield* sub_192cb();
+    frame.pc=2097185;
+case 2097185:
+yield* sub_192cb();
+frame.pc=2097186;
+case 2097186:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19093");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19252() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19252',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3824,13 +5791,24 @@ case 0x19281:
     default: throw new Error("Invalid control flow in sub_19252");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19289() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19289',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3857,20 +5835,35 @@ case 0x192b6:
     r.si = memoryAGet16(r.ds, 0x1cbb);
     r.di = 0x000e;
     r.al = 0x04;
-    yield* sub_19fa0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fa0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x1cbb, 0x000e);
 
       return;
     default: throw new Error("Invalid control flow in sub_19289");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_192cb() {
   let pc=0;
-  
+  const frame=execution.enter('sub_192cb',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3883,7 +5876,11 @@ function* sub_192cb() {
     r.di = memoryAGet16(r.ds, 0x1cbd);
     r.si = memoryAGet16(r.ds, 0x1cbb);
     r.bp = 0x1c40;
-    yield* sub_19efc();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19efc();
+frame.pc=2097154;
+case 2097154:;
     return;
 case 0x192ee:
     push(r.ds);
@@ -3893,25 +5890,44 @@ case 0x192ee:
     push(r.ds);
     r.si = memoryAGet16(r.es, 0x1cbd);
     r.di = 0x1c40;
-    yield* sub_19ffa();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19ffa();
+frame.pc=2097156;
+case 2097156:;
     r.es = pop();
     r.ds = pop();
     r.si = memoryAGet16(r.ds, 0x1cbb);
     r.di = memoryAGet16(r.ds, 0x1cbd);
     r.cx = memoryAGet16(r.ds, 0x1cc4);
-    yield* sub_19fcd();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19fcd();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_192cb");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19311() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19311',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3920,19 +5936,34 @@ function* sub_19311() {
     r.di = memoryAGet16(r.ds, 0x1cbd);
     r.si = 0x1c40;
     r.cx = memoryAGet16(r.ds, 0x1cc2);
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19311");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19325() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19325',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -3959,7 +5990,11 @@ function* sub_19325() {
 case 0x1935a:
     if (r.ax > memoryAGet16(r.ds, 0x0579))
         { pc = 0x19364; continue dispatch; }
-    yield* sub_19366();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19366();
+frame.pc=2097154;
+case 2097154:;
     return;
 case 0x19364:
     flags.carry = false;
@@ -3968,13 +6003,24 @@ case 0x19364:
     default: throw new Error("Invalid control flow in sub_19325");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19366() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19366',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4012,7 +6058,11 @@ case 0x193a3:
     memoryASet16(r.ds, 0x1cb9, r.dx);
     if (memoryAGet16(r.ds, 0x0004) != 0x0006)
         { pc = 0x193ed; continue dispatch; }
-    yield* sub_18413();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_18413();
+frame.pc=2097154;
+case 2097154:;
     r.al = memoryAGet(r.ds, 0x1cb8);
     push(r.ax);
     memoryASet(r.ds, 0x1cb8, 0x00);
@@ -4021,14 +6071,30 @@ case 0x193a3:
     memoryASet16(r.ds, 0x1cbb, r.ax);
     r.cx = memoryAGet16(r.ds, 0x1cc6);
     r.dl = memoryAGet(r.ds, 0x1cc8);
-    yield* sub_19ee0();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19ee0();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x1cbd, r.ax);
-    yield* sub_192cb();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_192cb();
+frame.pc=2097158;
+case 2097158:;
     r.ax = pop();
     memoryASet(r.ds, 0x1cb8, r.al);
 case 0x193ed:
-    yield* sub_19311();
-    yield* sub_18413();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19311();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18413();
+frame.pc=2097162;
+case 2097162:;
     r.ax = 0x0000;
     if (memoryAGet16(r.ds, 0x0579) >= 0x00a0)
         { pc = 0x19401; continue dispatch; }
@@ -4037,7 +6103,11 @@ case 0x19401:
     memoryASet16(r.ds, 0x0579, r.ax);
     if (memoryAGet16(r.ds, 0x0004) != 0x0000)
         { pc = 0x1940e; continue dispatch; }
-    yield* sub_1793d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1793d();
+frame.pc=2097164;
+case 2097164:;
 case 0x1940e:
     flags.carry = true;
 
@@ -4045,13 +6115,24 @@ case 0x1940e:
     default: throw new Error("Invalid control flow in sub_19366");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19410() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19410',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4067,7 +6148,11 @@ function* sub_19410() {
     r.dh = memoryAGet(r.ds, 0x1cc8);
     r.di = 0x0020;
     r.cx = 0x0f1e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     return;
 case 0x19439:
     flags.carry = false;
@@ -4076,13 +6161,24 @@ case 0x19439:
     default: throw new Error("Invalid control flow in sub_19410");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19440() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19440',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4092,19 +6188,34 @@ function* sub_19440() {
     default: throw new Error("Invalid control flow in sub_19440");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19446() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19446',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     push(0x7777);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x1d5a))
         { pc = 0x19451; continue dispatch; }
 case 0x19450:
@@ -4112,11 +6223,19 @@ case 0x19450:
     return;
 case 0x19451:
     r.cx = r.dx;
-    yield* sub_18608();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18608();
+frame.pc=2097156;
+case 2097156:;
     if (flags.zero)
         { pc = 0x19450; continue dispatch; }
     memoryASet16(r.ds, 0x1d5a, r.cx);
-    yield* sub_19527();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19527();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         { pc = 0x19450; continue dispatch; }
     if (memoryAGet(r.ds, 0x1d59) != 0x00)
@@ -4125,14 +6244,26 @@ case 0x19451:
         { pc = 0x1947e; continue dispatch; }
     if (memoryAGet(r.ds, 0x057b) == 0x8e)
         { pc = 0x1947e; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     if (r.dl > 0x05)
         { pc = 0x19450; continue dispatch; }
 case 0x1947e:
-    yield* sub_18800();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18800();
+frame.pc=2097162;
+case 2097162:;
     r.dl += 0x03;
     memoryASet(r.ds, 0x1d5e, r.dl);
-    yield* sub_1a02d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1a02d();
+frame.pc=2097164;
+case 2097164:;
     r.dx &= 0x0007;
     r.cx += r.dx;
     r.cx += 0x0006;
@@ -4157,10 +6288,22 @@ case 0x194c1:
 case 0x194cf:
     memoryASet16(r.ds, 0x1d64, r.bx);
     memoryASet(r.ds, 0x1d5f, r.dl);
-    yield* sub_19ee0();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19ee0();
+frame.pc=2097166;
+case 2097166:;
     memoryASet16(r.ds, 0x1d62, r.ax);
-    yield* sub_1950c();
-    yield* sub_19527();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1950c();
+frame.pc=2097168;
+case 2097168:;
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19527();
+frame.pc=2097170;
+case 2097170:;
     if (flags.carry)
         { pc = 0x194ec; continue dispatch; }
     if (memoryAGet(r.ds, 0x1d59) != 0x00)
@@ -4177,20 +6320,35 @@ case 0x194ed:
     r.cx = memoryAGet16(r.ds, 0x1d64);
     memoryASet16(r.ds, 0x1d66, r.cx);
     r.bp = 0x1d24;
-    yield* sub_19efc();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19efc();
+frame.pc=2097172;
+case 2097172:;
     assert(pop() == 0x7777);
 
       return;
     default: throw new Error("Invalid control flow in sub_19446");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1950c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1950c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4201,19 +6359,34 @@ function* sub_1950c() {
     r.di = memoryAGet16(r.ds, 0x1d60);
     r.si = 0x1d24;
     r.cx = memoryAGet16(r.ds, 0x1d66);
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1950c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19527() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19527',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4233,7 +6406,11 @@ case 0x19530:
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.ch = 0x0e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     memoryASet(r.ds, 0x1d58, 0x01);
@@ -4242,13 +6419,24 @@ case 0x19530:
     default: throw new Error("Invalid control flow in sub_19527");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19560() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19560',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4277,18 +6465,33 @@ case 0x19577:
     default: throw new Error("Invalid control flow in sub_19560");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_195ab() {
   let pc=0;
-  
+  const frame=execution.enter('sub_195ab',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x1f65))
         { pc = 0x195b6; continue dispatch; }
 case 0x195b5:
@@ -4304,17 +6507,29 @@ case 0x195b6:
     r.bx = 0x0000;
 case 0x195ce:
     memoryASet16(r.ds, 0x1f6c, r.bx);
-    yield* sub_1988e();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1988e();
+frame.pc=2097156;
+case 2097156:;
     if (flags.carry)
         { pc = 0x195b5; continue dispatch; }
-    yield* sub_19797();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19797();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         { pc = 0x195b5; continue dispatch; }
     r.bx = memoryAGet16(r.ds, 0x1f6c);
     if (memoryAGet(r.ds, r.bx + 8016) == 0x00)
         { pc = 0x1961b; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     r.bx = memoryAGet16(r.ds, 0x1f6c);
     r.bl <<= 1;
     r.dx -= memoryAGet16(r.ds, r.bx + 8019);
@@ -4350,7 +6565,11 @@ case 0x1963f:
 case 0x19648:
     if (memoryAGet(r.ds, r.bx + 7996) != 0x00)
         { pc = 0x19655; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1a02d();
+frame.pc=2097162;
+case 2097162:;
     { pc = 0x196ba; continue dispatch; }
 case 0x19655:
     if (memoryAGet(r.ds, 0x055c) == 0x00)
@@ -4361,7 +6580,11 @@ case 0x19655:
     r.al += 0x10;
     if (r.al < memoryAGet(r.ds, 0x057b))
         { pc = 0x19696; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1a02d();
+frame.pc=2097164;
+case 2097164:;
     r.si = memoryAGet16(r.ds, 0x0008);
     if (r.dl > memoryAGet(r.ds, r.si + 8046))
         { pc = 0x19696; continue dispatch; }
@@ -4384,7 +6607,11 @@ case 0x19696:
         { pc = 0x196aa; continue dispatch; }
     r.cl = 0x10;
 case 0x196aa:
-    yield* sub_1a02d();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1a02d();
+frame.pc=2097166;
+case 2097166:;
     if (r.dl > r.cl)
         { pc = 0x196c6; continue dispatch; }
     r.al = 0x00;
@@ -4425,7 +6652,11 @@ case 0x196f2:
     memoryASet(r.ds, r.bx + 7996, r.dl);
     r.dl = memoryAGet(r.ds, r.bx + 7990);
     r.cx = r.ax;
-    yield* sub_19ee0();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_19ee0();
+frame.pc=2097168;
+case 2097168:;
     memoryASet16(r.ds, 0x1f4b, r.ax);
     r.bx = memoryAGet16(r.ds, 0x1f6c);
     if (memoryAGet(r.ds, r.bx + 8008) != 0x00)
@@ -4434,12 +6665,24 @@ case 0x196f2:
     r.al |= memoryAGet(r.ds, r.bx + 7999);
     if (!r.al)
         { pc = 0x19720; continue dispatch; }
-    yield* sub_1977d();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1977d();
+frame.pc=2097170;
+case 2097170:;
 case 0x19720:
-    yield* sub_1988e();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1988e();
+frame.pc=2097172;
+case 2097172:;
     if (flags.carry)
         { pc = 0x1972a; continue dispatch; }
-    yield* sub_19797();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_19797();
+frame.pc=2097174;
+case 2097174:;
     if (!flags.carry)
         { pc = 0x1972b; continue dispatch; }
 case 0x1972a:
@@ -4471,19 +6714,34 @@ case 0x19763:
     r.es = r.ax;
     r.bp = memoryAGet16(r.ds, r.bx + 8025);
     r.cx = 0x0802;
-    yield* sub_19f65();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_19f65();
+frame.pc=2097176;
+case 2097176:;
 
       return;
     default: throw new Error("Invalid control flow in sub_195ab");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1977d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1977d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4494,19 +6752,34 @@ function* sub_1977d() {
     r.di = memoryAGet16(r.ds, r.bx + 8002);
     r.si = memoryAGet16(r.ds, r.bx + 8025);
     r.cx = 0x0802;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1977d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19797() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19797',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4519,7 +6792,11 @@ function* sub_19797() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e08;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (flags.carry)
         { pc = 0x197be; continue dispatch; }
     return;
@@ -4548,34 +6825,66 @@ case 0x197ff:
     r.si = 0x1d70;
     r.bp = 0x000e;
     r.cx = 0x0806;
-    yield* sub_19efc();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19efc();
+frame.pc=2097156;
+case 2097156:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x1a);
+frame.pc=2097158;
+case 2097158:;
     memoryASet16(r.ds, 0x1f65, r.dx);
 case 0x1981c:
-    yield* sub_1ccc0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1ccc0();
+frame.pc=2097160;
+case 2097160:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     r.dx -= memoryAGet16(r.ds, 0x1f65);
     if (r.dx < 0x0008)
         { pc = 0x1981c; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1cd51();
+frame.pc=2097164;
+case 2097164:;
     r.di = memoryAGet16(r.ds, 0x1f67);
     r.si = 0x000e;
     r.cx = 0x0806;
-    yield* sub_19fcd();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19fcd();
+frame.pc=2097166;
+case 2097166:;
 case 0x1983c:
     flags.carry = true;
     return;
 case 0x1983e:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097167;
+case 2097167:
+yield* interrupt(0x1a);
+frame.pc=2097168;
+case 2097168:;
     r.bx = memoryAGet16(r.ds, 0x1f6c);
     memoryASet(r.ds, r.bx + 8016, 0x01);
     memoryASet(r.ds, r.bx + 7996, 0x01);
     r.bl <<= 1;
     memoryASet16(r.ds, r.bx + 8019, r.dx);
-    yield* sub_18413();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_18413();
+frame.pc=2097170;
+case 2097170:;
     r.bx = memoryAGet16(r.ds, 0x1f6c);
     r.bl <<= 1;
     r.si = memoryAGet16(r.ds, r.bx + 8031);
@@ -4584,27 +6893,54 @@ case 0x1983e:
     r.es = r.ax;
     r.bp = 0x000e;
     r.cx = 0x0802;
-    yield* sub_19efc();
-    yield* sub_18354();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19efc();
+frame.pc=2097172;
+case 2097172:;
+    frame.pc=2097173;
+case 2097173:
+yield* sub_18354();
+frame.pc=2097174;
+case 2097174:;
     r.bx = memoryAGet16(r.ds, 0x1f6c);
     r.al = memoryAGet(r.ds, r.bx + 7993);
-    yield* sub_19936();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_19936();
+frame.pc=2097176;
+case 2097176:;
     r.ax = 0x03e8;
     r.bx = 0x02ee;
-    yield* sub_1cb6b();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1cb6b();
+frame.pc=2097178;
+case 2097178:;
     flags.carry = true;
 
       return;
     default: throw new Error("Invalid control flow in sub_19797");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1988e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1988e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4622,19 +6958,34 @@ case 0x19897:
     r.bx = memoryAGet16(r.ds, 0x1671);
     r.dh = memoryAGet(r.ds, 0x1673);
     r.cx = 0x0c08;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1988e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_198c0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_198c0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4661,13 +7012,24 @@ case 0x198d7:
     default: throw new Error("Invalid control flow in sub_198c0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_198e3() {
   let pc=0;
-  
+  const frame=execution.enter('sub_198e3',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4686,53 +7048,98 @@ case 0x198ed:
     r.es = r.ax;
     r.di = 0x1260;
     r.cx = 0x0801;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_198e3");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1990a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1990a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.di = 0x1f82;
-    yield* sub_19918();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19918();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1990a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19911() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19911',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.di = 0x1f89;
-    yield* sub_19918();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19918();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19911");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19918() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19918',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4746,49 +7153,90 @@ function* sub_19918() {
     default: throw new Error("Invalid control flow in sub_19918");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19922() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19922',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.bx = 0x1f89;
     r.di = 0x12ca;
-    yield* sub_19969();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19969();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19922");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1992c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1992c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.bx = 0x1f82;
     r.di = 0x143c;
-    yield* sub_19969();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19969();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1992c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19936() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19936',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4802,19 +7250,34 @@ case 0x19939:
     r.al = r.ah;
     if (--r.cx)
         { pc = 0x19939; continue dispatch; }
-    yield* sub_1992c();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1992c();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19936");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1994e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1994e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4851,13 +7314,24 @@ case 0x19956:
     default: throw new Error("Invalid control flow in sub_1994e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19969() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19969',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4876,7 +7350,11 @@ case 0x1997b:
     r.si = r.ax;
     r.di = memoryAGet16(r.ds, 0x1f90);
     r.cx = 0x0801;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x1f90, memoryAGet16(r.ds, 0x1f90) + 0x0002);
     memoryASet16(r.ds, 0x1f93, memoryAGet16(r.ds, 0x1f93) + 1);
     memoryASet(r.ds, 0x1f92, memoryAGet(r.ds, 0x1f92) + 1);
@@ -4891,13 +7369,24 @@ case 0x1997b:
     default: throw new Error("Invalid control flow in sub_19969");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_199c0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_199c0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -4915,7 +7404,11 @@ function* sub_199c0() {
     rep_stosw();
     memoryASet16(r.ds, 0x2654, 0x0000);
 case 0x199e5:
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dx &= 0x0018;
     if (r.dl == memoryAGet(r.ds, 0x2653))
         { pc = 0x199e5; continue dispatch; }
@@ -4928,7 +7421,11 @@ case 0x199e5:
     r.di <<= 1;
     r.di += 0x00a0;
     r.cx = 0x0401;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x2654, memoryAGet16(r.ds, 0x2654) + 1);
     if (memoryAGet16(r.ds, 0x2654) < 0x0028)
         { pc = 0x199e5; continue dispatch; }
@@ -4936,150 +7433,324 @@ case 0x199e5:
 case 0x19a1e:
     if (memoryAGet16(r.ds, 0x0004) != 0x0007)
         { pc = 0x19a29; continue dispatch; }
-    yield* sub_1a23f();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a23f();
+frame.pc=2097158;
+case 2097158:;
     return;
 case 0x19a29:
     if (memoryAGet16(r.ds, 0x0004) != 0x0006)
         { pc = 0x19a6e; continue dispatch; }
     r.ax = 0;
-    yield* sub_19bd0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19bd0();
+frame.pc=2097160;
+case 2097160:;
     r.bx = 0x2570;
     r.ax = 0x064a;
-    yield* sub_19d54();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19d54();
+frame.pc=2097162;
+case 2097162:;
     memoryASet16(r.ds, 0x2650, 0x0048);
     memoryASet(r.ds, 0x2652, 0x38);
     r.ax = 0x0dd2;
-    yield* sub_19b88();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19b88();
+frame.pc=2097164;
+case 2097164:;
     r.ax = 0x0df6;
-    yield* sub_19ba0();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19ba0();
+frame.pc=2097166;
+case 2097166:;
     r.si = 0x1fa0;
     r.di = 0x067e;
     r.cx = 0x1002;
-    yield* sub_19fcd();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_19fcd();
+frame.pc=2097168;
+case 2097168:;
     r.bx = 0x2344;
     r.ax = 0x0b84;
-    yield* sub_19d54();
-    yield* sub_1bd77();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19d54();
+frame.pc=2097170;
+case 2097170:;
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1bd77();
+frame.pc=2097172;
+case 2097172:;
     return;
 case 0x19a6e:
     if (memoryAGet16(r.ds, 0x0004) != 0x0005)
         { pc = 0x19abd; continue dispatch; }
     r.ax = 0x0640;
-    yield* sub_19bd0();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_19bd0();
+frame.pc=2097174;
+case 2097174:;
     r.bx = 0x2570;
     r.ax = 0x0cb6;
-    yield* sub_19d54();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_19d54();
+frame.pc=2097176;
+case 2097176:;
     memoryASet16(r.ds, 0x2650, 0x00f8);
     memoryASet(r.ds, 0x2652, 0x60);
     r.ax = 0x140e;
-    yield* sub_19b88();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_19b88();
+frame.pc=2097178;
+case 2097178:;
     r.ax = 0x1434;
-    yield* sub_19ba0();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_19ba0();
+frame.pc=2097180;
+case 2097180:;
     r.ax = 0x143e;
-    yield* sub_19ba0();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_19ba0();
+frame.pc=2097182;
+case 2097182:;
     r.ax = 0x16a0;
-    yield* sub_19bb8();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_19bb8();
+frame.pc=2097184;
+case 2097184:;
     r.bx = 0x2344;
     r.ax = 0x1184;
-    yield* sub_19d54();
+    frame.pc=2097185;
+case 2097185:
+yield* sub_19d54();
+frame.pc=2097186;
+case 2097186:;
     r.si = 0x1fe0;
     r.di = 0x0dd6;
     r.cx = 0x1002;
-    yield* sub_19fcd();
+    frame.pc=2097187;
+case 2097187:
+yield* sub_19fcd();
+frame.pc=2097188;
+case 2097188:;
     return;
 case 0x19abd:
     if (memoryAGet16(r.ds, 0x0004) != 0x0004)
         { pc = 0x19aee; continue dispatch; }
     r.ax = 0x0640;
-    yield* sub_19bd0();
+    frame.pc=2097189;
+case 2097189:
+yield* sub_19bd0();
+frame.pc=2097190;
+case 2097190:;
     r.bx = 0x2570;
     r.ax = 0x0cba;
-    yield* sub_19d54();
+    frame.pc=2097191;
+case 2097191:
+yield* sub_19d54();
+frame.pc=2097192;
+case 2097192:;
     memoryASet16(r.ds, 0x2650, 0x0108);
     memoryASet(r.ds, 0x2652, 0x60);
     r.ax = 0x1439;
-    yield* sub_19b88();
+    frame.pc=2097193;
+case 2097193:
+yield* sub_19b88();
+frame.pc=2097194;
+case 2097194:;
     r.ax = 0x16c0;
-    yield* sub_19b75();
-    yield* sub_1b1ce();
+    frame.pc=2097195;
+case 2097195:
+yield* sub_19b75();
+frame.pc=2097196;
+case 2097196:;
+    frame.pc=2097197;
+case 2097197:
+yield* sub_1b1ce();
+frame.pc=2097198;
+case 2097198:;
     return;
 case 0x19aee:
     if (memoryAGet16(r.ds, 0x0004) != 0x0003)
         { pc = 0x19b39; continue dispatch; }
     r.ax = 0x0640;
-    yield* sub_19bd0();
+    frame.pc=2097199;
+case 2097199:
+yield* sub_19bd0();
+frame.pc=2097200;
+case 2097200:;
     r.bx = 0x2570;
     r.ax = 0x0c90;
-    yield* sub_19d54();
+    frame.pc=2097201;
+case 2097201:
+yield* sub_19d54();
+frame.pc=2097202;
+case 2097202:;
     memoryASet16(r.ds, 0x2650, 0x0060);
     memoryASet(r.ds, 0x2652, 0x60);
     r.ax = 0x140c;
-    yield* sub_19b88();
+    frame.pc=2097203;
+case 2097203:
+yield* sub_19b88();
+frame.pc=2097204;
+case 2097204:;
     r.ax = 0x1418;
-    yield* sub_19ba0();
+    frame.pc=2097205;
+case 2097205:
+yield* sub_19ba0();
+frame.pc=2097206;
+case 2097206:;
     r.bx = 0x2344;
     r.ax = 0x1184;
-    yield* sub_19d54();
+    frame.pc=2097207;
+case 2097207:
+yield* sub_19d54();
+frame.pc=2097208;
+case 2097208:;
     r.bx = 0x2344;
     r.ax = 0x11a2;
-    yield* sub_19d54();
+    frame.pc=2097209;
+case 2097209:
+yield* sub_19d54();
+frame.pc=2097210;
+case 2097210:;
     r.bx = 0x2624;
     r.ax = 0;
-    yield* sub_19d54();
-    yield* sub_1ae0b();
+    frame.pc=2097211;
+case 2097211:
+yield* sub_19d54();
+frame.pc=2097212;
+case 2097212:;
+    frame.pc=2097213;
+case 2097213:
+yield* sub_1ae0b();
+frame.pc=2097214;
+case 2097214:;
     return;
 case 0x19b39:
     r.ax = 0x0640;
-    yield* sub_19bd0();
+    frame.pc=2097215;
+case 2097215:
+yield* sub_19bd0();
+frame.pc=2097216;
+case 2097216:;
     r.bx = 0x2570;
     r.ax = 0x0ca0;
-    yield* sub_19d54();
+    frame.pc=2097217;
+case 2097217:
+yield* sub_19d54();
+frame.pc=2097218;
+case 2097218:;
     memoryASet16(r.ds, 0x2650, 0x00a0);
     memoryASet(r.ds, 0x2652, 0x60);
     r.ax = 0x1406;
-    yield* sub_19b88();
+    frame.pc=2097219;
+case 2097219:
+yield* sub_19b88();
+frame.pc=2097220;
+case 2097220:;
     r.bx = 0x2344;
     r.ax = 0x11c4;
-    yield* sub_19d54();
+    frame.pc=2097221;
+case 2097221:
+yield* sub_19d54();
+frame.pc=2097222;
+case 2097222:;
     r.ax = 0x1422;
-    yield* sub_19ba0();
+    frame.pc=2097223;
+case 2097223:
+yield* sub_19ba0();
+frame.pc=2097224;
+case 2097224:;
     r.ax = 0x1690;
-    yield* sub_19bb8();
+    frame.pc=2097225;
+case 2097225:
+yield* sub_19bb8();
+frame.pc=2097226;
+case 2097226:;
     r.ax = 0x16b6;
-    yield* sub_19b75();
+    frame.pc=2097227;
+case 2097227:
+yield* sub_19b75();
+frame.pc=2097228;
+case 2097228:;
 
       return;
     default: throw new Error("Invalid control flow in sub_199c0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19b75() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19b75',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x2634, r.ax);
     r.bx = 0x2384;
-    yield* sub_19d54();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19d54();
+frame.pc=2097154;
+case 2097154:;
     r.ax = memoryAGet16(r.ds, 0x2634);
     r.bx = 0x238c;
-    yield* sub_19d54();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19d54();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19b75");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19b88() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19b88',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5089,7 +7760,11 @@ case 0x19b8e:
     r.ax = memoryAGet16(r.ds, 0x2634);
     r.bx = memoryAGet16(r.ds, r.si + 9780);
     push(r.si);
-    yield* sub_19d54();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19d54();
+frame.pc=2097154;
+case 2097154:;
     r.si = pop();
     r.si -= 0x0002;
     if (r.si != 0)
@@ -5099,13 +7774,24 @@ case 0x19b8e:
     default: throw new Error("Invalid control flow in sub_19b88");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19ba0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19ba0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5115,7 +7801,11 @@ case 0x19ba6:
     r.ax = memoryAGet16(r.ds, 0x2634);
     r.bx = memoryAGet16(r.ds, r.si + 9788);
     push(r.si);
-    yield* sub_19d54();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19d54();
+frame.pc=2097154;
+case 2097154:;
     r.si = pop();
     r.si -= 0x0002;
     if (r.si != 0)
@@ -5125,13 +7815,24 @@ case 0x19ba6:
     default: throw new Error("Invalid control flow in sub_19ba0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19bb8() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19bb8',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5141,7 +7842,11 @@ case 0x19bbe:
     r.ax = memoryAGet16(r.ds, 0x2634);
     r.bx = memoryAGet16(r.ds, r.si + 9798);
     push(r.si);
-    yield* sub_19d54();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19d54();
+frame.pc=2097154;
+case 2097154:;
     r.si = pop();
     r.si -= 0x0002;
     if (r.si != 0)
@@ -5151,19 +7856,34 @@ case 0x19bbe:
     default: throw new Error("Invalid control flow in sub_19bb8");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19bd0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19bd0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x267e, r.ax);
     r.bx = 0x251c;
-    yield* sub_19d54();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19d54();
+frame.pc=2097154;
+case 2097154:;
     r.ax = 0;
     flags.direction = false;
     r.di = memoryAGet16(r.ds, 0x267e);
@@ -5177,23 +7897,42 @@ function* sub_19bd0() {
     r.di = memoryAGet16(r.ds, 0x267e);
     r.di += 0x2284;
     r.al = 0x2a;
-    yield* sub_19c11();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19c11();
+frame.pc=2097156;
+case 2097156:;
     r.di = memoryAGet16(r.ds, 0x267e);
     r.di += 0x22cb;
     r.al = 0xa8;
-    yield* sub_19c11();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19c11();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19bd0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19c11() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19c11',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5212,13 +7951,24 @@ case 0x19c24:
     default: throw new Error("Invalid control flow in sub_19c11");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19c30() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19c30',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5232,27 +7982,63 @@ function* sub_19c30() {
     r.di = 0x2000;
     r.cx = 0x0fa0;
     rep_stosw();
-    yield 1;
-    yield* sub_19dce();
+    frame.pc=2097153;frame.parked=1;yield 1;
+case 2097153: frame.parked=null;
+    frame.pc=2097154;
+case 2097154:
+yield* sub_19dce();
+frame.pc=2097155;
+case 2097155:;
     r.bx = 0x28a0;
     r.ax = 0;
-    yield* sub_19d54();
-    yield* sub_19c98();
-    yield* sub_19eb4();
-    yield* sub_19dbb();
-    yield* sub_19cb0();
+    frame.pc=2097156;
+case 2097156:
+yield* sub_19d54();
+frame.pc=2097157;
+case 2097157:;
+    frame.pc=2097158;
+case 2097158:
+yield* sub_19c98();
+frame.pc=2097159;
+case 2097159:;
+    frame.pc=2097160;
+case 2097160:
+yield* sub_19eb4();
+frame.pc=2097161;
+case 2097161:;
+    frame.pc=2097162;
+case 2097162:
+yield* sub_19dbb();
+frame.pc=2097163;
+case 2097163:;
+    frame.pc=2097164;
+case 2097164:
+yield* sub_19cb0();
+frame.pc=2097165;
+case 2097165:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19c30");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19c60() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19c60',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5266,15 +8052,31 @@ function* sub_19c60() {
     r.di = 0x2000;
     r.cx = 0x0fa0;
     rep_stosw();
-    yield* sub_19dce();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19dce();
+frame.pc=2097154;
+case 2097154:;
     r.bx = 0x28a0;
     r.ax = 0;
-    yield* sub_19d54();
-    yield* sub_19c98();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19d54();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19c98();
+frame.pc=2097158;
+case 2097158:;
     r.ax = memoryAGet16(r.ds, 0x0008);
     push(r.ax);
     memoryASet16(r.ds, 0x0008, 0x0001);
-    yield* sub_19eb4();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19eb4();
+frame.pc=2097160;
+case 2097160:;
     r.ax = pop();
     memoryASet16(r.ds, 0x0008, r.ax);
 
@@ -5282,13 +8084,24 @@ function* sub_19c60() {
     default: throw new Error("Invalid control flow in sub_19c60");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19c98() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19c98',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5298,19 +8111,34 @@ function* sub_19c98() {
     r.si = memoryAGet16(r.ds, r.bx + 10961);
     r.di = 0x1902;
     r.cx = 0x0801;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19c98");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19cb0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19cb0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5324,15 +8152,27 @@ case 0x19cb3:
     r.di = 0x0140;
     r.bh = 0x80;
     memoryASet16(r.ds, 0x2aca, 0x0000);
-    yield* sub_19cf6();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19cf6();
+frame.pc=2097154;
+case 2097154:;
     r.di = 0x0640;
     r.bh = 0x30;
     memoryASet16(r.ds, 0x2aca, 0x0005);
-    yield* sub_19cf6();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19cf6();
+frame.pc=2097156;
+case 2097156:;
     r.di = 0x0b40;
     r.bh = 0x00;
     memoryASet16(r.ds, 0x2aca, 0x000a);
-    yield* sub_19cf6();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19cf6();
+frame.pc=2097158;
+case 2097158:;
     memoryASet(r.ds, 0x0525, 0x10);
     memoryASet16(r.ds, 0x052f, 0x0000);
     memoryASet(r.ds, 0x0531, 0x01);
@@ -5341,13 +8181,24 @@ case 0x19cb3:
     default: throw new Error("Invalid control flow in sub_19cb0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19cf6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19cf6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5362,13 +8213,21 @@ case 0x19cff:
     r.ax = 0x1010;
     r.es = r.ax;
     r.di = 0x04d7;
-    yield* sub_178ad();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_178ad();
+frame.pc=2097154;
+case 2097154:;
     r.es = pop();
     r.di = pop();
     push(r.di);
     r.si = 0x04d7;
     r.cx = 0x1002;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     r.bh = 0;
     r.bl = memoryAGet(r.ds, 0x2ac4);
     r.cl = r.bl;
@@ -5391,13 +8250,24 @@ case 0x19cff:
     default: throw new Error("Invalid control flow in sub_19cf6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19d54() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19d54',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5406,7 +8276,8 @@ function* sub_19d54() {
     memoryASet16(r.ds, 0x2acc, r.ax);
     r.bx += 0x0002;
 case 0x19d60:
-    yield 1;
+    frame.pc=2097153;frame.parked=1;yield 1;
+case 2097153: frame.parked=null;
     r.si = memoryAGet16(r.ds, r.bx);
     if (r.si != 0xffff)
         { pc = 0x19d69; continue dispatch; }
@@ -5439,13 +8310,24 @@ case 0x19d92:
     default: throw new Error("Invalid control flow in sub_19d54");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19da1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19da1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5454,7 +8336,11 @@ case 0x19da6:
     r.si = 0x2680;
     r.cx = 0x1005;
     push(r.di);
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
     r.di = pop();
     r.di += 0x0014;
     r.tl = memoryAGet(r.ds, 0x2ac4);
@@ -5466,34 +8352,68 @@ case 0x19da6:
     default: throw new Error("Invalid control flow in sub_19da1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19dbb() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19dbb',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.di = 0x03c5;
-    yield* sub_19da1();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19da1();
+frame.pc=2097154;
+case 2097154:;
     r.di = 0x08c5;
-    yield* sub_19da1();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19da1();
+frame.pc=2097156;
+case 2097156:;
     r.di = 0x0dc5;
-    yield* sub_19da1();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19da1();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19dbb");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19dce() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19dce',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5504,7 +8424,11 @@ case 0x19dd4:
     if (r.di >= 0x1090)
         { pc = 0x19e02; continue dispatch; }
 case 0x19de3:
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dx &= 0x0030;
     if (r.dl == memoryAGet(r.ds, 0x2ac4))
         { pc = 0x19de3; continue dispatch; }
@@ -5512,7 +8436,11 @@ case 0x19de3:
     r.dx += 0x2904;
     r.si = r.dx;
     r.cx = 0x0801;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     { pc = 0x19dd4; continue dispatch; }
 case 0x19e02:
     r.di = 0x1180;
@@ -5523,18 +8451,27 @@ case 0x19e02:
     r.di = 0x3180;
     r.cx = 0x0500;
     rep_stosw();
-    yield 1;
+    frame.pc=2097157;frame.parked=1;yield 1;
+case 2097157: frame.parked=null;
     memoryASet16(r.ds, 0x2ac2, 0x2944);
 case 0x19e1c:
     memoryASet(r.ds, 0x2ac4, 0x09);
 case 0x19e21:
-    yield* sub_1a02d();
+    frame.pc=2097158;
+case 2097158:
+yield* sub_1a02d();
+frame.pc=2097159;
+case 2097159:;
     r.dx &= 0x0776;
     r.dx += 0x12c0;
     r.di = r.dx;
     r.si = memoryAGet16(r.ds, 0x2ac2);
     r.cx = 0x0501;
-    yield* sub_19fcd();
+    frame.pc=2097160;
+case 2097160:
+yield* sub_19fcd();
+frame.pc=2097161;
+case 2097161:;
     r.tl = memoryAGet(r.ds, 0x2ac4);
     memoryASet(r.ds, 0x2ac4, memoryAGet(r.ds, 0x2ac4) - 1);
     if (r.tl != 1)
@@ -5544,13 +8481,21 @@ case 0x19e21:
         { pc = 0x19e1c; continue dispatch; }
     memoryASet(r.ds, 0x2ac4, 0x05);
 case 0x19e50:
-    yield* sub_1a02d();
+    frame.pc=2097162;
+case 2097162:
+yield* sub_1a02d();
+frame.pc=2097163;
+case 2097163:;
     r.dx &= 0x003e;
     r.dx += 0x3a98;
     r.di = r.dx;
     r.si = 0x296c;
     r.cx = 0x0501;
-    yield* sub_19fcd();
+    frame.pc=2097164;
+case 2097164:
+yield* sub_19fcd();
+frame.pc=2097165;
+case 2097165:;
     r.tl = memoryAGet(r.ds, 0x2ac4);
     memoryASet(r.ds, 0x2ac4, memoryAGet(r.ds, 0x2ac4) - 1);
     if (r.tl != 1)
@@ -5560,13 +8505,24 @@ case 0x19e50:
     default: throw new Error("Invalid control flow in sub_19dce");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19e6d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19e6d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5580,13 +8536,21 @@ case 0x19e7b:
     memoryASet16(r.ds, 0x2ac2, memoryAGet16(r.ds, 0x2ac2) + 0x01e0);
     r.si = 0x2976;
     r.cx = 0x0c05;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 case 0x19e8d:
     r.di = memoryAGet16(r.ds, 0x2ac2);
     memoryASet16(r.ds, 0x2ac2, memoryAGet16(r.ds, 0x2ac2) + 0x0140);
     r.si = 0x29ee;
     r.cx = 0x0804;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     r.tl = memoryAGet(r.ds, 0x2ac4);
     memoryASet(r.ds, 0x2ac4, memoryAGet(r.ds, 0x2ac4) - 1);
     if (r.tl != 1)
@@ -5594,19 +8558,34 @@ case 0x19e8d:
     r.di = memoryAGet16(r.ds, 0x2ac2);
     r.si = 0x2a2e;
     r.cx = 0x0b04;
-    yield* sub_19fcd();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19fcd();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_19e6d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19eb4() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19eb4',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5619,7 +8598,11 @@ case 0x19ebc:
         { pc = 0x19eca; continue dispatch; }
     return;
 case 0x19eca:
-    yield* sub_19e6d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19e6d();
+frame.pc=2097154;
+case 2097154:;
     r.bx = memoryAGet16(r.ds, 0x2ac5);
     r.bx += 0x0002;
     { pc = 0x19ebc; continue dispatch; }
@@ -5628,13 +8611,24 @@ case 0x19eca:
     default: throw new Error("Invalid control flow in sub_19eb4");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19ee0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19ee0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5656,13 +8650,24 @@ case 0x19eee:
     default: throw new Error("Invalid control flow in sub_19ee0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19efc() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19efc',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5702,7 +8707,7 @@ case 0x19f34:
         { pc = 0x19f1c; continue dispatch; }
     r.ax &= r.bx;
     r.ax |= memoryAGet16(r.ds, 0x2ae3);
-    colorArt.paintWord(r.es,r.di,r.ds,r.si-2); colorArt.writing=true; stosw(); colorArt.writing=false; 
+    colorArt.paintWord(r.es,r.di,r.ds,r.si-2); colorArt.writing=true; stosw(); colorArt.writing=false;
     r.bp += 0x0002;
     if (--r.cx)
         { pc = 0x19f0e; continue dispatch; }
@@ -5722,13 +8727,24 @@ case 0x19f5e:
     default: throw new Error("Invalid control flow in sub_19efc");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19f65() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19f65',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5763,13 +8779,24 @@ case 0x19f99:
     default: throw new Error("Invalid control flow in sub_19f65");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19fa0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19fa0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5795,13 +8822,24 @@ case 0x19fb4:
     default: throw new Error("Invalid control flow in sub_19fa0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19fcd() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19fcd',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5828,13 +8866,24 @@ case 0x19ff3:
     default: throw new Error("Invalid control flow in sub_19fcd");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_19ffa() {
   let pc=0;
-  
+  const frame=execution.enter('sub_19ffa',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5861,13 +8910,24 @@ case 0x1a025:
     default: throw new Error("Invalid control flow in sub_19ffa");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a02d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a02d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5883,13 +8943,24 @@ function* sub_1a02d() {
     default: throw new Error("Invalid control flow in sub_1a02d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a040() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a040',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5908,13 +8979,24 @@ case 0x1a055:
     default: throw new Error("Invalid control flow in sub_1a040");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a059() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a059',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -5951,13 +9033,24 @@ case 0x1a07f:
     default: throw new Error("Invalid control flow in sub_1a059");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a090() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a090',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6023,7 +9116,11 @@ case 0x1a105:
     r.si = 0x0018;
     r.di = r.si;
     r.cx = 0x0f0f;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     r.cx = pop();
     if (!flags.carry)
         { pc = 0x1a137; continue dispatch; }
@@ -6031,10 +9128,18 @@ case 0x1a105:
 case 0x1a137:
     if (--r.cx)
         { pc = 0x1a105; continue dispatch; }
-    yield* sub_18413();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18413();
+frame.pc=2097156;
+case 2097156:;
     if (memoryAGet(r.ds, 0x70f2) == 0x00)
         { pc = 0x1a146; continue dispatch; }
-    yield* sub_1d45b();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1d45b();
+frame.pc=2097158;
+case 2097158:;
 case 0x1a146:
     r.bx = memoryAGet16(r.ds, 0x2e8d);
     memoryASet16(r.ds, 0x2e94, r.bx);
@@ -6042,43 +9147,86 @@ case 0x1a146:
     r.dl = memoryAGet(r.ds, r.bx + 11114);
     r.bl <<= 1;
     r.cx = memoryAGet16(r.ds, r.bx + 11098);
-    yield* sub_19ee0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19ee0();
+frame.pc=2097160;
+case 2097160:;
     r.di = r.ax;
     r.si = 0x2af0;
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0f03;
-    yield* sub_19fcd();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19fcd();
+frame.pc=2097162;
+case 2097162:;
     memoryASet16(r.ds, 0x2e8d, 0xffff);
     r.bx = 0;
     r.ah = 0x0b;
-    yield* interrupt(0x10);
-    yield* sub_1c06e();
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x10);
+frame.pc=2097164;
+case 2097164:;
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1c06e();
+frame.pc=2097166;
+case 2097166:;
     if (memoryAGet(r.ds, 0x70f2) == 0x00)
         { pc = 0x1a189; continue dispatch; }
-    yield* sub_1d42a();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1d42a();
+frame.pc=2097168;
+case 2097168:;
 case 0x1a189:
-    yield* sub_18375();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_18375();
+frame.pc=2097170;
+case 2097170:;
     r.ax = 0x03e8;
     r.bx = 0x04a5;
-    yield* sub_1cb6b();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1cb6b();
+frame.pc=2097172;
+case 2097172:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a090");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a196() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a196',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x2e8f))
         { pc = 0x1a1a1; continue dispatch; }
     return;
@@ -6101,7 +9249,11 @@ case 0x1a1af:
     r.bx = memoryAGet16(r.ds, 0x0579);
     r.dh = memoryAGet(r.ds, 0x057b);
     r.cx = 0x0e0f;
-    yield* sub_1a059();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a059();
+frame.pc=2097156;
+case 2097156:;
     r.cx = pop();
     if (flags.carry)
         { pc = 0x1a1e3; continue dispatch; }
@@ -6118,10 +9270,18 @@ case 0x1a1e3:
     if (r.bx == memoryAGet16(r.ds, 0x2e94))
         { pc = 0x1a1e2; continue dispatch; }
     push(r.bx);
-    yield* sub_18413();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18413();
+frame.pc=2097158;
+case 2097158:;
     if (memoryAGet(r.ds, 0x70f2) == 0x00)
         { pc = 0x1a1fa; continue dispatch; }
-    yield* sub_1d45b();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1d45b();
+frame.pc=2097160;
+case 2097160:;
 case 0x1a1fa:
     r.bx = pop();
     memoryASet(r.ds, r.bx + 11122, 0x00);
@@ -6129,42 +9289,81 @@ case 0x1a1fa:
     memoryASet16(r.ds, 0x2e8d, r.bx);
     r.bl <<= 1;
     r.cx = memoryAGet16(r.ds, r.bx + 11098);
-    yield* sub_19ee0();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19ee0();
+frame.pc=2097162;
+case 2097162:;
     r.di = r.ax;
     r.si = 0x2b7a;
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0f03;
-    yield* sub_19fcd();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19fcd();
+frame.pc=2097164;
+case 2097164:;
     if (memoryAGet(r.ds, 0x70f2) == 0x00)
         { pc = 0x1a22b; continue dispatch; }
-    yield* sub_1d42a();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1d42a();
+frame.pc=2097166;
+case 2097166:;
 case 0x1a22b:
-    yield* sub_18375();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_18375();
+frame.pc=2097168;
+case 2097168:;
     r.bx = 0x0001;
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097169;
+case 2097169:
+yield* interrupt(0x10);
+frame.pc=2097170;
+case 2097170:;
     r.ax = 0x03e8;
     r.bx = 0x0349;
-    yield* sub_1cb6b();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1cb6b();
+frame.pc=2097172;
+case 2097172:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a196");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a23f() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a23f',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ax = 0;
     r.bx = 0x2e24;
-    yield* sub_19d54();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19d54();
+frame.pc=2097154;
+case 2097154:;
     memoryASet(r.ds, 0x2e8a, 0xbf);
     memoryASet16(r.ds, 0x2e8b, 0x0000);
 case 0x1a252:
@@ -6173,14 +9372,22 @@ case 0x1a258:
     r.bx = 0;
     if (memoryAGet(r.ds, 0x2e8a) == 0xbf)
         { pc = 0x1a269; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     r.bl = r.dl;
     r.bl &= 0x02;
 case 0x1a269:
     r.cx = memoryAGet16(r.ds, 0x2e88);
     r.dl = memoryAGet(r.ds, 0x2e8a);
     push(r.bx);
-    yield* sub_1a313();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a313();
+frame.pc=2097158;
+case 2097158:;
     r.bx = pop();
     r.si = memoryAGet16(r.ds, 0x2e8b);
     r.ax = memoryAGet16(r.ds, 0x2e88);
@@ -6235,11 +9442,19 @@ case 0x1a2e8:
     r.bl <<= 1;
     r.cx = memoryAGet16(r.ds, r.bx + 11082);
     memoryASet16(r.ds, r.bx + 11098, r.cx);
-    yield* sub_19ee0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19ee0();
+frame.pc=2097160;
+case 2097160:;
     r.di = r.ax;
     r.si = 0x2af0;
     r.cx = 0x0f03;
-    yield* sub_19fcd();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19fcd();
+frame.pc=2097162;
+case 2097162:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1a2e8; continue dispatch; }
@@ -6248,37 +9463,67 @@ case 0x1a2e8:
     default: throw new Error("Invalid control flow in sub_1a23f");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a313() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a313',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     push(r.bx);
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     r.di = r.ax;
     r.ax = 0xb800;
     r.es = r.ax;
     r.bx = pop();
     r.si = memoryAGet16(r.ds, r.bx + 11808);
     r.cx = 0x0802;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a313");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a32a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a32a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6329,18 +9574,33 @@ case 0x1a37d:
     default: throw new Error("Invalid control flow in sub_1a32a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a380() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a380',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.bx = memoryAGet16(r.ds, 0x0004);
     r.bl <<= 1;
     r.cx = memoryAGet16(r.ds, r.bx + 13042);
@@ -6352,14 +9612,26 @@ case 0x1a398:
     return;
 case 0x1a399:
     memoryASet16(r.ds, 0x328c, r.dx);
-    yield* sub_1a5ea();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a5ea();
+frame.pc=2097156;
+case 2097156:;
     if (flags.carry)
         { pc = 0x1a398; continue dispatch; }
-    yield* sub_19410();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19410();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         { pc = 0x1a398; continue dispatch; }
     memoryASet(r.ds, 0x32ea, memoryAGet(r.ds, 0x32ea) + 1);
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     r.al = memoryAGet(r.ds, 0x32ea);
     r.al &= r.dl;
     memoryASet(r.ds, 0x32eb, memoryAGet(r.ds, 0x32eb) ^ r.al);
@@ -6399,7 +9671,11 @@ case 0x1a3fc:
         { pc = 0x1a47b; continue dispatch; }
     memoryASet16(r.ds, 0x328a, memoryAGet16(r.ds, 0x328a) - 1);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     r.dx -= memoryAGet16(r.ds, 0x0410);
     r.cl = 0x03;
     r.dx >>= r.cl;
@@ -6413,7 +9689,11 @@ case 0x1a41c:
     if (r.al < memoryAGet(r.ds, 0x32eb))
         { pc = 0x1a442; continue dispatch; }
     memoryASet(r.ds, 0x3281, 0x01);
-    yield* sub_1a02d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1a02d();
+frame.pc=2097164;
+case 2097164:;
     if (r.dl == 0x00)
         { pc = 0x1a43b; continue dispatch; }
     if (r.dl > 0x07)
@@ -6431,14 +9711,22 @@ case 0x1a442:
     r.al &= 0x2f;
     if (r.al != 0)
         { pc = 0x1a468; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1a02d();
+frame.pc=2097166;
+case 2097166:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x1a453; continue dispatch; }
     r.dl = 0xff;
 case 0x1a453:
     memoryASet(r.ds, 0x3280, r.dl);
-    yield* sub_1a02d();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1a02d();
+frame.pc=2097168;
+case 2097168:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x1a461; continue dispatch; }
@@ -6485,11 +9773,19 @@ case 0x1a4b8:
     r.cx = 0x1e02;
     r.ax = 0xb800;
     r.es = r.ax;
-    yield* sub_19fcd();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19fcd();
+frame.pc=2097170;
+case 2097170:;
     r.bx = pop();
     memoryASet(r.ds, r.bx + 12942, memoryAGet(r.ds, r.bx + 12942) - 1);
     r.al = memoryAGet(r.ds, r.bx + 12942);
-    yield* sub_1a6af();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1a6af();
+frame.pc=2097172;
+case 2097172:;
     memoryASet(r.ds, 0x3286, 0x01);
 case 0x1a4dc:
     r.cx = memoryAGet16(r.ds, 0x327d);
@@ -6531,9 +9827,17 @@ case 0x1a527:
     r.dl = 0;
 case 0x1a52e:
     memoryASet(r.ds, 0x327f, r.dl);
-    yield* sub_19ee0();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_19ee0();
+frame.pc=2097174;
+case 2097174:;
     memoryASet16(r.ds, 0x3284, r.ax);
-    yield* sub_1a5ea();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1a5ea();
+frame.pc=2097176;
+case 2097176:;
     if (!flags.carry)
         { pc = 0x1a558; continue dispatch; }
 case 0x1a53d:
@@ -6545,24 +9849,47 @@ case 0x1a53d:
     memoryASet(r.ds, 0x327f, r.dl);
     return;
 case 0x1a558:
-    yield* sub_19410();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_19410();
+frame.pc=2097178;
+case 2097178:;
     if (flags.carry)
         { pc = 0x1a53d; continue dispatch; }
-    yield* sub_1a5d0();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1a5d0();
+frame.pc=2097180;
+case 2097180:;
     memoryASet16(r.ds, 0x327a, memoryAGet16(r.ds, 0x327a) + 0x0002);
-    yield* sub_1a569();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1a569();
+frame.pc=2097182;
+case 2097182:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a380");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a569() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a569',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6613,13 +9940,24 @@ case 0x1a5c9:
     default: throw new Error("Invalid control flow in sub_1a569");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a5d0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a5d0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6630,19 +9968,34 @@ function* sub_1a5d0() {
     r.si = 0x31e8;
     r.di = memoryAGet16(r.ds, 0x3282);
     r.cx = 0x1e02;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a5d0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a5ea() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a5ea',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6652,7 +10005,11 @@ function* sub_1a5ea() {
         { pc = 0x1a603; continue dispatch; }
     if (memoryAGet(r.ds, 0x44bd) == 0x00)
         { pc = 0x1a603; continue dispatch; }
-    yield* sub_1b9e0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1b9e0();
+frame.pc=2097154;
+case 2097154:;
     return;
 case 0x1a603:
     r.ax = memoryAGet16(r.ds, 0x327d);
@@ -6662,7 +10019,11 @@ case 0x1a603:
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e1e;
-    yield* sub_1a059();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a059();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         { pc = 0x1a633; continue dispatch; }
     if (memoryAGet16(r.ds, 0x0004) != 0x0004)
@@ -6670,7 +10031,11 @@ case 0x1a603:
     if (memoryAGet(r.ds, 0x39e1) != 0x00)
         { pc = 0x1a631; continue dispatch; }
 case 0x1a62e:
-    yield* sub_17aa2();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_17aa2();
+frame.pc=2097158;
+case 2097158:;
 case 0x1a631:
     flags.carry = true;
     return;
@@ -6681,13 +10046,24 @@ case 0x1a633:
     default: throw new Error("Invalid control flow in sub_1a5ea");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a635() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a635',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6705,7 +10081,11 @@ function* sub_1a635() {
     memoryASet(r.ds, 0x3286, 0x01);
     memoryASet(r.ds, 0x3280, 0x00);
     memoryASet(r.ds, 0x3281, 0x00);
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     memoryASet(r.ds, 0x32eb, r.dl);
     memoryASet(r.ds, 0x32ea, 0x6c);
 
@@ -6713,13 +10093,24 @@ function* sub_1a635() {
     default: throw new Error("Invalid control flow in sub_1a635");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a675() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a675',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6742,19 +10133,34 @@ function* sub_1a675() {
         return;
     r.al++;
     memoryASet(r.ds, r.bx + 12942, r.al);
-    yield* sub_1a6af();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a6af();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a675");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a6af() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a6af',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6768,19 +10174,34 @@ function* sub_1a6af() {
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0501;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a6af");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a6d0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a6d0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6808,7 +10229,11 @@ case 0x1a700:
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.ch = 0x0e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         { pc = 0x1a6e6; continue dispatch; }
     r.bx = memoryAGet16(r.ds, 0x3511);
@@ -6835,25 +10260,53 @@ case 0x1a74a:
         { pc = 0x1a755; continue dispatch; }
     r.dl = 0xb4;
 case 0x1a755:
-    yield* sub_19ee0();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19ee0();
+frame.pc=2097156;
+case 2097156:;
     r.di = r.ax;
     r.si = 0x3350;
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x1205;
-    yield* sub_19fcd();
-    yield* sub_1c9c7();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19fcd();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1c9c7();
+frame.pc=2097160;
+case 2097160:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     memoryASet16(r.ds, 0x3509, r.dx);
 case 0x1a773:
     push(r.dx);
 case 0x1a774:
-    yield* sub_1c9d6();
-    yield* sub_18608();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1c9d6();
+frame.pc=2097164;
+case 2097164:;
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18608();
+frame.pc=2097166;
+case 2097166:;
     if (flags.zero)
         { pc = 0x1a774; continue dispatch; }
-    yield* sub_1c9d6();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1c9d6();
+frame.pc=2097168;
+case 2097168:;
     r.dx = pop();
     r.bx = 0x0001;
     if (r.dl & 0x01)
@@ -6861,10 +10314,22 @@ case 0x1a774:
     r.bl = 0x0f;
 case 0x1a78a:
     r.ah = 0x0b;
-    yield* interrupt(0x10);
-    yield* sub_1c9d6();
+    frame.pc=2097169;
+case 2097169:
+yield* interrupt(0x10);
+frame.pc=2097170;
+case 2097170:;
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1c9d6();
+frame.pc=2097172;
+case 2097172:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097173;
+case 2097173:
+yield* interrupt(0x1a);
+frame.pc=2097174;
+case 2097174:;
     r.dx -= memoryAGet16(r.ds, 0x3509);
     flags.carry = r.dx < 0x000d;
     if (r.dx < 0x000d)
@@ -6874,13 +10339,25 @@ case 0x1a79f:
     memoryASet(r.ds, 0x351b, memoryAGet(r.ds, 0x351b) + 1);
     r.ax = 0x05dc;
     r.bx = 0x0425;
-    yield* sub_1cb6b();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1cb6b();
+frame.pc=2097176;
+case 2097176:;
     if (memoryAGet(r.ds, 0x351b) != 0x01)
         { pc = 0x1a7b6; continue dispatch; }
-    yield* sub_18413();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_18413();
+frame.pc=2097178;
+case 2097178:;
 case 0x1a7b6:
     r.bx = memoryAGet16(r.ds, 0x3511);
-    yield* sub_1a9f1();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1a9f1();
+frame.pc=2097180;
+case 2097180:;
     r.bx = memoryAGet16(r.ds, 0x3511);
     memoryASet(r.ds, r.bx + 13479, 0x01);
     if (r.bx >= 0x000c)
@@ -6900,7 +10377,11 @@ case 0x1a7dd:
 case 0x1a7eb:
     if (memoryAGet(r.ds, 0x351b) == 0x00)
         { pc = 0x1a7f7; continue dispatch; }
-    yield* sub_1a86d();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1a86d();
+frame.pc=2097182;
+case 2097182:;
     flags.carry = true;
     return;
 case 0x1a7f7:
@@ -6910,13 +10391,24 @@ case 0x1a7f7:
     default: throw new Error("Invalid control flow in sub_1a6d0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a7f9() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a7f9',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -6932,7 +10424,11 @@ case 0x1a80d:
     r.al = memoryAGet(r.ds, r.bx + 13553);
     memoryASet(r.ds, r.bx + 13431, r.al);
     memoryASet(r.ds, r.bx + 13359, 0x01);
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x1a831; continue dispatch; }
@@ -6940,7 +10436,11 @@ case 0x1a80d:
 case 0x1a831:
     memoryASet(r.ds, r.bx + 13335, r.dl);
     r.bx <<= 1;
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     r.dh = 0;
     memoryASet16(r.ds, r.bx + 13383, r.dx);
     if (--r.cx)
@@ -6949,7 +10449,11 @@ case 0x1a831:
     r.cl = memoryAGet(r.ds, r.bx + 13596);
     r.ch = 0;
 case 0x1a84c:
-    yield* sub_1a02d();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a02d();
+frame.pc=2097158;
+case 2097158:;
     r.dl &= 0x0f;
     if (r.dl >= 0x0c)
         { pc = 0x1a84c; continue dispatch; }
@@ -6966,13 +10470,24 @@ case 0x1a84c:
     default: throw new Error("Invalid control flow in sub_1a7f9");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a86d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a86d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7007,18 +10522,33 @@ case 0x1a8a2:
     default: throw new Error("Invalid control flow in sub_1a86d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a8a5() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a8a5',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x3509))
         { pc = 0x1a8b0; continue dispatch; }
 case 0x1a8af:
@@ -7049,7 +10579,11 @@ case 0x1a8ed:
     r.si <<= 1;
     if (memoryAGet(r.ds, r.bx + 13479) != 0x00)
         { pc = 0x1a8af; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     if (r.dl > 0x10)
         { pc = 0x1a919; continue dispatch; }
     r.dl &= 0x01;
@@ -7058,7 +10592,11 @@ case 0x1a8ed:
     r.dl = ~r.dl;
 case 0x1a907:
     memoryASet(r.ds, r.bx + 13335, r.dl);
-    yield* sub_1a02d();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a02d();
+frame.pc=2097158;
+case 2097158:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x1a915; continue dispatch; }
@@ -7110,10 +10648,18 @@ case 0x1a980:
     memoryASet(r.ds, r.bx + 13431, r.al);
     r.dl = r.al;
     r.cx = memoryAGet16(r.ds, r.si + 13383);
-    yield* sub_19ee0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19ee0();
+frame.pc=2097160;
+case 2097160:;
     memoryASet16(r.ds, 0x34ef, r.ax);
     r.bx = memoryAGet16(r.ds, 0x3415);
-    yield* sub_1a9f1();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1a9f1();
+frame.pc=2097162;
+case 2097162:;
     r.bx = memoryAGet16(r.ds, 0x3415);
     r.si = r.bx;
     r.si <<= 1;
@@ -7131,7 +10677,11 @@ case 0x1a980:
     r.si &= 0x0018;
     r.si += 0x3330;
     r.cx = 0x0202;
-    yield* sub_19fcd();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19fcd();
+frame.pc=2097164;
+case 2097164:;
     return;
 case 0x1a9cf:
     r.si = memoryAGet16(r.ds, 0x3411);
@@ -7145,19 +10695,34 @@ case 0x1a9dc:
 case 0x1a9e6:
     r.si += 0x3300;
     r.cx = 0x0601;
-    yield* sub_19fcd();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19fcd();
+frame.pc=2097166;
+case 2097166:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a8a5");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1a9f1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1a9f1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7173,24 +10738,43 @@ function* sub_1a9f1() {
         { pc = 0x1aa11; continue dispatch; }
     r.cx = 0x0202;
 case 0x1aa11:
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1a9f1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1aa15() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1aa15',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x350f);
     if (r.ax < 0x0008)
@@ -7230,24 +10814,43 @@ case 0x1aa59:
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0401;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1aa15");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1aa80() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1aa80',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x35da);
     if (r.ax >= 0x0006)
@@ -7263,7 +10866,11 @@ case 0x1aa90:
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0a02;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     r.ax = 0x00e4;
     r.dl = 0x8a;
     r.si = 0x0010;
@@ -7271,7 +10878,11 @@ case 0x1aa90:
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e0a;
-    yield* sub_1a059();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a059();
+frame.pc=2097158;
+case 2097158:;
     if (!flags.carry)
         return;
     memoryASet(r.ds, 0x0554, 0x01);
@@ -7280,13 +10891,24 @@ case 0x1aa90:
     default: throw new Error("Invalid control flow in sub_1aa80");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1aae0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1aae0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7297,13 +10919,25 @@ case 0x1aaea:
     memoryASet16(r.ds, 0x0414, memoryAGet16(r.ds, 0x0414) + 1);
     memoryASet(r.ds, 0x0418, 0x01);
     r.dx = 0xaaaa;
-    yield* sub_1acc6();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1acc6();
+frame.pc=2097154;
+case 2097154:;
     r.ax = 0;
     memoryASet(r.ds, 0x369f, 0x00);
-    yield* sub_1acdc();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1acdc();
+frame.pc=2097156;
+case 2097156:;
 case 0x1ab03:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x1a);
+frame.pc=2097158;
+case 2097158:;
     if (memoryAGet16(r.ds, 0x0006) != 0x0007)
         { pc = 0x1ab1f; continue dispatch; }
     r.dx -= memoryAGet16(r.ds, 0x0412);
@@ -7334,12 +10968,20 @@ case 0x1ab35:
     r.ax <<= 1;
 case 0x1ab3e:
     memoryASet16(r.ds, 0x3697, r.ax);
-    yield* sub_1ad24();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1ad24();
+frame.pc=2097160;
+case 2097160:;
     r.bx = memoryAGet16(r.ds, 0x0006);
     r.bl <<= 1;
     r.si = memoryAGet16(r.ds, r.bx + 14028);
     r.di = 0x368d;
-    yield* sub_1994e();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1994e();
+frame.pc=2097162;
+case 2097162:;
     if (memoryAGet16(r.ds, 0x0006) != 0x0007)
         { pc = 0x1ab9e; continue dispatch; }
     r.bx = memoryAGet16(r.ds, 0x0008);
@@ -7356,25 +10998,49 @@ case 0x1ab76:
     r.si = 0x368d;
     r.di = 0x1f82;
     push(r.cx);
-    yield* sub_1994e();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1994e();
+frame.pc=2097164;
+case 2097164:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1ab76; continue dispatch; }
-    yield* sub_1ac2a();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1ac2a();
+frame.pc=2097166;
+case 2097166:;
     memoryASet(r.ds, 0x369e, 0x38);
     memoryASet(r.ds, 0x3699, 0x01);
     memoryASet16(r.ds, 0x3722, 0x0044);
-    yield* sub_1ac6a();
-    yield* sub_1ac9c();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1ac6a();
+frame.pc=2097168;
+case 2097168:;
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1ac9c();
+frame.pc=2097170;
+case 2097170:;
     { pc = 0x1abd7; continue dispatch; }
 case 0x1ab9e:
     r.si = 0x368d;
     r.di = 0x1f82;
-    yield* sub_1994e();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1994e();
+frame.pc=2097172;
+case 2097172:;
     memoryASet(r.ds, 0x3699, 0x02);
     memoryASet16(r.ds, 0x3722, 0x001e);
     r.dx = 0xffff;
-    yield* sub_1acc6();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1acc6();
+frame.pc=2097174;
+case 2097174:;
     r.ax = 0x0a8c;
     r.ax -= memoryAGet16(r.ds, 0x3697);
     r.cl = 0x04;
@@ -7384,30 +11050,62 @@ case 0x1ab9e:
     r.ah = 0x28;
     mul8(r.ah);
     memoryASet(r.ds, 0x369f, 0x01);
-    yield* sub_1acdc();
-    yield* sub_1ac6a();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1acdc();
+frame.pc=2097176;
+case 2097176:;
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1ac6a();
+frame.pc=2097178;
+case 2097178:;
 case 0x1abd7:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097179;
+case 2097179:
+yield* interrupt(0x1a);
+frame.pc=2097180;
+case 2097180:;
     memoryASet16(r.ds, 0x3695, r.dx);
 case 0x1abdf:
     if (memoryAGet16(r.ds, 0x0006) != 0x0007)
         { pc = 0x1abeb; continue dispatch; }
-    yield* sub_1cd93();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1cd93();
+frame.pc=2097182;
+case 2097182:;
     { pc = 0x1abee; continue dispatch; }
 case 0x1abeb:
-    yield* sub_1ca65();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1ca65();
+frame.pc=2097184;
+case 2097184:;
 case 0x1abee:
-    yield* sub_1ac4c();
+    frame.pc=2097185;
+case 2097185:
+yield* sub_1ac4c();
+frame.pc=2097186;
+case 2097186:;
     r.dx -= memoryAGet16(r.ds, 0x3695);
     if (r.dx < memoryAGet16(r.ds, 0x3722))
         { pc = 0x1abdf; continue dispatch; }
     r.bx = 0;
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097187;
+case 2097187:
+yield* interrupt(0x10);
+frame.pc=2097188;
+case 2097188:;
     if (memoryAGet16(r.ds, 0x0006) == 0x0007)
         { pc = 0x1ac0c; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097189;
+case 2097189:
+yield* sub_1cd51();
+frame.pc=2097190;
+case 2097190:;
     return;
 case 0x1ac0c:
     r.ax = 0xb800;
@@ -7415,23 +11113,42 @@ case 0x1ac0c:
     r.si = 0x000e;
     r.di = 0x08e4;
     r.cx = 0x0804;
-    yield* sub_19fcd();
+    frame.pc=2097191;
+case 2097191:
+yield* sub_19fcd();
+frame.pc=2097192;
+case 2097192:;
     r.si = 0x004e;
     r.di = 0x0c94;
     r.cx = 0x0814;
-    yield* sub_19fcd();
+    frame.pc=2097193;
+case 2097193:
+yield* sub_19fcd();
+frame.pc=2097194;
+case 2097194:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1aae0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ac2a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ac2a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7442,11 +11159,19 @@ function* sub_1ac2a() {
     r.cx = 0x0804;
     r.di = 0x000e;
     r.si = 0x08e4;
-    yield* sub_19ffa();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ffa();
+frame.pc=2097154;
+case 2097154:;
     r.cx = 0x0814;
     r.di = 0x004e;
     r.si = 0x0c94;
-    yield* sub_19ffa();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19ffa();
+frame.pc=2097156;
+case 2097156:;
     push(r.es);
     r.ds = pop();
 
@@ -7454,21 +11179,40 @@ function* sub_1ac2a() {
     default: throw new Error("Invalid control flow in sub_1ac2a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ac4c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ac4c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     push(r.dx);
 case 0x1ac51:
-    yield* sub_18608();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18608();
+frame.pc=2097156;
+case 2097156:;
     if (flags.zero)
         { pc = 0x1ac51; continue dispatch; }
     r.dx = pop();
@@ -7479,20 +11223,35 @@ case 0x1ac51:
     r.bl = memoryAGet(r.ds, 0x3699);
 case 0x1ac64:
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x10);
+frame.pc=2097158;
+case 2097158:;
     r.dx = pop();
 
       return;
     default: throw new Error("Invalid control flow in sub_1ac4c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ac6a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ac6a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7502,7 +11261,11 @@ function* sub_1ac6a() {
     r.dh >>= r.cl;
     r.dl = 0x12;
     r.bh = 0;
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x36a0, 0x0003);
 case 0x1ac80:
     r.bx = memoryAGet16(r.ds, 0x36a0);
@@ -7510,7 +11273,11 @@ case 0x1ac80:
     r.al += 0x30;
     r.ah = 0x0e;
     r.bl = 0x03;
-    yield* interrupt(0x10);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x10);
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x36a0, memoryAGet16(r.ds, 0x36a0) + 1);
     if (memoryAGet16(r.ds, 0x36a0) < 0x0007)
         { pc = 0x1ac80; continue dispatch; }
@@ -7519,13 +11286,24 @@ case 0x1ac80:
     default: throw new Error("Invalid control flow in sub_1ac6a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ac9c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ac9c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7533,7 +11311,11 @@ function* sub_1ac9c() {
     r.dl = 0x0a;
     r.dh = r.dl;
     r.bx = 0;
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
     r.bx = memoryAGet16(r.ds, 0x370c);
     r.ax = memoryAGet16(r.ds, r.bx + 14060);
     memoryASet16(r.ds, 0x3720, r.ax);
@@ -7543,7 +11325,11 @@ case 0x1acb3:
     r.al = memoryAGet(r.ds, r.bx + 14094);
     push(r.bx);
     r.bl = 0x03;
-    yield* interrupt(0x10);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x10);
+frame.pc=2097156;
+case 2097156:;
     r.bx = pop();
     r.bx++;
     if (r.bx < 0x0014)
@@ -7553,13 +11339,24 @@ case 0x1acb3:
     default: throw new Error("Invalid control flow in sub_1ac9c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1acc6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1acc6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7580,34 +11377,65 @@ case 0x1acd5:
     default: throw new Error("Invalid control flow in sub_1acc6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1acdc() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1acdc',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x369a, r.ax);
     r.ax = 0xb800;
     r.es = r.ax;
-    yield* sub_1ca59();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1ca59();
+frame.pc=2097154;
+case 2097154:;
     r.ax = 0x1b80;
 case 0x1acea:
     r.bx = 0x361c;
     memoryASet16(r.ds, 0x369c, r.ax);
-    yield* sub_19d54();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19d54();
+frame.pc=2097156;
+case 2097156:;
     if (memoryAGet(r.ds, 0x369f) == 0x00)
         { pc = 0x1ad12; continue dispatch; }
-    yield* sub_1ca99();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1ca99();
+frame.pc=2097158;
+case 2097158:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     memoryASet16(r.ds, 0x3695, r.dx);
 case 0x1ad05:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     r.dx -= memoryAGet16(r.ds, 0x3695);
     if (r.dx < 0x0002)
         { pc = 0x1ad05; continue dispatch; }
@@ -7620,19 +11448,34 @@ case 0x1ad12:
     if (r.ax >= memoryAGet16(r.ds, 0x369a))
         { pc = 0x1acea; continue dispatch; }
 case 0x1ad20:
-    yield* sub_1cd51();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1cd51();
+frame.pc=2097164;
+case 2097164:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1acdc");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ad24() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ad24',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7649,7 +11492,11 @@ case 0x1ad3b:
         { pc = 0x1ad49; continue dispatch; }
     r.si = r.bx;
     r.di = 0x368d;
-    yield* sub_1994e();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1994e();
+frame.pc=2097154;
+case 2097154:;
 case 0x1ad49:
     r.bx -= 0x0007;
     flags.carry = r.dx & 1;
@@ -7661,13 +11508,24 @@ case 0x1ad49:
     default: throw new Error("Invalid control flow in sub_1ad24");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ad60() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ad60',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7681,18 +11539,33 @@ function* sub_1ad60() {
     default: throw new Error("Invalid control flow in sub_1ad60");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ad72() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ad72',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x37b8))
         { pc = 0x1ad7d; continue dispatch; }
     return;
@@ -7710,18 +11583,46 @@ case 0x1ad87:
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e10;
-    yield* sub_1a059();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a059();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         { pc = 0x1adcb; continue dispatch; }
     r.ax = 0x0c00;
     r.bx = 0x08fd;
-    yield* sub_1cb6b();
-    yield* sub_18413();
-    yield* sub_1b068();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cb6b();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18413();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1b068();
+frame.pc=2097162;
+case 2097162:;
     r.bx = memoryAGet16(r.ds, 0x37b6);
-    yield* sub_1add3();
-    yield* sub_18354();
-    yield* sub_1b044();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1add3();
+frame.pc=2097164;
+case 2097164:;
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18354();
+frame.pc=2097166;
+case 2097166:;
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1b044();
+frame.pc=2097168;
+case 2097168:;
     return;
 case 0x1adcb:
     flags.carry = memoryAGet16(r.ds, 0x37b6) < 0x0002;
@@ -7733,13 +11634,24 @@ case 0x1adcb:
     default: throw new Error("Invalid control flow in sub_1ad72");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1add3() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1add3',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7756,7 +11668,11 @@ function* sub_1add3() {
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x1002;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
     r.tl = memoryAGet(r.ds, 0x37af);
     memoryASet(r.ds, 0x37af, memoryAGet(r.ds, 0x37af) - 1);
     if (r.tl != 1)
@@ -7769,13 +11685,24 @@ function* sub_1add3() {
     default: throw new Error("Invalid control flow in sub_1add3");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ae0b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ae0b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7796,7 +11723,11 @@ case 0x1ae1d:
     push(r.cx);
     r.cx = 0x0801;
     push(r.bx);
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
     r.bx = pop();
     r.cx = pop();
     r.bx += 0x0002;
@@ -7816,13 +11747,21 @@ case 0x1ae4e:
         { pc = 0x1ae66; continue dispatch; }
     if (r.cl & 0x01)
         { pc = 0x1ae66; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     if (r.dl < 0x40)
         { pc = 0x1ae66; continue dispatch; }
     r.al = 0x10;
     { pc = 0x1ae1d; continue dispatch; }
 case 0x1ae66:
-    yield* sub_1a02d();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a02d();
+frame.pc=2097158;
+case 2097158:;
     r.al = r.dl;
     r.al -= r.bl;
     r.al &= 0x30;
@@ -7833,13 +11772,24 @@ case 0x1ae66:
     default: throw new Error("Invalid control flow in sub_1ae0b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ae73() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ae73',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7872,13 +11822,24 @@ case 0x1aeaf:
     default: throw new Error("Invalid control flow in sub_1ae73");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1aec0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1aec0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -7893,18 +11854,33 @@ function* sub_1aec0() {
     default: throw new Error("Invalid control flow in sub_1aec0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1aee1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1aee1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x39c8);
     if (r.ax >= 0x0002)
@@ -7913,10 +11889,18 @@ case 0x1aef0:
     return;
 case 0x1aef1:
     memoryASet16(r.ds, 0x39c8, r.dx);
-    yield* sub_1b082();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b082();
+frame.pc=2097156;
+case 2097156:;
     if (flags.carry)
         { pc = 0x1aef0; continue dispatch; }
-    yield* sub_1b09e();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1b09e();
+frame.pc=2097158;
+case 2097158:;
     if (!flags.carry)
         { pc = 0x1af02; continue dispatch; }
     { pc = 0x1afc0; continue dispatch; }
@@ -7996,7 +11980,11 @@ case 0x1afa1:
 case 0x1afa6:
     memoryASet(r.ds, 0x3966, r.al);
 case 0x1afa9:
-    yield* sub_1b082();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1b082();
+frame.pc=2097160;
+case 2097160:;
     if (!flags.carry)
         { pc = 0x1afbb; continue dispatch; }
     r.ax = memoryAGet16(r.ds, 0x39c3);
@@ -8005,7 +11993,11 @@ case 0x1afa9:
     memoryASet(r.ds, 0x3966, r.al);
     return;
 case 0x1afbb:
-    yield* sub_1b09e();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1b09e();
+frame.pc=2097162;
+case 2097162:;
     if (!flags.carry)
         { pc = 0x1b01e; continue dispatch; }
 case 0x1afc0:
@@ -8031,22 +12023,46 @@ case 0x1afdc:
         { pc = 0x1afe7; continue dispatch; }
     r.dl = 0;
 case 0x1afe7:
-    yield* sub_19ee0();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19ee0();
+frame.pc=2097164;
+case 2097164:;
     r.di = r.ax;
     r.ax = 0xb800;
     r.es = r.ax;
     r.si = 0x37c0;
     r.bp = 0x000e;
     r.cx = 0x1506;
-    yield* sub_19efc();
-    yield* sub_1c924();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19efc();
+frame.pc=2097166;
+case 2097166:;
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1c924();
+frame.pc=2097168;
+case 2097168:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097169;
+case 2097169:
+yield* interrupt(0x1a);
+frame.pc=2097170;
+case 2097170:;
     memoryASet16(r.ds, 0x39c8, r.dx);
 case 0x1b008:
-    yield* sub_1c934();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1c934();
+frame.pc=2097172;
+case 2097172:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097173;
+case 2097173:
+yield* interrupt(0x1a);
+frame.pc=2097174;
+case 2097174:;
     r.dx -= memoryAGet16(r.ds, 0x39c8);
     if (r.dx < 0x0009)
         { pc = 0x1b008; continue dispatch; }
@@ -8055,9 +12071,17 @@ case 0x1b008:
 case 0x1b01e:
     r.cx = memoryAGet16(r.ds, 0x3964);
     r.dl = memoryAGet(r.ds, 0x3966);
-    yield* sub_19ee0();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_19ee0();
+frame.pc=2097176;
+case 2097176:;
     memoryASet16(r.ds, 0x39ca, r.ax);
-    yield* sub_1b068();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1b068();
+frame.pc=2097178;
+case 2097178:;
     r.tl = memoryAGet(r.ds, 0x396d);
     memoryASet(r.ds, 0x396d, memoryAGet(r.ds, 0x396d) - 1);
     if (r.tl != 1)
@@ -8065,19 +12089,34 @@ case 0x1b01e:
     memoryASet(r.ds, 0x396d, 0x02);
     memoryASet16(r.ds, 0x396b, memoryAGet16(r.ds, 0x396b) ^ 0x0054);
 case 0x1b040:
-    yield* sub_1b044();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1b044();
+frame.pc=2097180;
+case 2097180:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1aee1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b044() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b044',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8090,19 +12129,34 @@ function* sub_1b044() {
     r.si = memoryAGet16(r.ds, 0x396b);
     r.si += 0x38bc;
     r.cx = 0x0e03;
-    yield* sub_19efc();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19efc();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b044");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b068() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b068',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8113,19 +12167,34 @@ function* sub_1b068() {
     r.di = memoryAGet16(r.ds, 0x3968);
     r.si = 0x396f;
     r.cx = 0x0e03;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b068");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b082() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b082',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8136,19 +12205,34 @@ function* sub_1b082() {
     r.dh = memoryAGet(r.ds, 0x327f);
     r.di = 0x0010;
     r.cx = 0x1e0e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b082");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b09e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b09e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8159,26 +12243,45 @@ function* sub_1b09e() {
     r.bx = memoryAGet16(r.ds, 0x0579);
     r.dh = memoryAGet(r.ds, 0x057b);
     r.cx = 0x0e0e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b09e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b0c0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b0c0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x39e1) == 0x00)
         { pc = 0x1b0d4; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx == memoryAGet16(r.ds, 0x3d16))
         { pc = 0x1b0e9; continue dispatch; }
     { pc = 0x1b165; continue dispatch; }
@@ -8192,11 +12295,19 @@ case 0x1b0d4:
 case 0x1b0e9:
     return;
 case 0x1b0ea:
-    yield* sub_1b295();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b295();
+frame.pc=2097156;
+case 2097156:;
     if (flags.carry)
         { pc = 0x1b0e9; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x1a);
+frame.pc=2097158;
+case 2097158:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x3d18);
     if (r.ax < 0x000c)
@@ -8235,13 +12346,21 @@ case 0x1b142:
     r.ax = memoryAGet16(r.ds, r.bx + 4407);
     r.ax += 0x0008;
     memoryASet16(r.ds, 0x3d03, r.ax);
-    yield* sub_18413();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18413();
+frame.pc=2097160;
+case 2097160:;
     memoryASet(r.ds, 0x39e1, 0x0e);
     memoryASet(r.ds, 0x069a, 0x10);
 case 0x1b165:
     if (memoryAGet(r.ds, 0x1cbf) != 0x00)
         { pc = 0x1b16f; continue dispatch; }
-    yield* sub_1a5d0();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1a5d0();
+frame.pc=2097162;
+case 2097162:;
 case 0x1b16f:
     memoryASet(r.ds, 0x39e1, memoryAGet(r.ds, 0x39e1) - 0x02);
     r.bh = 0;
@@ -8266,29 +12385,56 @@ case 0x1b1a0:
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x1002;
-    yield* sub_19fcd();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19fcd();
+frame.pc=2097164;
+case 2097164:;
     if (memoryAGet(r.ds, 0x1cbf) != 0x00)
         { pc = 0x1b1bb; continue dispatch; }
-    yield* sub_1a569();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1a569();
+frame.pc=2097166;
+case 2097166:;
 case 0x1b1bb:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097167;
+case 2097167:
+yield* interrupt(0x1a);
+frame.pc=2097168;
+case 2097168:;
     memoryASet16(r.ds, 0x3d16, r.dx);
     if (memoryAGet(r.ds, 0x39e1) != 0x00)
         return;
-    yield* sub_18342();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_18342();
+frame.pc=2097170;
+case 2097170:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b0c0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b1ce() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b1ce',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8305,7 +12451,11 @@ case 0x1b1e9:
     r.ch = r.bl;
 case 0x1b1f5:
     r.si = 0x3aea;
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     if (r.dl > 0x30)
         { pc = 0x1b20b; continue dispatch; }
     r.si = 0x3af8;
@@ -8318,7 +12468,11 @@ case 0x1b20b:
     push(r.cx);
     push(r.bx);
     r.cx = 0x0801;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     r.bx = pop();
     r.cx = pop();
     r.bx += 0x0002;
@@ -8330,21 +12484,41 @@ case 0x1b20b:
         { pc = 0x1b1e9; continue dispatch; }
     r.bx = 0x3c22;
     r.ax = 0;
-    yield* sub_19d54();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19d54();
+frame.pc=2097158;
+case 2097158:;
     r.bx = 0x3c3e;
     r.ax = 0;
-    yield* sub_19d54();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19d54();
+frame.pc=2097160;
+case 2097160:;
     r.bx = 0x3c9a;
     r.ax = 0;
-    yield* sub_19d54();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19d54();
+frame.pc=2097162;
+case 2097162:;
     r.bx = 0x3c56;
     r.ax = 0;
-    yield* sub_19d54();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19d54();
+frame.pc=2097164;
+case 2097164:;
     r.si = 0x3caa;
     r.di = 0x08ec;
     r.cx = 0x0102;
     r.bp = 0x000e;
-    yield* sub_19f65();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19f65();
+frame.pc=2097166;
+case 2097166:;
     r.si = 0;
     r.bx = memoryAGet16(r.ds, 0x0008);
     r.cl = 0x03;
@@ -8369,13 +12543,24 @@ case 0x1b26c:
     default: throw new Error("Invalid control flow in sub_1b1ce");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b295() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b295',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8386,19 +12571,34 @@ function* sub_1b295() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e1e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b295");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b2c0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b2c0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8410,8 +12610,16 @@ case 0x1b2c3:
     r.si <<= 1;
     memoryASet(r.ds, r.bx + 16046, 0x01);
     memoryASet(r.ds, r.bx + 16050, 0x00);
-    yield* sub_1b4a7();
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1b4a7();
+frame.pc=2097154;
+case 2097154:;
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     r.dl &= 0x0f;
     r.dl += 0x14;
     memoryASet(r.ds, r.bx + 16054, r.dl);
@@ -8424,18 +12632,33 @@ case 0x1b2c3:
     default: throw new Error("Invalid control flow in sub_1b2c0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b2f2() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b2f2',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x3edc))
         { pc = 0x1b2fd; continue dispatch; }
 case 0x1b2fc:
@@ -8456,24 +12679,44 @@ case 0x1b319:
     r.si <<= 1;
     if (memoryAGet(r.ds, r.bx + 16050) != 0x00)
         { pc = 0x1b2fc; continue dispatch; }
-    yield* sub_1b50b();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b50b();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         { pc = 0x1b32c; continue dispatch; }
     { pc = 0x1b354; continue dispatch; }
 case 0x1b32c:
-    yield* sub_1b52c();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1b52c();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         { pc = 0x1b2fc; continue dispatch; }
     if (memoryAGet(r.ds, r.bx + 16054) != 0x00)
         { pc = 0x1b348; continue dispatch; }
-    yield* sub_1b4a7();
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1b4a7();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1a02d();
+frame.pc=2097162;
+case 2097162:;
     r.dl &= 0x07;
     r.dl += 0x14;
     memoryASet(r.ds, r.bx + 16054, r.dl);
 case 0x1b348:
     memoryASet(r.ds, r.bx + 16054, memoryAGet(r.ds, r.bx + 16054) - 1);
-    yield* sub_1b50b();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1b50b();
+frame.pc=2097164;
+case 2097164:;
     if (flags.carry)
         { pc = 0x1b354; continue dispatch; }
     { pc = 0x1b3b1; continue dispatch; }
@@ -8485,11 +12728,23 @@ case 0x1b354:
 case 0x1b362:
     return;
 case 0x1b363:
-    yield* sub_18413();
-    yield* sub_1b484();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18413();
+frame.pc=2097166;
+case 2097166:;
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1b484();
+frame.pc=2097168;
+case 2097168:;
     r.bx = memoryAGet16(r.ds, 0x3eda);
     memoryASet(r.ds, r.bx + 16050, 0x01);
-    yield* sub_18354();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_18354();
+frame.pc=2097170;
+case 2097170:;
     memoryASet(r.ds, 0x055c, 0x00);
     r.tl = memoryAGet(r.ds, 0x3ed8);
     memoryASet(r.ds, 0x3ed8, memoryAGet(r.ds, 0x3ed8) - 1);
@@ -8509,17 +12764,33 @@ case 0x1b385:
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0c02;
-    yield* sub_19f65();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19f65();
+frame.pc=2097172;
+case 2097172:;
     r.ax = 0x03e8;
     r.bx = 0x02ee;
-    yield* sub_1cb6b();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1cb6b();
+frame.pc=2097174;
+case 2097174:;
     return;
 case 0x1b3b1:
-    yield* sub_1b4e4();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1b4e4();
+frame.pc=2097176;
+case 2097176:;
     r.di = memoryAGet16(r.ds, 0x0008);
     r.di <<= 1;
     r.bp = memoryAGet16(r.ds, r.di + 16094);
-    yield* sub_1b54c();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1b54c();
+frame.pc=2097178;
+case 2097178:;
     if (!flags.carry)
         { pc = 0x1b3e0; continue dispatch; }
     if (memoryAGet(r.ds, r.bx + 16054) < 0x02)
@@ -8574,13 +12845,25 @@ case 0x1b434:
     memoryASet16(r.ds, 0x3eca, r.ax);
     r.dl = memoryAGet(r.ds, r.bx + 16084);
     r.cx = memoryAGet16(r.ds, r.si + 16076);
-    yield* sub_19ee0();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_19ee0();
+frame.pc=2097180;
+case 2097180:;
     memoryASet16(r.ds, 0x3de4, r.ax);
-    yield* sub_1b484();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1b484();
+frame.pc=2097182;
+case 2097182:;
     r.bx = memoryAGet16(r.ds, 0x3eda);
     r.si = r.bx;
     r.si <<= 1;
-    yield* sub_1b52c();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1b52c();
+frame.pc=2097184;
+case 2097184:;
     if (!flags.carry)
         { pc = 0x1b456; continue dispatch; }
     return;
@@ -8598,19 +12881,34 @@ case 0x1b463:
     r.bp = memoryAGet16(r.ds, r.si + 16066);
     r.cx = 0x0c02;
     r.si = memoryAGet16(r.ds, 0x3eca);
-    yield* sub_19f65();
+    frame.pc=2097185;
+case 2097185:
+yield* sub_19f65();
+frame.pc=2097186;
+case 2097186:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b2f2");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b484() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b484',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8624,25 +12922,44 @@ function* sub_1b484() {
     r.si = memoryAGet16(r.ds, r.si + 16066);
     r.ax = 0xb800;
     r.es = r.ax;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b484");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b4a7() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b4a7',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet(r.ds, 0x3ed9, 0x20);
 case 0x1b4ac:
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dx &= 0x000f;
     r.di = 0;
 case 0x1b4b5:
@@ -8655,11 +12972,19 @@ case 0x1b4bf:
     if (r.di < 0x0008)
         { pc = 0x1b4b5; continue dispatch; }
     memoryASet16(r.ds, r.si + 16058, r.dx);
-    yield* sub_1b4e4();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b4e4();
+frame.pc=2097156;
+case 2097156:;
     if (memoryAGet(r.ds, 0x3ed9) == 0x00)
         return;
     r.bp = 0x0032;
-    yield* sub_1b54c();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1b54c();
+frame.pc=2097158;
+case 2097158:;
     if (!flags.carry)
         return;
     memoryASet(r.ds, 0x3ed9, memoryAGet(r.ds, 0x3ed9) - 1);
@@ -8669,13 +12994,24 @@ case 0x1b4bf:
     default: throw new Error("Invalid control flow in sub_1b4a7");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b4e4() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b4e4',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8698,13 +13034,24 @@ case 0x1b4f5:
     default: throw new Error("Invalid control flow in sub_1b4e4");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b50b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b50b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8717,7 +13064,11 @@ function* sub_1b50b() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e0c;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     r.bx = pop();
     r.si = pop();
 
@@ -8725,13 +13076,24 @@ function* sub_1b50b() {
     default: throw new Error("Invalid control flow in sub_1b50b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b52c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b52c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8744,7 +13106,11 @@ function* sub_1b52c() {
     r.dh = memoryAGet(r.ds, 0x327f);
     r.di = r.si;
     r.cx = 0x1e0c;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     r.bx = pop();
     r.si = pop();
 
@@ -8752,13 +13118,24 @@ function* sub_1b52c() {
     default: throw new Error("Invalid control flow in sub_1b52c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b54c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b54c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -8789,18 +13166,33 @@ case 0x1b56e:
     default: throw new Error("Invalid control flow in sub_1b54c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b570() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b570',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x40b5))
         { pc = 0x1b57b; continue dispatch; }
 case 0x1b57a:
@@ -8813,20 +13205,40 @@ case 0x1b57b:
 case 0x1b58a:
     if (memoryAGet(r.ds, 0x40aa) < 0xa4)
         { pc = 0x1b57a; continue dispatch; }
-    yield* sub_1b75d();
-    yield* sub_1b787();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b75d();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1b787();
+frame.pc=2097158;
+case 2097158:;
     if (flags.carry)
         { pc = 0x1b57a; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     if (r.dl > 0x30)
         { pc = 0x1b5cc; continue dispatch; }
-    yield* sub_1b72b();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1b72b();
+frame.pc=2097162;
+case 2097162:;
     r.si = memoryAGet16(r.ds, 0x0008);
     r.si <<= 1;
     r.ax = memoryAGet16(r.ds, r.si + 16590);
     if (memoryAGet16(r.ds, 0x40cc) > r.ax)
         { pc = 0x1b5cc; continue dispatch; }
-    yield* sub_1cb8d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1cb8d();
+frame.pc=2097164;
+case 2097164:;
     memoryASet16(r.ds, 0x40c8, 0x00ff);
     r.al = memoryAGet(r.ds, 0x40ca);
     memoryASet(r.ds, 0x40b7, r.al);
@@ -8836,7 +13248,11 @@ case 0x1b58a:
 case 0x1b5cc:
     if (memoryAGet16(r.ds, 0x40c8) > 0x000a)
         { pc = 0x1b5e1; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1a02d();
+frame.pc=2097166;
+case 2097166:;
     if (r.dl > 0x06)
         { pc = 0x1b5e4; continue dispatch; }
     memoryASet16(r.ds, 0x40c8, 0x00ff);
@@ -8873,13 +13289,25 @@ case 0x1b617:
     r.dl |= memoryAGet(r.ds, 0x40b7);
     if (r.dl)
         { pc = 0x1b65e; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1a02d();
+frame.pc=2097168;
+case 2097168:;
     if (r.dl > 0x10)
         { pc = 0x1b65e; continue dispatch; }
     memoryASet16(r.ds, 0x40c8, 0x00ff);
-    yield* sub_1cb8d();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1cb8d();
+frame.pc=2097170;
+case 2097170:;
 case 0x1b632:
-    yield* sub_1a02d();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1a02d();
+frame.pc=2097172;
+case 2097172:;
     if (r.dl > 0x30)
         { pc = 0x1b653; continue dispatch; }
     r.dl &= 0x01;
@@ -8888,7 +13316,11 @@ case 0x1b632:
     r.dl = 0xff;
 case 0x1b641:
     memoryASet(r.ds, 0x40b7, r.dl);
-    yield* sub_1a02d();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1a02d();
+frame.pc=2097174;
+case 2097174:;
     r.dl &= 0x01;
     if (r.dl != 0)
         { pc = 0x1b64f; continue dispatch; }
@@ -8896,7 +13328,11 @@ case 0x1b641:
 case 0x1b64f:
     memoryASet(r.ds, 0x40b8, r.dl);
 case 0x1b653:
-    yield* sub_1a02d();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1a02d();
+frame.pc=2097176;
+case 2097176:;
     r.dx &= 0x00ff;
     memoryASet16(r.ds, 0x40c8, r.dx);
 case 0x1b65e:
@@ -8941,10 +13377,18 @@ case 0x1b6a7:
 case 0x1b6b3:
     memoryASet16(r.ds, 0x40b2, r.ax);
 case 0x1b6b6:
-    yield* sub_1b75d();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1b75d();
+frame.pc=2097178;
+case 2097178:;
     r.cx = memoryAGet16(r.ds, 0x40b2);
     r.dl = memoryAGet(r.ds, 0x40b4);
-    yield* sub_19ee0();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_19ee0();
+frame.pc=2097180;
+case 2097180:;
     memoryASet16(r.ds, 0x40bc, r.ax);
     r.ax = 0xb800;
     r.es = r.ax;
@@ -8953,9 +13397,17 @@ case 0x1b6b6:
     r.si = 0x3f2c;
     r.di = memoryAGet16(r.ds, 0x40ba);
     r.cx = 0x0501;
-    yield* sub_19fcd();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_19fcd();
+frame.pc=2097182;
+case 2097182:;
 case 0x1b6e0:
-    yield* sub_1b787();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1b787();
+frame.pc=2097184;
+case 2097184:;
     if (flags.carry)
         return;
     memoryASet(r.ds, 0x40b9, 0x00);
@@ -8971,19 +13423,34 @@ case 0x1b705:
     memoryASet16(r.ds, 0x40ba, r.di);
     r.bp = 0x3f2c;
     r.cx = 0x0501;
-    yield* sub_19efc();
+    frame.pc=2097185;
+case 2097185:
+yield* sub_19efc();
+frame.pc=2097186;
+case 2097186:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b570");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b717() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b717',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9002,13 +13469,24 @@ case 0x1b729:
     default: throw new Error("Invalid control flow in sub_1b717");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b72b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b72b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9041,13 +13519,24 @@ case 0x1b750:
     default: throw new Error("Invalid control flow in sub_1b72b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b75d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b75d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9058,7 +13547,11 @@ function* sub_1b75d() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e05;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     if (memoryAGet(r.ds, 0x0552) != 0x00)
@@ -9069,13 +13562,24 @@ function* sub_1b75d() {
     default: throw new Error("Invalid control flow in sub_1b75d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b787() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b787',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9086,7 +13590,11 @@ function* sub_1b787() {
     r.dh = memoryAGet(r.ds, 0x327f);
     r.di = 0x0010;
     r.cx = 0x1e05;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     memoryASet(r.ds, 0x40b8, 0xff);
@@ -9095,13 +13603,24 @@ function* sub_1b787() {
     default: throw new Error("Invalid control flow in sub_1b787");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b7aa() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b7aa',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9109,9 +13628,17 @@ function* sub_1b7aa() {
     r.dl = 0x86;
     memoryASet16(r.ds, 0x40a8, r.cx);
     memoryASet(r.ds, 0x40aa, r.dl);
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x40ab, r.ax);
-    yield* sub_1b989();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b989();
+frame.pc=2097156;
+case 2097156:;
     memoryASet(r.ds, 0x40af, 0x00);
     memoryASet(r.ds, 0x40b1, 0x00);
     memoryASet(r.ds, 0x40b9, 0x01);
@@ -9122,18 +13649,33 @@ function* sub_1b7aa() {
     default: throw new Error("Invalid control flow in sub_1b7aa");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b7db() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b7db',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x40ad))
         { pc = 0x1b7e6; continue dispatch; }
 case 0x1b7e5:
@@ -9142,17 +13684,29 @@ case 0x1b7e6:
     memoryASet16(r.ds, 0x40ad, r.dx);
     if (memoryAGet(r.ds, 0x40aa) >= 0xa4)
         { pc = 0x1b7e5; continue dispatch; }
-    yield* sub_1b9b6();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1b9b6();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         { pc = 0x1b806; continue dispatch; }
-    yield* sub_1b717();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1b717();
+frame.pc=2097158;
+case 2097158:;
     if (!flags.carry)
         { pc = 0x1b7e5; continue dispatch; }
     memoryASet(r.ds, 0x0571, 0x01);
     memoryASet(r.ds, 0x055b, 0x10);
     return;
 case 0x1b806:
-    yield* sub_1b96e();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1b96e();
+frame.pc=2097160;
+case 2097160:;
     if (!flags.carry)
         { pc = 0x1b879; continue dispatch; }
     if (memoryAGet(r.ds, 0x40af) != 0x00)
@@ -9198,15 +13752,27 @@ case 0x1b861:
     memoryASet(r.ds, 0x057c, r.al);
 case 0x1b869:
     push(r.cx);
-    yield* sub_1b96e();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1b96e();
+frame.pc=2097162;
+case 2097162:;
     r.cx = pop();
     if (!flags.carry)
         { pc = 0x1b872; continue dispatch; }
     if (--r.cx)
         { pc = 0x1b832; continue dispatch; }
 case 0x1b872:
-    yield* sub_18413();
-    yield* sub_18342();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_18413();
+frame.pc=2097164;
+case 2097164:;
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18342();
+frame.pc=2097166;
+case 2097166:;
 case 0x1b878:
     return;
 case 0x1b879:
@@ -9223,21 +13789,41 @@ case 0x1b896:
     r.ax -= 0x0008;
 case 0x1b899:
     memoryASet16(r.ds, 0x40a8, r.ax);
-    yield* sub_1b96e();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1b96e();
+frame.pc=2097168;
+case 2097168:;
     if (!flags.carry)
         { pc = 0x1b8a2; continue dispatch; }
     return;
 case 0x1b8a2:
     r.ax = 0x0c00;
     r.bx = 0x0b54;
-    yield* sub_1cb6b();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1cb6b();
+frame.pc=2097170;
+case 2097170:;
     memoryASet(r.ds, 0x40af, 0x00);
     r.cx = memoryAGet16(r.ds, 0x40a8);
     r.dl = memoryAGet(r.ds, 0x40aa);
-    yield* sub_19ee0();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19ee0();
+frame.pc=2097172;
+case 2097172:;
     memoryASet16(r.ds, 0x40ab, r.ax);
-    yield* sub_1b9a3();
-    yield* sub_1b989();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1b9a3();
+frame.pc=2097174;
+case 2097174:;
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1b989();
+frame.pc=2097176;
+case 2097176:;
     r.ax = memoryAGet16(r.ds, 0x40a8);
     if (r.ax < 0x0078)
         { pc = 0x1b8d2; continue dispatch; }
@@ -9248,7 +13834,11 @@ case 0x1b8d2:
     memoryASet(r.ds, 0x40b1, 0x01);
     if (memoryAGet(r.ds, 0x1cbf) == 0x00)
         { pc = 0x1b8ee; continue dispatch; }
-    yield* sub_1b717();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1b717();
+frame.pc=2097178;
+case 2097178:;
     if (!flags.carry)
         { pc = 0x1b8ed; continue dispatch; }
     memoryASet(r.ds, 0x0571, 0x01);
@@ -9257,7 +13847,11 @@ case 0x1b8ed:
     return;
 case 0x1b8ee:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097179;
+case 2097179:
+yield* interrupt(0x1a);
+frame.pc=2097180;
+case 2097180:;
     if (r.dx == memoryAGet16(r.ds, 0x40ad))
         { pc = 0x1b8d2; continue dispatch; }
     memoryASet16(r.ds, 0x40ad, r.dx);
@@ -9282,25 +13876,53 @@ case 0x1b91c:
     r.dl += 0x05;
     memoryASet(r.ds, 0x40aa, r.dl);
     r.cx = memoryAGet16(r.ds, 0x40a8);
-    yield* sub_19ee0();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_19ee0();
+frame.pc=2097182;
+case 2097182:;
     memoryASet16(r.ds, 0x40ab, r.ax);
-    yield* sub_1b9a3();
-    yield* sub_1b989();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1b9a3();
+frame.pc=2097184;
+case 2097184:;
+    frame.pc=2097185;
+case 2097185:
+yield* sub_1b989();
+frame.pc=2097186;
+case 2097186:;
     { pc = 0x1b8ee; continue dispatch; }
 case 0x1b93e:
-    yield* sub_1cd51();
-    yield* sub_1b9a3();
+    frame.pc=2097187;
+case 2097187:
+yield* sub_1cd51();
+frame.pc=2097188;
+case 2097188:;
+    frame.pc=2097189;
+case 2097189:
+yield* sub_1b9a3();
+frame.pc=2097190;
+case 2097190:;
     r.bp = 0x401e;
     memoryASet16(r.ds, 0x40a6, memoryAGet16(r.ds, 0x40a6) - 1);
     r.di = memoryAGet16(r.ds, 0x40a6);
     r.si = 0x3f36;
     r.cx = 0x1104;
-    yield* sub_19f65();
+    frame.pc=2097191;
+case 2097191:
+yield* sub_19f65();
+frame.pc=2097192;
+case 2097192:;
     r.ax = memoryAGet16(r.ds, 0x40a8);
     memoryASet16(r.ds, 0x40b2, r.ax);
     r.al = memoryAGet(r.ds, 0x40aa);
     memoryASet(r.ds, 0x40b4, r.al);
-    yield* sub_1b72b();
+    frame.pc=2097193;
+case 2097193:
+yield* sub_1b72b();
+frame.pc=2097194;
+case 2097194:;
     r.al = memoryAGet(r.ds, 0x40ca);
     memoryASet(r.ds, 0x40b7, r.al);
 
@@ -9308,13 +13930,24 @@ case 0x1b93e:
     default: throw new Error("Invalid control flow in sub_1b7db");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b96e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b96e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9325,19 +13958,34 @@ function* sub_1b96e() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = r.si;
     r.cx = 0x0e10;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b96e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b989() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b989',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9348,19 +13996,34 @@ function* sub_1b989() {
     r.di = memoryAGet16(r.ds, 0x40ab);
     memoryASet16(r.ds, 0x40a6, r.di);
     r.cx = 0x1003;
-    yield* sub_19f65();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19f65();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b989");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b9a3() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b9a3',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9369,19 +14032,34 @@ function* sub_1b9a3() {
     r.si = 0x401e;
     r.di = memoryAGet16(r.ds, 0x40a6);
     r.cx = 0x1003;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b9a3");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b9b6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b9b6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9403,13 +14081,24 @@ case 0x1b9d4:
     default: throw new Error("Invalid control flow in sub_1b9b6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1b9e0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1b9e0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9427,24 +14116,43 @@ case 0x1b9f5:
     r.dh += 0x03;
     r.di = 0x0028;
     r.cx = 0x0e1e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1b9e0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ba06() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ba06',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x44d7);
     r.si = memoryAGet16(r.ds, 0x0008);
@@ -9483,11 +14191,31 @@ case 0x1ba52:
         { pc = 0x1ba7c; continue dispatch; }
     r.ax = memoryAGet16(r.ds, r.bx + 17425);
     memoryASet16(r.ds, 0x44da, r.ax);
-    yield* sub_1babd();
-    yield* sub_1bad1();
-    yield* sub_1a569();
-    yield* sub_18375();
-    yield* sub_19366();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1babd();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1bad1();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a569();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18375();
+frame.pc=2097162;
+case 2097162:;
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19366();
+frame.pc=2097164;
+case 2097164:;
     return;
 case 0x1ba7c:
     memoryASet16(r.ds, r.bx + 17497, memoryAGet16(r.ds, r.bx + 17497) + 1);
@@ -9498,24 +14226,44 @@ case 0x1ba7c:
 case 0x1ba8d:
     if (memoryAGet16(r.ds, r.bx + 17497) == 0x0000)
         { pc = 0x1baad; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1a02d();
+frame.pc=2097166;
+case 2097166:;
     if (r.dl > 0x38)
         { pc = 0x1baa0; continue dispatch; }
     memoryASet16(r.ds, r.bx + 17497, memoryAGet16(r.ds, r.bx + 17497) - 1);
 case 0x1baa0:
     push(r.cx);
     push(r.bx);
-    yield* sub_1bb07();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1bb07();
+frame.pc=2097168;
+case 2097168:;
     r.bx = pop();
-    yield* sub_1bb46();
-    yield* sub_1baf1();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1bb46();
+frame.pc=2097170;
+case 2097170:;
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1baf1();
+frame.pc=2097172;
+case 2097172:;
     r.cx = pop();
 case 0x1baad:
     if (--r.cx)
         { pc = 0x1baba; continue dispatch; }
     if (memoryAGet(r.ds, 0x44fc) == 0x00)
         { pc = 0x1bab9; continue dispatch; }
-    yield* sub_1c8c1();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1c8c1();
+frame.pc=2097174;
+case 2097174:;
 case 0x1bab9:
     return;
 case 0x1baba:
@@ -9525,35 +14273,65 @@ case 0x1baba:
     default: throw new Error("Invalid control flow in sub_1ba06");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1babd() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1babd',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x44bd) == 0x00)
         { pc = 0x1bacd; continue dispatch; }
-    yield* sub_1bd33();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1bd33();
+frame.pc=2097154;
+case 2097154:;
     memoryASet(r.ds, 0x44bd, 0x00);
     return;
 case 0x1bacd:
-    yield* sub_18413();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18413();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1babd");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bad1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bad1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9569,19 +14347,34 @@ function* sub_1bad1() {
     r.es = r.ax;
     r.di = memoryAGet16(r.ds, 0x44da);
     r.cx = 0x0d05;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bad1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1baf1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1baf1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9589,23 +14382,42 @@ function* sub_1baf1() {
         { pc = 0x1bb02; continue dispatch; }
     if (memoryAGet(r.ds, 0x44bd) == 0x00)
         { pc = 0x1bb03; continue dispatch; }
-    yield* sub_1bd4d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1bd4d();
+frame.pc=2097154;
+case 2097154:;
 case 0x1bb02:
     return;
 case 0x1bb03:
-    yield* sub_18375();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18375();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1baf1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bb07() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bb07',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9618,32 +14430,59 @@ function* sub_1bb07() {
     r.dh = memoryAGet(r.ds, 0x057b);
     r.cx = 0x0e06;
     r.di = 0x0018;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     memoryASet(r.ds, 0x44d9, 0x01);
 case 0x1bb32:
-    yield* sub_18608();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18608();
+frame.pc=2097156;
+case 2097156:;
     if (flags.zero)
         { pc = 0x1bb32; continue dispatch; }
     if (memoryAGet(r.ds, 0x44bd) == 0x00)
         { pc = 0x1bb42; continue dispatch; }
-    yield* sub_1bd33();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1bd33();
+frame.pc=2097158;
+case 2097158:;
     return;
 case 0x1bb42:
-    yield* sub_18413();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18413();
+frame.pc=2097160;
+case 2097160:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bb07");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bb46() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bb46',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9661,19 +14500,34 @@ case 0x1bb65:
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0101;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bb46");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bb73() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bb73',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9686,7 +14540,11 @@ function* sub_1bb73() {
     memoryASet(r.ds, 0x0699, 0x00);
 case 0x1bb8c:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x44d3))
         { pc = 0x1bb97; continue dispatch; }
 case 0x1bb96:
@@ -9697,10 +14555,26 @@ case 0x1bb97:
         { pc = 0x1bbc5; continue dispatch; }
     if (memoryAGet(r.ds, 0x44bd) == 0x00)
         { pc = 0x1bbc4; continue dispatch; }
-    yield* sub_1bd33();
-    yield* sub_1a5d0();
-    yield* sub_18354();
-    yield* sub_1a569();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1bd33();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a5d0();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18354();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1a569();
+frame.pc=2097162;
+case 2097162:;
     memoryASet(r.ds, 0x44bd, 0x00);
     memoryASet(r.ds, 0x43e0, 0x01);
     memoryASet(r.ds, 0x44be, 0x00);
@@ -9751,8 +14625,16 @@ case 0x1bc20:
 case 0x1bc29:
     if (memoryAGet(r.ds, 0x44bd) == 0x00)
         { pc = 0x1bc3b; continue dispatch; }
-    yield* sub_1bd33();
-    yield* sub_18375();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1bd33();
+frame.pc=2097164;
+case 2097164:;
+    frame.pc=2097165;
+case 2097165:
+yield* sub_18375();
+frame.pc=2097166;
+case 2097166:;
     memoryASet(r.ds, 0x069a, 0x10);
 case 0x1bc3b:
     memoryASet(r.ds, 0x44bd, 0x00);
@@ -9778,8 +14660,16 @@ case 0x1bc7b:
     memoryASet(r.ds, 0x44be, 0x00);
     if (memoryAGet(r.ds, 0x44bd) != 0x00)
         { pc = 0x1bc8d; continue dispatch; }
-    yield* sub_18413();
-    yield* sub_18354();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_18413();
+frame.pc=2097168;
+case 2097168:;
+    frame.pc=2097169;
+case 2097169:
+yield* sub_18354();
+frame.pc=2097170;
+case 2097170:;
 case 0x1bc8d:
     memoryASet(r.ds, 0x44bd, 0x01);
     r.al = 0;
@@ -9808,13 +14698,25 @@ case 0x1bcc5:
         { pc = 0x1bccc; continue dispatch; }
     r.cx = 0;
 case 0x1bccc:
-    yield* sub_19ee0();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19ee0();
+frame.pc=2097172;
+case 2097172:;
     memoryASet16(r.ds, 0x43dc, r.ax);
 case 0x1bcd2:
-    yield* sub_18608();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_18608();
+frame.pc=2097174;
+case 2097174:;
     if (flags.zero)
         { pc = 0x1bcd2; continue dispatch; }
-    yield* sub_1bd33();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1bd33();
+frame.pc=2097176;
+case 2097176:;
     if (memoryAGet(r.ds, 0x44d5) == 0x00)
         { pc = 0x1bd2f; continue dispatch; }
     r.bx = memoryAGet16(r.ds, 0x44c1);
@@ -9827,7 +14729,11 @@ case 0x1bcd2:
     push(r.bx);
     r.ax = 0x08fd;
     r.bx = 0x0723;
-    yield* sub_1cb6b();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1cb6b();
+frame.pc=2097178;
+case 2097178:;
     r.bx = pop();
     memoryASet(r.ds, 0x0698, 0x00);
     memoryASet(r.ds, 0x44be, 0x00);
@@ -9839,32 +14745,67 @@ case 0x1bcd2:
     memoryASet(r.ds, 0x0553, 0x01);
 case 0x1bd17:
     push(r.bx);
-    yield* sub_1b9e0();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1b9e0();
+frame.pc=2097180;
+case 2097180:;
     r.bx = pop();
     if (!flags.carry)
         { pc = 0x1bd2c; continue dispatch; }
     push(r.bx);
-    yield* sub_1a5d0();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1a5d0();
+frame.pc=2097182;
+case 2097182:;
     r.bx = pop();
-    yield* sub_1bdf8();
-    yield* sub_1a569();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1bdf8();
+frame.pc=2097184;
+case 2097184:;
+    frame.pc=2097185;
+case 2097185:
+yield* sub_1a569();
+frame.pc=2097186;
+case 2097186:;
     { pc = 0x1bd2f; continue dispatch; }
 case 0x1bd2c:
-    yield* sub_1bdf8();
+    frame.pc=2097187;
+case 2097187:
+yield* sub_1bdf8();
+frame.pc=2097188;
+case 2097188:;
 case 0x1bd2f:
-    yield* sub_1bd4d();
+    frame.pc=2097189;
+case 2097189:
+yield* sub_1bd4d();
+frame.pc=2097190;
+case 2097190:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bb73");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bd33() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bd33',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9875,19 +14816,34 @@ function* sub_1bd33() {
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0a03;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bd33");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bd4d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bd4d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9903,19 +14859,34 @@ function* sub_1bd4d() {
     r.si += 0x003c;
 case 0x1bd70:
     r.cx = 0x0a03;
-    yield* sub_19f65();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19f65();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bd4d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bd77() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bd77',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -9931,7 +14902,11 @@ function* sub_1bd77() {
     r.cl = memoryAGet(r.ds, r.bx + 17521);
     r.ch = 0;
 case 0x1bd92:
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.bl = r.dl;
     r.bx &= 0x001e;
     if (r.bl >= 0x18)
@@ -9944,7 +14919,11 @@ case 0x1bd92:
     r.si = memoryAGet16(r.ds, r.bx + 17449);
     r.di = memoryAGet16(r.ds, r.bx + 17425);
     r.cx = 0x0d05;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1bd92; continue dispatch; }
@@ -9956,7 +14935,11 @@ case 0x1bdc8:
     r.dl = memoryAGet(r.ds, r.si + 17529);
     memoryASet(r.ds, r.bx + 17604, r.dl);
     push(r.cx);
-    yield* sub_1bdf8();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1bdf8();
+frame.pc=2097158;
+case 2097158:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1bdc8; continue dispatch; }
@@ -9970,17 +14953,32 @@ case 0x1bdc8:
     default: throw new Error("Invalid control flow in sub_1bd77");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1bdf8() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1bdf8',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* sub_1be18();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1be18();
+frame.pc=2097154;
+case 2097154:;
     r.di = r.ax;
     r.al = memoryAGet(r.ds, r.bx + 17604);
     r.ah = 0;
@@ -9991,19 +14989,34 @@ function* sub_1bdf8() {
     r.cx = 0x0802;
     r.ax = 0xb800;
     r.es = r.ax;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1bdf8");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1be18() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1be18',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10011,20 +15024,35 @@ function* sub_1be18() {
     r.dl = memoryAGet(r.ds, r.bx + 17561);
     r.bl <<= 1;
     r.cx = memoryAGet16(r.ds, r.bx + 17537);
-    yield* sub_19ee0();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19ee0();
+frame.pc=2097154;
+case 2097154:;
     r.bx = pop();
 
       return;
     default: throw new Error("Invalid control flow in sub_1be18");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1be30() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1be30',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10033,18 +15061,33 @@ function* sub_1be30() {
     default: throw new Error("Invalid control flow in sub_1be30");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1be40() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1be40',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x45b8))
         { pc = 0x1be4b; continue dispatch; }
     return;
@@ -10062,8 +15105,16 @@ case 0x1be4b:
 case 0x1be68:
     memoryASet16(r.ds, 0x45b8, r.dx);
 case 0x1be6c:
-    yield* sub_1c1fd();
-    yield* sub_1c25d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1c1fd();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c25d();
+frame.pc=2097158;
+case 2097158:;
     if (!flags.carry)
         { pc = 0x1be75; continue dispatch; }
 case 0x1be74:
@@ -10072,7 +15123,11 @@ case 0x1be75:
     if (memoryAGet16(r.ds, 0x454f) == 0x0000)
         { pc = 0x1bebc; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     r.dx -= memoryAGet16(r.ds, 0x454f);
     r.bx = memoryAGet16(r.ds, 0x0008);
     r.bl <<= 1;
@@ -10093,11 +15148,19 @@ case 0x1beb4:
     memoryASet16(r.ds, 0x4548, r.ax);
     memoryASet(r.ds, 0x454a, 0x00);
 case 0x1bebc:
-    yield* sub_1c000();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1c000();
+frame.pc=2097162;
+case 2097162:;
     if (!flags.carry)
         { pc = 0x1bec9; continue dispatch; }
     r.bx = memoryAGet16(r.ds, 0x45b6);
-    yield* sub_1c1eb();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1c1eb();
+frame.pc=2097164;
+case 2097164:;
     return;
 case 0x1bec9:
     if (memoryAGet(r.ds, 0x4553) == 0x00)
@@ -10123,7 +15186,11 @@ case 0x1bee8:
     if (memoryAGet(r.ds, 0x057b) < 0x28)
         { pc = 0x1bf0c; continue dispatch; }
 case 0x1beff:
-    yield* sub_1a02d();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1a02d();
+frame.pc=2097166;
+case 2097166:;
     r.bx = memoryAGet16(r.ds, 0x0008);
     if (r.dl > memoryAGet(r.ds, r.bx + 17855))
         { pc = 0x1bf44; continue dispatch; }
@@ -10160,7 +15227,11 @@ case 0x1bf57:
     r.ax = memoryAGet16(r.ds, 0x4548);
     if (memoryAGet(r.ds, 0x454a) >= 0x01)
         { pc = 0x1bf76; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1a02d();
+frame.pc=2097168;
+case 2097168:;
     if (r.dl > 0x10)
         { pc = 0x1bfd1; continue dispatch; }
     r.dl &= 0x01;
@@ -10200,42 +15271,85 @@ case 0x1bfa8:
 case 0x1bfbd:
     if (memoryAGet(r.ds, 0x4553) != 0x00)
         { pc = 0x1bfd1; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1a02d();
+frame.pc=2097170;
+case 2097170:;
     if (r.dl > 0x08)
         { pc = 0x1bfd1; continue dispatch; }
     memoryASet(r.ds, 0x454a, 0x00);
 case 0x1bfd1:
     r.cx = memoryAGet16(r.ds, 0x4548);
     r.dl = memoryAGet(r.ds, 0x454b);
-    yield* sub_19ee0();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_19ee0();
+frame.pc=2097172;
+case 2097172:;
     memoryASet16(r.ds, 0x45ba, r.ax);
-    yield* sub_1c25d();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1c25d();
+frame.pc=2097174;
+case 2097174:;
     if (!flags.carry)
         { pc = 0x1bfe5; continue dispatch; }
     return;
 case 0x1bfe5:
-    yield* sub_1c000();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1c000();
+frame.pc=2097176;
+case 2097176:;
     if (flags.carry)
         { pc = 0x1bff8; continue dispatch; }
-    yield* sub_1c17a();
-    yield* sub_1c140();
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1c17a();
+frame.pc=2097178;
+case 2097178:;
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1c140();
+frame.pc=2097180;
+case 2097180:;
     memoryASet(r.ds, 0x45be, 0x00);
-    yield* sub_1c0a5();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1c0a5();
+frame.pc=2097182;
+case 2097182:;
 case 0x1bff8:
     r.bx = memoryAGet16(r.ds, 0x45b6);
-    yield* sub_1c1eb();
+    frame.pc=2097183;
+case 2097183:
+yield* sub_1c1eb();
+frame.pc=2097184;
+case 2097184:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1be40");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c000() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c000',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10246,20 +15360,44 @@ function* sub_1c000() {
     r.bx = memoryAGet16(r.ds, 0x4548);
     r.dh = memoryAGet(r.ds, 0x454b);
     r.cx = 0x0c0e;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     if (memoryAGet16(r.ds, 0x45b6) != 0x0006)
         { pc = 0x1c030; continue dispatch; }
     memoryASet(r.ds, 0x0553, 0x01);
-    yield* sub_18413();
-    yield* sub_1c17a();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18413();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c17a();
+frame.pc=2097158;
+case 2097158:;
     flags.carry = true;
     return;
 case 0x1c030:
-    yield* sub_18413();
-    yield* sub_1c17a();
-    yield* sub_18375();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_18413();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1c17a();
+frame.pc=2097162;
+case 2097162:;
+    frame.pc=2097163;
+case 2097163:
+yield* sub_18375();
+frame.pc=2097164;
+case 2097164:;
     memoryASet(r.ds, 0x055b, 0x04);
     memoryASet(r.ds, 0x0571, 0x01);
     memoryASet(r.ds, 0x0576, 0x04);
@@ -10274,20 +15412,35 @@ case 0x1c05f:
     memoryASet(r.ds, 0x454a, r.dl);
     r.ax = 0x0ce4;
     r.bx = 0x123b;
-    yield* sub_1cb6b();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1cb6b();
+frame.pc=2097166;
+case 2097166:;
     flags.carry = true;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c000");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c06e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c06e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10297,12 +15450,24 @@ function* sub_1c06e() {
     memoryASet16(r.ds, 0x45b6, 0x0000);
 case 0x1c07d:
     r.bx = memoryAGet16(r.ds, 0x45b6);
-    yield* sub_1c1fd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1c1fd();
+frame.pc=2097154;
+case 2097154:;
     if (memoryAGet16(r.ds, 0x454f) != 0x0000)
         { pc = 0x1c095; continue dispatch; }
-    yield* sub_1c0a5();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1c0a5();
+frame.pc=2097156;
+case 2097156:;
     r.bx = memoryAGet16(r.ds, 0x45b6);
-    yield* sub_1c1eb();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c1eb();
+frame.pc=2097158;
+case 2097158:;
 case 0x1c095:
     memoryASet16(r.ds, 0x45b6, memoryAGet16(r.ds, 0x45b6) + 1);
     if (memoryAGet16(r.ds, 0x45b6) < 0x0007)
@@ -10314,13 +15479,24 @@ case 0x1c095:
     default: throw new Error("Invalid control flow in sub_1c06e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c0a5() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c0a5',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10339,7 +15515,11 @@ case 0x1c0a8:
     r.bx = memoryAGet16(r.ds, 0x4548);
     r.dh = memoryAGet(r.ds, 0x454b);
     r.cx = 0x0c0f;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     r.cx = pop();
     if (flags.carry)
         { pc = 0x1c0d6; continue dispatch; }
@@ -10351,12 +15531,24 @@ case 0x1c0d6:
     push(r.cx);
     if (memoryAGet(r.ds, 0x45be) != 0x00)
         { pc = 0x1c0eb; continue dispatch; }
-    yield* sub_18413();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_18413();
+frame.pc=2097156;
+case 2097156:;
     if (memoryAGet(r.ds, 0x70f2) == 0x00)
         { pc = 0x1c0eb; continue dispatch; }
-    yield* sub_1d45b();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1d45b();
+frame.pc=2097158;
+case 2097158:;
 case 0x1c0eb:
-    yield* sub_1c17a();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1c17a();
+frame.pc=2097160;
+case 2097160:;
     r.cx = pop();
     r.bx = r.cx;
     r.bx--;
@@ -10364,26 +15556,46 @@ case 0x1c0eb:
     r.dl = memoryAGet(r.ds, r.bx + 11114);
     r.bl <<= 1;
     r.cx = memoryAGet16(r.ds, r.bx + 11098);
-    yield* sub_19ee0();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19ee0();
+frame.pc=2097162;
+case 2097162:;
     r.di = r.ax;
     r.si = 0x2b7a;
     r.ax = 0xb800;
     r.es = r.ax;
     r.cx = 0x0f03;
-    yield* sub_19fcd();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19fcd();
+frame.pc=2097164;
+case 2097164:;
     if (memoryAGet(r.ds, 0x45be) != 0x00)
         { pc = 0x1c128; continue dispatch; }
     if (memoryAGet(r.ds, 0x70f2) == 0x00)
         { pc = 0x1c125; continue dispatch; }
-    yield* sub_1d42a();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1d42a();
+frame.pc=2097166;
+case 2097166:;
 case 0x1c125:
-    yield* sub_18375();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_18375();
+frame.pc=2097168;
+case 2097168:;
 case 0x1c128:
     r.dx = 0;
     if (memoryAGet16(r.ds, 0x45b6) == 0x0006)
         { pc = 0x1c13b; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097169;
+case 2097169:
+yield* interrupt(0x1a);
+frame.pc=2097170;
+case 2097170:;
     if (r.dx != 0x0000)
         { pc = 0x1c13b; continue dispatch; }
     r.dx--;
@@ -10394,13 +15606,24 @@ case 0x1c13b:
     default: throw new Error("Invalid control flow in sub_1c0a5");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c140() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c140',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10422,44 +15645,78 @@ case 0x1c16a:
 case 0x1c16e:
     r.di = memoryAGet16(r.ds, 0x45ba);
     memoryASet16(r.ds, 0x454c, r.di);
-    yield* sub_1c20f();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1c20f();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c140");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c17a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c17a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x454e) != 0x00)
         return;
     r.di = memoryAGet16(r.ds, 0x454c);
-    yield* sub_1c238();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1c238();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c17a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c189() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c189',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x45b6, 0x0000);
 case 0x1c18f:
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dx &= 0x007f;
     r.dx += 0x0060;
     memoryASet16(r.ds, 0x4548, r.dx);
@@ -10471,7 +15728,11 @@ case 0x1c18f:
     if (memoryAGet16(r.ds, 0x45b6) != 0x0000)
         { pc = 0x1c1c5; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     if (r.dx != 0x0000)
         { pc = 0x1c1c5; continue dispatch; }
     r.dx--;
@@ -10481,7 +15742,11 @@ case 0x1c1c5:
     r.al = memoryAGet(r.ds, r.bx + 11220);
     r.al += 0x03;
     memoryASet(r.ds, 0x454b, r.al);
-    yield* sub_1c1eb();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c1eb();
+frame.pc=2097158;
+case 2097158:;
     memoryASet16(r.ds, 0x45b6, memoryAGet16(r.ds, 0x45b6) + 1);
     if (memoryAGet16(r.ds, 0x45b6) < 0x0007)
         { pc = 0x1c18f; continue dispatch; }
@@ -10491,13 +15756,24 @@ case 0x1c1c5:
     default: throw new Error("Invalid control flow in sub_1c189");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c1eb() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c1eb',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10514,13 +15790,24 @@ function* sub_1c1eb() {
     default: throw new Error("Invalid control flow in sub_1c1eb");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c1fd() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c1fd',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10537,13 +15824,24 @@ function* sub_1c1fd() {
     default: throw new Error("Invalid control flow in sub_1c1fd");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c20f() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c20f',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10575,13 +15873,24 @@ case 0x1c233:
     default: throw new Error("Invalid control flow in sub_1c20f");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c238() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c238',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10608,13 +15917,24 @@ case 0x1c258:
     default: throw new Error("Invalid control flow in sub_1c238");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c25d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c25d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10630,19 +15950,34 @@ case 0x1c266:
     r.dh = memoryAGet(r.ds, 0x454b);
     r.di = 0x0018;
     r.cx = 0x0c08;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c25d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c290() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c290',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10680,10 +16015,18 @@ case 0x1c2c5:
 case 0x1c2d1:
     if (memoryAGet16(r.ds, 0x4dd6) == 0x000a)
         { pc = 0x1c2db; continue dispatch; }
-    yield* sub_1cd93();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd93();
+frame.pc=2097154;
+case 2097154:;
 case 0x1c2db:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x4a80, r.dx);
     r.ax = memoryAGet16(r.ds, 0x0579);
     r.cx = r.ax;
@@ -10709,35 +16052,71 @@ case 0x1c30d:
     r.cx = memoryAGet16(r.ds, 0x0579);
     r.cx += 0x0004;
     r.dl = memoryAGet(r.ds, 0x057b);
-    yield* sub_19ee0();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19ee0();
+frame.pc=2097158;
+case 2097158:;
     r.di = r.ax;
     memoryASet16(r.ds, 0x4dd8, r.di);
     r.si = 0x4b8a;
     r.bp = 0x000e;
     r.cx = 0x2007;
-    yield* sub_19efc();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19efc();
+frame.pc=2097160;
+case 2097160:;
     r.di = memoryAGet16(r.ds, 0x4dd8);
     r.di += 0x00f3;
     r.si = 0x4a82;
     r.cx = 0x0d04;
-    yield* sub_19fcd();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19fcd();
+frame.pc=2097162;
+case 2097162:;
     if (memoryAGet16(r.ds, 0x4dd6) != 0x000a)
         { pc = 0x1c350; continue dispatch; }
-    yield* sub_1c95e();
-    yield* sub_1cd84();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1c95e();
+frame.pc=2097164;
+case 2097164:;
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1cd84();
+frame.pc=2097166;
+case 2097166:;
 case 0x1c350:
-    yield* sub_1cd93();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1cd93();
+frame.pc=2097168;
+case 2097168:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097169;
+case 2097169:
+yield* interrupt(0x1a);
+frame.pc=2097170;
+case 2097170:;
     r.dx -= memoryAGet16(r.ds, 0x4a80);
     if (r.dx < memoryAGet16(r.ds, 0x4dd6))
         { pc = 0x1c350; continue dispatch; }
     if (memoryAGet16(r.ds, 0x4dd6) != 0x000a)
         { pc = 0x1c371; continue dispatch; }
-    yield* sub_1aae0();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1aae0();
+frame.pc=2097172;
+case 2097172:;
     r.bx = 0;
     r.ah = 0x0b;
-    yield* interrupt(0x10);
+    frame.pc=2097173;
+case 2097173:
+yield* interrupt(0x10);
+frame.pc=2097174;
+case 2097174:;
 case 0x1c371:
     memoryASet16(r.ds, 0x4dd6, 0x0002);
     { pc = 0x1c2d1; continue dispatch; }
@@ -10746,13 +16125,24 @@ case 0x1c371:
     default: throw new Error("Invalid control flow in sub_1c290");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c37a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c37a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10780,7 +16170,11 @@ case 0x1c37d:
     r.ax = memoryAGet16(r.ds, r.bx + 19906);
     memoryASet16(r.ds, 0x4dc8, r.ax);
     push(r.cx);
-    yield* sub_1c3cb();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1c3cb();
+frame.pc=2097154;
+case 2097154:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1c37d; continue dispatch; }
@@ -10789,13 +16183,24 @@ case 0x1c37d:
     default: throw new Error("Invalid control flow in sub_1c37a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c3cb() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c3cb',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10803,7 +16208,11 @@ function* sub_1c3cb() {
     memoryASet(r.ds, 0x4d91, 0x01);
 case 0x1c3d3:
     push(r.cx);
-    yield* sub_1cd93();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd93();
+frame.pc=2097154;
+case 2097154:;
     r.cx = pop();
     r.bx = r.cx;
     r.bx--;
@@ -10819,12 +16228,20 @@ case 0x1c3d3:
     memoryASet(r.ds, 0x4d6e, 0x00);
 case 0x1c3f7:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x4a80, r.dx);
     r.cx = 0x0008;
 case 0x1c402:
     push(r.cx);
-    yield* sub_1cd93();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cd93();
+frame.pc=2097158;
+case 2097158:;
     r.cx = pop();
     r.bx = r.cx;
     r.bx--;
@@ -10838,23 +16255,44 @@ case 0x1c402:
 case 0x1c41a:
     r.cx = memoryAGet16(r.ds, r.bx + 19786);
     r.dx = memoryAGet16(r.ds, r.bx + 19802);
-    yield* sub_19ee0();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19ee0();
+frame.pc=2097160;
+case 2097160:;
     r.di = r.ax;
     r.si = memoryAGet16(r.ds, 0x4dca);
     r.bp = 0x000e;
     r.cx = memoryAGet16(r.ds, 0x4dd4);
-    yield* sub_19efc();
-    yield 1; 
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19efc();
+frame.pc=2097162;
+case 2097162:;
+    frame.pc=2097163;frame.parked=1;yield 1;
+case 2097163: frame.parked=null;
 case 0x1c435:
     r.bx = pop();
     r.cx = pop();
-    yield* sub_1c45a();
+    frame.pc=2097164;
+case 2097164:
+yield* sub_1c45a();
+frame.pc=2097165;
+case 2097165:;
     if (--r.cx)
         { pc = 0x1c402; continue dispatch; }
 case 0x1c43c:
-    yield* sub_1cd93();
+    frame.pc=2097166;
+case 2097166:
+yield* sub_1cd93();
+frame.pc=2097167;
+case 2097167:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097168;
+case 2097168:
+yield* interrupt(0x1a);
+frame.pc=2097169;
+case 2097169:;
     r.dx -= memoryAGet16(r.ds, 0x4a80);
     if (r.dx < memoryAGet16(r.ds, 0x4dc8))
         { pc = 0x1c43c; continue dispatch; }
@@ -10866,13 +16304,24 @@ case 0x1c43c:
     default: throw new Error("Invalid control flow in sub_1c3cb");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c45a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c45a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -10922,26 +16371,57 @@ case 0x1c4b6:
     default: throw new Error("Invalid control flow in sub_1c45a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c4bb() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c4bb',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* sub_1cd84();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd84();
+frame.pc=2097154;
+case 2097154:;
     if (memoryAGet(r.ds, 0x0697) == 0xfd)
         { pc = 0x1c4cc; continue dispatch; }
     r.ah = 0x0b;
     r.bx = 0x0101;
-    yield* interrupt(0x10);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x10);
+frame.pc=2097156;
+case 2097156:;
 case 0x1c4cc:
-    yield* sub_1c290();
-    yield* sub_1c37a();
-    yield* sub_1cdef();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c290();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1c37a();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1cdef();
+frame.pc=2097162;
+case 2097162:;
     if (memoryAGet(r.ds, 0x1f80) >= 0x09)
         { pc = 0x1c4e0; continue dispatch; }
     memoryASet(r.ds, 0x1f80, memoryAGet(r.ds, 0x1f80) + 1);
@@ -10952,28 +16432,51 @@ case 0x1c4e0:
 case 0x1c4eb:
     memoryASet16(r.ds, 0x0414, 0x0000);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x1a);
+frame.pc=2097164;
+case 2097164:;
     memoryASet16(r.ds, 0x0412, r.dx);
-    yield* sub_1cd51();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1cd51();
+frame.pc=2097166;
+case 2097166:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c4bb");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c500() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c500',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         return;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx == memoryAGet16(r.ds, 0x52c4))
         return;
     memoryASet16(r.ds, 0x52c4, r.dx);
@@ -10982,7 +16485,11 @@ function* sub_1c500() {
     r.ax = memoryAGet16(r.ds, r.bx + 21194);
     if (r.ax != memoryAGet16(r.ds, 0x52c8))
         { pc = 0x1c52c; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cd51();
+frame.pc=2097156;
+case 2097156:;
     return;
 case 0x1c52c:
     memoryASet16(r.ds, 0x52c8, r.ax);
@@ -11000,13 +16507,24 @@ case 0x1c52c:
     default: throw new Error("Invalid control flow in sub_1c500");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c543() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c543',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11014,19 +16532,35 @@ function* sub_1c543() {
         return;
     memoryASet16(r.ds, 0x5016, 0x0000);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x52c0, r.dx);
     memoryASet16(r.ds, 0x52c2, r.dx);
     memoryASet16(r.ds, 0x52c4, r.dx);
     memoryASet16(r.ds, 0x52c6, 0x0000);
     memoryASet16(r.ds, 0x52c8, 0x0000);
 case 0x1c56c:
-    yield* sub_1c598();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1c598();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x5016, memoryAGet16(r.ds, 0x5016) ^ 0x0002);
 case 0x1c575:
-    yield* sub_1c500();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c500();
+frame.pc=2097158;
+case 2097158:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x52c0);
     if (r.ax < 0x0005)
@@ -11035,19 +16569,34 @@ case 0x1c575:
     r.dx -= memoryAGet16(r.ds, 0x52c2);
     if (r.dx < 0x0028)
         { pc = 0x1c56c; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1cd51();
+frame.pc=2097162;
+case 2097162:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c543");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c598() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c598',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11069,8 +16618,16 @@ case 0x1c5b6:
     r.bx &= 0x0002;
     r.si = memoryAGet16(r.ds, r.bx + 20498);
     r.cx = 0x2304;
-    yield* sub_19fcd();
-    yield* sub_1c500();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1c500();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x5010, memoryAGet16(r.ds, 0x5010) + 0x0004);
     { pc = 0x1c5aa; continue dispatch; }
 
@@ -11078,21 +16635,37 @@ case 0x1c5b6:
     default: throw new Error("Invalid control flow in sub_1c598");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c5e0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c5e0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         return;
-    yield 1; 
+    frame.pc=2097153;frame.parked=1;yield 1;
+case 2097153: frame.parked=null;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097154;
+case 2097154:
+yield* interrupt(0x1a);
+frame.pc=2097155;
+case 2097155:;
     if (r.dx == memoryAGet16(r.ds, 0x5322))
         return;
     memoryASet16(r.ds, 0x5322, r.dx);
@@ -11105,7 +16678,11 @@ function* sub_1c5e0() {
     if (r.bx != 0x0000)
         { pc = 0x1c611; continue dispatch; }
 case 0x1c60d:
-    yield* sub_1cd51();
+    frame.pc=2097156;
+case 2097156:
+yield* sub_1cd51();
+frame.pc=2097157;
+case 2097157:;
     return;
 case 0x1c611:
     r.al = 0xb6;
@@ -11122,13 +16699,24 @@ case 0x1c611:
     default: throw new Error("Invalid control flow in sub_1c5e0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c630() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c630',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11146,7 +16734,11 @@ case 0x1c64c:
     r.di = memoryAGet16(r.ds, r.bx);
     if (r.di == 0xffff)
         return;
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.dx &= 0x000e;
     r.dx += memoryAGet16(r.ds, 0x5918);
     r.si = r.dx;
@@ -11154,7 +16746,11 @@ case 0x1c64c:
     r.cx = memoryAGet16(r.ds, r.si + 22616);
     r.si = memoryAGet16(r.ds, r.si + 22604);
     push(r.bx);
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     r.bx = pop();
     r.bx += 0x0002;
     { pc = 0x1c64c; continue dispatch; }
@@ -11163,13 +16759,24 @@ case 0x1c64c:
     default: throw new Error("Invalid control flow in sub_1c630");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c680() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c680',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11183,13 +16790,24 @@ function* sub_1c680() {
     default: throw new Error("Invalid control flow in sub_1c680");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c69d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c69d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11198,7 +16816,11 @@ function* sub_1c69d() {
     if (memoryAGet(r.ds, 0x1cb8) == 0x00)
         { pc = 0x1c728; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (memoryAGet(r.ds, 0x5b0f) != 0x00)
         { pc = 0x1c6d6; continue dispatch; }
     if (r.dx == memoryAGet16(r.ds, 0x5b10))
@@ -11209,7 +16831,11 @@ function* sub_1c69d() {
     r.ax = memoryAGet16(r.ds, 0x5b12);
     r.ax &= 0x01ff;
     r.ax += 0x00c8;
-    yield* sub_1cab9();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cab9();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x5b12, memoryAGet16(r.ds, 0x5b12) - 0x004b);
 case 0x1c6d5:
     return;
@@ -11229,7 +16855,11 @@ case 0x1c6e4:
     r.al <<= 1;
 case 0x1c6f5:
     memoryASet(r.ds, 0x5b0e, r.al);
-    yield* sub_1a02d();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a02d();
+frame.pc=2097158;
+case 2097158:;
     if (r.dl > 0x04)
         { pc = 0x1c704; continue dispatch; }
     memoryASet16(r.ds, 0x5b0c, memoryAGet16(r.ds, 0x5b0c) + 1);
@@ -11240,17 +16870,29 @@ case 0x1c704:
 case 0x1c711:
     r.al = 0xb6;
     out(0x43, r.al);
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     r.ax = r.dx;
     r.ax &= memoryAGet16(r.ds, 0x5b0a);
     r.ax &= 0x01ff;
     r.ax += 0x0190;
-    yield* sub_1cab9();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1cab9();
+frame.pc=2097162;
+case 2097162:;
 case 0x1c727:
     return;
 case 0x1c728:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x1a);
+frame.pc=2097164;
+case 2097164:;
     if (memoryAGet(r.ds, 0x5920) == 0x00)
         { pc = 0x1c752; continue dispatch; }
     if (r.dx == memoryAGet16(r.ds, 0x5921))
@@ -11263,10 +16905,18 @@ case 0x1c728:
     r.al = 0xb6;
     out(0x43, r.al);
     r.ax = memoryAGet16(r.ds, 0x5923);
-    yield* sub_1cab9();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1cab9();
+frame.pc=2097166;
+case 2097166:;
     return;
 case 0x1c74e:
-    yield* sub_1cd51();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1cd51();
+frame.pc=2097168;
+case 2097168:;
     return;
 case 0x1c752:
     if (r.dx == memoryAGet16(r.ds, 0x5925))
@@ -11314,7 +16964,11 @@ case 0x1c7be:
     memoryASet16(r.ds, 0x59ba, memoryAGet16(r.ds, 0x59ba) + 0x0002);
     r.ax = memoryAGet16(r.ds, r.bx + 23108);
     memoryASet16(r.ds, 0x592a, r.ax);
-    yield* sub_1cd58();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1cd58();
+frame.pc=2097170;
+case 2097170:;
     return;
 case 0x1c7ce:
     if (r.si != 0x0002)
@@ -11343,13 +16997,21 @@ case 0x1c7eb:
         { pc = 0x1c846; continue dispatch; }
     r.dl = memoryAGet(r.ds, r.si + 23050);
     memoryASet(r.ds, 0x5929, memoryAGet(r.ds, 0x5929) + r.dl);
-    yield* sub_1a02d();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1a02d();
+frame.pc=2097172;
+case 2097172:;
     if (r.dl > memoryAGet(r.ds, r.si + 23052))
         { pc = 0x1c828; continue dispatch; }
     r.dl &= 0x07;
     memoryASet(r.ds, 0x592d, r.dl);
 case 0x1c828:
-    yield* sub_1a02d();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1a02d();
+frame.pc=2097174;
+case 2097174:;
     r.dx &= 0x00ff;
     r.dx <<= 1;
     r.cl = 0x01;
@@ -11401,28 +17063,55 @@ case 0x1c897:
     r.ax = memoryAGet16(r.ds, r.di + 23046);
     memoryASet16(r.ds, 0x592e, r.ax);
 case 0x1c8bd:
-    yield* sub_1cd58();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1cd58();
+frame.pc=2097176;
+case 2097176:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c69d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c8c1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c8c1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* sub_1cd51();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd51();
+frame.pc=2097154;
+case 2097154:;
     r.ah = 0x0b;
     r.bx = 0x0004;
-    yield* interrupt(0x10);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x10);
+frame.pc=2097156;
+case 2097156:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097157;
+case 2097157:
+yield* interrupt(0x1a);
+frame.pc=2097158;
+case 2097158:;
     memoryASet16(r.ds, 0x5ae2, r.dx);
     memoryASet16(r.ds, 0x5ae4, 0x0000);
     r.al = 0x02;
@@ -11444,27 +17133,50 @@ case 0x1c8e7:
     out(0x61, r.al);
 case 0x1c908:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     r.dx -= memoryAGet16(r.ds, 0x5ae2);
     if (r.dx < 0x0002)
         { pc = 0x1c8e7; continue dispatch; }
     r.ah = 0x0b;
     r.bx = 0;
-    yield* interrupt(0x10);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x10);
+frame.pc=2097162;
+case 2097162:;
     memoryASet(r.ds, 0x5b07, 0x0c);
-    yield* sub_1cd51();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1cd51();
+frame.pc=2097164;
+case 2097164:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c8c1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c924() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c924',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11479,13 +17191,24 @@ case 0x1c930:
     default: throw new Error("Invalid control flow in sub_1c924");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c934() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c934',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11509,46 +17232,84 @@ function* sub_1c934() {
     default: throw new Error("Invalid control flow in sub_1c934");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c95e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c95e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x5acb, 0x01f4);
 case 0x1c964:
-    yield* sub_1c99e();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1c99e();
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x5acb, memoryAGet16(r.ds, 0x5acb) - 0x001e);
     if (memoryAGet16(r.ds, 0x5acb) > 0x00c8)
         { pc = 0x1c964; continue dispatch; }
     memoryASet16(r.ds, 0x5acb, 0x01f4);
 case 0x1c97a:
-    yield* sub_1c99e();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1c99e();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x5acb, memoryAGet16(r.ds, 0x5acb) - 0x0014);
     if (memoryAGet16(r.ds, 0x5acb) > 0x012c)
         { pc = 0x1c97a; continue dispatch; }
 case 0x1c98a:
-    yield* sub_1c99e();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1c99e();
+frame.pc=2097158;
+case 2097158:;
     memoryASet16(r.ds, 0x5acb, memoryAGet16(r.ds, 0x5acb) + 0x001e);
     if (memoryAGet16(r.ds, 0x5acb) < 0x0320)
         { pc = 0x1c98a; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1cd51();
+frame.pc=2097160;
+case 2097160:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1c95e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c99e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c99e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11575,17 +17336,32 @@ case 0x1c9aa:
     default: throw new Error("Invalid control flow in sub_1c99e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c9c7() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c9c7',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* sub_1cd51();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd51();
+frame.pc=2097154;
+case 2097154:;
     memoryASet(r.ds, 0x5acf, 0x00);
     memoryASet16(r.ds, 0x5acd, 0x0008);
 
@@ -11593,13 +17369,24 @@ function* sub_1c9c7() {
     default: throw new Error("Invalid control flow in sub_1c9c7");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1c9d6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1c9d6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11629,39 +17416,69 @@ case 0x1c9f8:
     default: throw new Error("Invalid control flow in sub_1c9d6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ca05() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ca05',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x5a85, 0x0000);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x5a83, r.dx);
 
       return;
     default: throw new Error("Invalid control flow in sub_1ca05");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ca14() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ca14',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         return;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x5a83);
     if (r.ax < 0x0002)
@@ -11674,7 +17491,11 @@ function* sub_1ca14() {
     r.ax = memoryAGet16(r.ds, r.bx + 23203);
     if (r.ax != 0x0000)
         { pc = 0x1ca4f; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cd51();
+frame.pc=2097156;
+case 2097156:;
     return;
 case 0x1ca4b:
     r.ax = memoryAGet16(r.ds, r.bx + 23175);
@@ -11683,19 +17504,34 @@ case 0x1ca4f:
     r.al = 0xb6;
     out(0x43, r.al);
     r.ax = pop();
-    yield* sub_1cab9();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cab9();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1ca14");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ca59() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ca59',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11706,20 +17542,35 @@ function* sub_1ca59() {
     default: throw new Error("Invalid control flow in sub_1ca59");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ca65() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ca65',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         { pc = 0x1ca76; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x5a80))
         { pc = 0x1ca77; continue dispatch; }
 case 0x1ca76:
@@ -11735,19 +17586,34 @@ case 0x1ca77:
     r.bx += 0x0002;
 case 0x1ca91:
     r.ax = memoryAGet16(r.ds, r.bx + 23140);
-    yield* sub_1cab9();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cab9();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1ca65");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ca99() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ca99',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11760,7 +17626,11 @@ function* sub_1ca99() {
     r.bx = memoryAGet16(r.ds, 0x5a62);
     memoryASet16(r.ds, 0x5a62, memoryAGet16(r.ds, 0x5a62) + 0x0002);
     r.ax = memoryAGet16(r.ds, r.bx + 23140);
-    yield* sub_1cab9();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cab9();
+frame.pc=2097154;
+case 2097154:;
     r.ax = pop();
     r.bx = pop();
 
@@ -11768,13 +17638,24 @@ function* sub_1ca99() {
     default: throw new Error("Invalid control flow in sub_1ca99");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cab9() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cab9',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11789,13 +17670,24 @@ function* sub_1cab9() {
     default: throw new Error("Invalid control flow in sub_1cab9");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cac6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cac6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11804,13 +17696,24 @@ function* sub_1cac6() {
     default: throw new Error("Invalid control flow in sub_1cac6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cac7() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cac7',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11825,7 +17728,11 @@ function* sub_1cac7() {
     r.bx &= 0x0006;
     memoryASet16(r.ds, 0x5a56, memoryAGet16(r.ds, 0x5a56) + 0x0002);
     r.ax = memoryAGet16(r.ds, r.bx + 23130);
-    yield* sub_1cab9();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cab9();
+frame.pc=2097154;
+case 2097154:;
     r.dx = pop();
     r.cx = pop();
     r.ax = pop();
@@ -11834,13 +17741,24 @@ function* sub_1cac7() {
     default: throw new Error("Invalid control flow in sub_1cac7");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1caed() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1caed',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11860,13 +17778,24 @@ function* sub_1caed() {
     default: throw new Error("Invalid control flow in sub_1caed");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cb28() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cb28',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11874,7 +17803,11 @@ function* sub_1cb28() {
         { pc = 0x1cb38; continue dispatch; }
     r.bx = 0x0390;
     r.cx = 0x1800;
-    yield* sub_1cbd3();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cbd3();
+frame.pc=2097154;
+case 2097154:;
 case 0x1cb38:
     memoryASet(r.ds, 0x127c, 0x00);
 
@@ -11882,13 +17815,24 @@ case 0x1cb38:
     default: throw new Error("Invalid control flow in sub_1cb28");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cb3e() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cb3e',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11896,43 +17840,81 @@ function* sub_1cb3e() {
         return;
     r.bx = 0x0400;
     r.cx = 0x1800;
-    yield* sub_1cbd3();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cbd3();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1cb3e");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cb4f() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cb4f',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.bx = 0x07d0;
     r.cx = 0x1800;
-    yield* sub_1cbd3();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cbd3();
+frame.pc=2097154;
+case 2097154:;
     r.bx = 0x0a6e;
     r.cx = 0x1800;
-    yield* sub_1cbd3();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cbd3();
+frame.pc=2097156;
+case 2097156:;
     r.bx = 0x0dec;
     r.cx = 0x1800;
-    yield* sub_1cbd3();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cbd3();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1cb4f");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cb6b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cb6b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11943,23 +17925,42 @@ function* sub_1cb6b() {
     r.al = 0xb6;
     out(0x43, r.al);
     r.ax = pop();
-    yield* sub_1cab9();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cab9();
+frame.pc=2097154;
+case 2097154:;
     memoryASet(r.ds, 0x5920, 0x02);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x5921, r.dx);
 
       return;
     default: throw new Error("Invalid control flow in sub_1cb6b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cb8d() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cb8d',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11967,25 +17968,44 @@ function* sub_1cb8d() {
         return;
     if (memoryAGet(r.ds, 0x5920) != 0x00)
         return;
-    yield* sub_1a02d();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a02d();
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax &= 0x007f;
     r.ax += 0x00aa;
     r.bx = r.ax;
     r.ax += 0x001e;
-    yield* sub_1cb6b();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cb6b();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1cb8d");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cbaf() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cbaf',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -11996,20 +18016,35 @@ function* sub_1cbaf() {
     r.ax += memoryAGet16(r.ds, 0x5b08);
     r.bx += memoryAGet16(r.ds, 0x5b08);
     memoryASet16(r.ds, 0x5b08, memoryAGet16(r.ds, 0x5b08) + 0x015e);
-    yield* sub_1cb6b();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cb6b();
+frame.pc=2097154;
+case 2097154:;
     memoryASet(r.ds, 0x5b07, 0x18);
 
       return;
     default: throw new Error("Invalid control flow in sub_1cbaf");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cbd3() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cbd3',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12030,19 +18065,34 @@ function* sub_1cbd3() {
 case 0x1cbf5:
     if (--r.cx)
         { pc = 0x1cbf5; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd51();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1cbd3");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cbfb() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cbfb',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12050,7 +18100,11 @@ function* sub_1cbfb() {
     r.al &= 0xfe;
     out(0x61, r.al);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x5a40, r.dx);
     memoryASet16(r.ds, 0x5a42, 0x0000);
 case 0x1cc0f:
@@ -12065,7 +18119,11 @@ case 0x1cc19:
 case 0x1cc1b:
     push(r.cx);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     r.cx = pop();
     r.dx -= memoryAGet16(r.ds, 0x5a40);
     if (r.dx < 0x0002)
@@ -12074,7 +18132,11 @@ case 0x1cc1b:
         { pc = 0x1cc48; continue dispatch; }
     if (--r.cx)
         { pc = 0x1cc1b; continue dispatch; }
-    yield* sub_1a02d();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1a02d();
+frame.pc=2097158;
+case 2097158:;
     r.dl &= 0x02;
     r.dl &= memoryAGet(r.ds, 0x0000);
     r.al = portRead(0x61);
@@ -12083,25 +18145,44 @@ case 0x1cc1b:
     memoryASet16(r.ds, 0x5a42, memoryAGet16(r.ds, 0x5a42) + 0x0007);
     { pc = 0x1cc0f; continue dispatch; }
 case 0x1cc48:
-    yield* sub_1cd51();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1cd51();
+frame.pc=2097160;
+case 2097160:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1cbfb");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cc4c() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cc4c',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         { pc = 0x1cc64; continue dispatch; }
-    yield* sub_185e7();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_185e7();
+frame.pc=2097154;
+case 2097154:;
     r.bx = memoryAGet16(r.ds, 0x5a16);
     r.tx = r.bx;
     r.bx -= r.ax;
@@ -12155,20 +18236,35 @@ case 0x1cc9d:
     default: throw new Error("Invalid control flow in sub_1cc4c");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ccc0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ccc0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         { pc = 0x1ccd1; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x5a14))
         { pc = 0x1ccd2; continue dispatch; }
 case 0x1ccd1:
@@ -12177,7 +18273,11 @@ case 0x1ccd2:
     memoryASet16(r.ds, 0x5a14, r.dx);
     r.al = 0xb6;
     out(0x43, r.al);
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     r.ax = r.dx;
     r.ax &= 0x0070;
     r.ax += 0x0200;
@@ -12192,24 +18292,47 @@ case 0x1ccd2:
     default: throw new Error("Invalid control flow in sub_1ccc0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ccf2() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ccf2',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x5a12, 0x0338);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x5a10, r.dx);
-    yield* sub_185e7();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_185e7();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x5a0e, r.ax);
 case 0x1cd06:
-    yield* sub_185e7();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_185e7();
+frame.pc=2097158;
+case 2097158:;
     r.dx = r.ax;
     r.ax -= memoryAGet16(r.ds, 0x5a0e);
     if (r.ax < 0x9c40)
@@ -12219,7 +18342,11 @@ case 0x1cd06:
         { pc = 0x1cd40; continue dispatch; }
     r.al = 0xb6;
     out(0x43, r.al);
-    yield* sub_1a02d();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1a02d();
+frame.pc=2097160;
+case 2097160:;
     r.ax = r.dx;
     r.ax &= 0x07ff;
     r.ax += memoryAGet16(r.ds, 0x5a12);
@@ -12232,23 +18359,42 @@ case 0x1cd06:
     out(0x61, r.al);
 case 0x1cd40:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097161;
+case 2097161:
+yield* interrupt(0x1a);
+frame.pc=2097162;
+case 2097162:;
     r.dx -= memoryAGet16(r.ds, 0x5a10);
     if (r.dx < 0x0002)
         { pc = 0x1cd06; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1cd51();
+frame.pc=2097164;
+case 2097164:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1ccf2");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cd51() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cd51',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12260,13 +18406,24 @@ function* sub_1cd51() {
     default: throw new Error("Invalid control flow in sub_1cd51");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cd58() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cd58',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12279,10 +18436,18 @@ function* sub_1cd58() {
     r.al = portRead(0x61);
     r.al |= 0x03;
     out(0x61, r.al);
-    yield* sub_185e7();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_185e7();
+frame.pc=2097154;
+case 2097154:;
     r.cx = r.ax;
 case 0x1cd70:
-    yield* sub_185e7();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_185e7();
+frame.pc=2097156;
+case 2097156:;
     r.dx = r.cx;
     r.dx -= r.ax;
     if (r.dx < memoryAGet16(r.ds, 0x592e))
@@ -12295,39 +18460,69 @@ case 0x1cd70:
     default: throw new Error("Invalid control flow in sub_1cd58");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cd84() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cd84',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     memoryASet16(r.ds, 0x59be, 0x0000);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x59c0, r.dx);
 
       return;
     default: throw new Error("Invalid control flow in sub_1cd84");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cd93() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cd93',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         { pc = 0x1cda9; continue dispatch; }
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x59c0);
     if (r.ax >= 0x0002)
@@ -12349,7 +18544,11 @@ case 0x1cdc2:
     memoryASet16(r.ds, 0x59bc, r.ax);
     if (r.ax != r.cx)
         { pc = 0x1cdda; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cd51();
+frame.pc=2097156;
+case 2097156:;
     return;
 case 0x1cdda:
     r.cx = r.ax;
@@ -12367,20 +18566,35 @@ case 0x1cdda:
     default: throw new Error("Invalid control flow in sub_1cd93");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cdef() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cdef',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
 case 0x1cdef:
     if (memoryAGet(r.ds, 0x0000) == 0x00)
         return;
-    yield* sub_1cd93();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd93();
+frame.pc=2097154;
+case 2097154:;
     if (memoryAGet16(r.ds, 0x59be) < 0x007c)
         { pc = 0x1cdef; continue dispatch; }
 
@@ -12388,18 +18602,33 @@ case 0x1cdef:
     default: throw new Error("Invalid control flow in sub_1cdef");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ce10() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ce10',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x5f66, r.dx);
     memoryASet16(r.ds, 0x5f60, 0x0000);
 case 0x1ce1e:
@@ -12411,11 +18640,23 @@ case 0x1ce1e:
     r.si = memoryAGet16(r.ds, r.bx + 24418);
     r.di = 0x0a74;
     r.cx = 0x4404;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
 case 0x1ce3d:
-    yield* sub_1ca14();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1ca14();
+frame.pc=2097158;
+case 2097158:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x5f66);
     if (r.ax < 0x0004)
@@ -12426,7 +18667,11 @@ case 0x1ce3d:
     r.si = 0x5f68;
     r.di = 0x0668;
     r.cx = 0x1004;
-    yield* sub_19fcd();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19fcd();
+frame.pc=2097162;
+case 2097162:;
 case 0x1ce66:
     r.bx = memoryAGet16(r.ds, 0x5f60);
     r.tx = r.bx;
@@ -12438,23 +18683,42 @@ case 0x1ce66:
     r.si = 0x5fe8;
     r.di = memoryAGet16(r.ds, r.bx + 24804);
     r.cx = 0x1506;
-    yield* sub_19fcd();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19fcd();
+frame.pc=2097164;
+case 2097164:;
 case 0x1ce81:
     if (memoryAGet16(r.ds, 0x5f60) < 0x0010)
         { pc = 0x1ce1e; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1cd51();
+frame.pc=2097166;
+case 2097166:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1ce10");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1ce90() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1ce90',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12470,7 +18734,11 @@ function* sub_1ce90() {
     if (r.ax != 0x55aa)
         { pc = 0x1cec6; continue dispatch; }
     r.si = 0x60f0;
-    yield* sub_1cece();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cece();
+frame.pc=2097154;
+case 2097154:;
     r.ax = 0x0040;
     r.ds = r.ax;
     r.ax = memoryAGet16(r.ds, 0x0010);
@@ -12478,12 +18746,20 @@ function* sub_1ce90() {
     r.al |= 0x10;
     memoryASet16(r.ds, 0x0010, r.ax);
     r.ax = 0x0004;
-    yield* interrupt(0x10);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x10);
+frame.pc=2097156;
+case 2097156:;
 case 0x1cec5:
     return;
 case 0x1cec6:
     r.si = 0x6112;
-    yield* sub_1cece();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1cece();
+frame.pc=2097158;
+case 2097158:;
 case 0x1cecc:
     { pc = 0x1cecc; continue dispatch; }
 
@@ -12491,77 +18767,163 @@ case 0x1cecc:
     default: throw new Error("Invalid control flow in sub_1ce90");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cece() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cece',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ax = 0x1010;
     r.ds = r.ax;
-    yield* sub_1d05b();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1d05b();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1cece");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1cee0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1cee0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     flags.direction = false;
     memoryASet16(r.ds, 0x0004, 0x0000);
-    yield* sub_18a60();
-    yield* sub_19560();
-    yield* sub_19c60();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_18a60();
+frame.pc=2097154;
+case 2097154:;
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19560();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19c60();
+frame.pc=2097158;
+case 2097158:;
     r.ax = 0xb800;
     r.es = r.ax;
     r.si = 0x6152;
     r.cx = 0x1d0b;
     r.di = 0x00bd;
-    yield* sub_19fcd();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_19fcd();
+frame.pc=2097160;
+case 2097160:;
     r.si = 0x63d0;
     r.cx = 0x160e;
     r.di = 0x069e;
-    yield* sub_19fcd();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19fcd();
+frame.pc=2097162;
+case 2097162:;
     r.si = 0x6638;
     r.cx = 0x0c03;
     r.di = 0x0a78;
-    yield* sub_19fcd();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_19fcd();
+frame.pc=2097164;
+case 2097164:;
     r.si = 0x6680;
     r.cx = 0x080e;
     r.di = 0x0ca8;
-    yield* sub_19fcd();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_19fcd();
+frame.pc=2097166;
+case 2097166:;
     r.si = 0x6760;
     r.cx = 0x0b0c;
     r.di = 0x1d6e;
-    yield* sub_19fcd();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_19fcd();
+frame.pc=2097168;
+case 2097168:;
     r.si = 0x6868;
     r.cx = 0x0804;
     r.di = 0x1dec;
-    yield* sub_19fcd();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19fcd();
+frame.pc=2097170;
+case 2097170:;
     memoryASet16(r.ds, 0x6a8d, 0x0000);
-    yield* sub_1d06b();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1d06b();
+frame.pc=2097172;
+case 2097172:;
     memoryASet16(r.ds, 0x0579, 0x0000);
-    yield* sub_1793d();
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1793d();
+frame.pc=2097174;
+case 2097174:;
     memoryASet(r.ds, 0x057b, 0x60);
     memoryASet(r.ds, 0x057c, 0x92);
-    yield* sub_19922();
-    yield* sub_1992c();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_19922();
+frame.pc=2097176;
+case 2097176:;
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1992c();
+frame.pc=2097178;
+case 2097178:;
     memoryASet(r.ds, 0x1f80, 0x09);
     memoryASet(r.ds, 0x1f81, 0xff);
-    yield* sub_198e3();
-    yield* sub_19070();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_198e3();
+frame.pc=2097180;
+case 2097180:;
+    frame.pc=2097181;
+case 2097181:
+yield* sub_19070();
+frame.pc=2097182;
+case 2097182:;
     memoryASet(r.ds, 0x0698, 0x00);
     memoryASet(r.ds, 0x0699, 0x00);
     memoryASet(r.ds, 0x6a8a, 0x00);
@@ -12569,7 +18931,11 @@ function* sub_1cee0() {
     memoryASet16(r.ds, 0x6150, r.ax);
 case 0x1cf84:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097183;
+case 2097183:
+yield* interrupt(0x1a);
+frame.pc=2097184;
+case 2097184:;
     memoryASet16(r.ds, 0x6a8b, r.dx);
     memoryASet16(r.ds, 0x5322, r.dx);
     memoryASet16(r.ds, 0x6a93, r.dx);
@@ -12578,14 +18944,22 @@ case 0x1cf84:
     memoryASet16(r.ds, 0x5320, 0x0000);
 case 0x1cfa1: game.phase="title";
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097185;
+case 2097185:
+yield* interrupt(0x1a);
+frame.pc=2097186;
+case 2097186:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x6a93);
     if (r.ax < 0x0024)
         { pc = 0x1cfb9; continue dispatch; }
     memoryASet16(r.ds, 0x6a93, r.dx);
     push(r.dx);
-    yield* sub_1d06b();
+    frame.pc=2097187;
+case 2097187:
+yield* sub_1d06b();
+frame.pc=2097188;
+case 2097188:;
     r.dx = pop();
 case 0x1cfb9:
     r.dx -= memoryAGet16(r.ds, 0x6a8b);
@@ -12601,8 +18975,16 @@ case 0x1cfd0:
     if (r.dx > r.ax)
         return;
 case 0x1cfd7:
-    yield* sub_1c5e0();
-    yield* sub_1d004();
+    frame.pc=2097189;
+case 2097189:
+yield* sub_1c5e0();
+frame.pc=2097190;
+case 2097190:;
+    frame.pc=2097191;
+case 2097191:
+yield* sub_1d004();
+frame.pc=2097192;
+case 2097192:;
     if (memoryAGet(r.ds, 0x069b) == 0x00)
         { pc = 0x1cffa; continue dispatch; }
     r.dx = 0x0201;
@@ -12624,13 +19006,24 @@ case 0x1cffa:
     default: throw new Error("Invalid control flow in sub_1cee0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d004() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d004',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12645,13 +19038,21 @@ case 0x1d012:
     { pc = 0x1d04c; continue dispatch; }
 case 0x1d021:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     r.ax = r.dx;
     r.ax -= memoryAGet16(r.ds, 0x6a88);
     if (r.ax < 0x0012)
         { pc = 0x1d04c; continue dispatch; }
     memoryASet16(r.ds, 0x6a88, r.dx);
-    yield* sub_1a02d();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a02d();
+frame.pc=2097156;
+case 2097156:;
     memoryASet(r.ds, 0x0698, 0x00);
     if (r.dl > 0xa0)
         { pc = 0x1d04c; continue dispatch; }
@@ -12662,23 +19063,42 @@ case 0x1d021:
 case 0x1d048:
     memoryASet(r.ds, 0x0698, r.dl);
 case 0x1d04c:
-    yield* sub_18608();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18608();
+frame.pc=2097158;
+case 2097158:;
     if (flags.zero)
         return;
     memoryASet16(r.ds, 0x0572, 0x0004);
-    yield* sub_17b15();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_17b15();
+frame.pc=2097160;
+case 2097160:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d004");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d05b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d05b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12689,7 +19109,11 @@ case 0x1d05b:
     push(r.si);
     r.bl = 0x02;
     r.ah = 0x0e;
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
     r.si = pop();
     { pc = 0x1d05b; continue dispatch; }
 
@@ -12697,13 +19121,24 @@ case 0x1d05b:
     default: throw new Error("Invalid control flow in sub_1d05b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d06b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d06b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12715,45 +19150,83 @@ function* sub_1d06b() {
     r.si = memoryAGet16(r.ds, r.bx + 27279);
     r.cx = 0x0c0a;
     r.di = 0x1d38;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d06b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d08b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d08b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.dl = 0x00;
     r.bh = r.dl;
     r.ah = 0x02;
-    yield* interrupt(0x10);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x10);
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d08b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d0a0() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d0a0',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 game.phase="paused";
 
-    yield* sub_1cd51();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd51();
+frame.pc=2097154;
+case 2097154:;
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x6dfc, r.dx);
     memoryASet16(r.ds, 0x6dfe, r.cx);
     push(r.ds);
@@ -12764,37 +19237,69 @@ game.phase="paused";
     r.si = 0x0dca;
     r.di = 0x000e;
     r.cx = 0x1020;
-    yield* sub_19ffa();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19ffa();
+frame.pc=2097158;
+case 2097158:;
     r.ds = pop();
     r.dx = 0x0b05;
     r.bh = 0x00;
     r.ah = 0x02;
-    yield* interrupt(0x10);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x10);
+frame.pc=2097160;
+case 2097160:;
     r.si = 0x6d91;
     flags.direction = false;
-    yield* sub_1d05b();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_1d05b();
+frame.pc=2097162;
+case 2097162:;
     r.dx = 0x0c05;
     r.bh = 0x00;
     r.ah = 0x02;
-    yield* interrupt(0x10);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x10);
+frame.pc=2097164;
+case 2097164:;
     r.si = 0x6db2;
     if (memoryAGet(r.ds, 0x069b) == 0x00)
         { pc = 0x1d0ea; continue dispatch; }
     r.si = 0x6dd3;
 case 0x1d0ea:
     flags.direction = false;
-    yield* sub_1d05b();
-    yield* sub_1d1c7();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1d05b();
+frame.pc=2097166;
+case 2097166:;
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1d1c7();
+frame.pc=2097168;
+case 2097168:;
     r.ax = 0xb800;
     r.es = r.ax;
     r.si = 0x000e;
     r.di = 0x0dca;
     r.cx = 0x1020;
-    yield* sub_19fcd();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_19fcd();
+frame.pc=2097170;
+case 2097170:;
     r.ah = 0x01;
     r.cx = memoryAGet16(r.ds, 0x6dfe);
     r.dx = memoryAGet16(r.ds, 0x6dfc);
-    yield* interrupt(0x1a);
+    frame.pc=2097171;
+case 2097171:
+yield* interrupt(0x1a);
+frame.pc=2097172;
+case 2097172:;
     r.ax = memoryAGet16(r.ds, 0x0693);
     memoryASet16(r.ds, 0x6e00, r.ax);
 
@@ -12803,29 +19308,62 @@ game.phase="playing";
     default: throw new Error("Invalid control flow in sub_1d0a0");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d115() {
   let pc=0;
-  yield* sub_1cd51();
-  yield* sub_1d1fd();
-  memoryASet(r.ds, 0x069b, 0);
-  memoryASet16(r.ds, 0x6d8f, 2);
-  pc = 0x1d14c;
+  const frame=execution.enter('sub_1d115',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
+frame.pc=2097183;
+case 2097183:
+yield* sub_1cd51();
+frame.pc=2097184;
+case 2097184:;
+  frame.pc=2097185;
+case 2097185:
+yield* sub_1d1fd();
+frame.pc=2097186;
+case 2097186:;
+  memoryASet(r.ds, 0x069b, 0);
+  memoryASet16(r.ds, 0x6d8f, 2);
+  {pc=0x1d14c;continue dispatch;}
 
-    yield* sub_1cd51();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1cd51();
+frame.pc=2097154;
+case 2097154:;
 case 0x1d118:
-    yield* sub_1d1fd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1d1fd();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x6d8f, 0x0000);
-    yield* sub_1d1e1();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1d1e1();
+frame.pc=2097158;
+case 2097158:;
 case 0x1d124:
     r.ax = memoryAGet16(r.ds, 0x0693);
 case 0x1d127: game.phase="keyboard";
-    yield 1;
+    frame.pc=2097159;frame.parked=1;yield 1;
+case 2097159: frame.parked=null;
     if (r.ax == memoryAGet16(r.ds, 0x0693))
         { pc = 0x1d127; continue dispatch; }
     if (!(memoryAGet(r.ds, 0x06c1) & 0x80))
@@ -12835,7 +19373,11 @@ case 0x1d127: game.phase="keyboard";
     memoryASet(r.ds, 0x069b, 0x00);
     { pc = 0x1d14c; continue dispatch; }
 case 0x1d142:
-    yield* sub_1d215();
+    frame.pc=2097160;
+case 2097160:
+yield* sub_1d215();
+frame.pc=2097161;
+case 2097161:;
     if (flags.carry)
         { pc = 0x1d118; continue dispatch; }
     memoryASet(r.ds, 0x069b, 0x01);
@@ -12843,14 +19385,19 @@ case 0x1d14c:
     r.cx = 0x0005;
 case 0x1d14f:
     push(r.cx);
-    yield* sub_1d1e1();
+    frame.pc=2097162;
+case 2097162:
+yield* sub_1d1e1();
+frame.pc=2097163;
+case 2097163:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1d14f; continue dispatch; }
 case 0x1d156:
     r.ax = memoryAGet16(r.ds, 0x0693);
 case 0x1d159: game.phase="difficulty";
-    yield 1;
+    frame.pc=2097164;frame.parked=1;yield 1;
+case 2097164: frame.parked=null;
     if (r.ax == memoryAGet16(r.ds, 0x0693))
         { pc = 0x1d159; continue dispatch; }
     r.ax = 0;
@@ -12870,39 +19417,86 @@ case 0x1d180:
     r.cx = 0x0005;
 case 0x1d186:
     push(r.cx);
-    yield* sub_1d1e1();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1d1e1();
+frame.pc=2097166;
+case 2097166:;
     r.cx = pop();
     if (--r.cx)
         { pc = 0x1d186; continue dispatch; }
     if (memoryAGet(r.ds, 0x069b) == 0x00)
         { pc = 0x1d1ae; continue dispatch; }
     memoryASet16(r.ds, 0x6d8f, 0x0020);
-    yield* sub_1d1e1();
-    yield* sub_1d1e1();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_1d1e1();
+frame.pc=2097168;
+case 2097168:;
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1d1e1();
+frame.pc=2097170;
+case 2097170:;
     memoryASet16(r.ds, 0x6d8f, 0x0018);
-    yield* sub_1d1e1();
-    yield* sub_1d1e1();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1d1e1();
+frame.pc=2097172;
+case 2097172:;
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1d1e1();
+frame.pc=2097174;
+case 2097174:;
     { pc = 0x1d1c3; continue dispatch; }
 case 0x1d1ae:
     memoryASet16(r.ds, 0x6d8f, 0x001c);
-    yield* sub_1d1e1();
-    yield* sub_1d1e1();
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1d1e1();
+frame.pc=2097176;
+case 2097176:;
+    frame.pc=2097177;
+case 2097177:
+yield* sub_1d1e1();
+frame.pc=2097178;
+case 2097178:;
     memoryASet16(r.ds, 0x6d8f, 0x0016);
-    yield* sub_1d1e1();
+    frame.pc=2097179;
+case 2097179:
+yield* sub_1d1e1();
+frame.pc=2097180;
+case 2097180:;
 case 0x1d1c3: game.phase="ready";
-    yield* sub_1d1c7();
+    frame.pc=2097181;
+case 2097181:
+yield* sub_1d1c7();
+frame.pc=2097182;
+case 2097182:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d115");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d1c7() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d1c7',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12918,7 +19512,8 @@ case 0x1d1ce:
 case 0x1d1d7:
     r.ax = memoryAGet16(r.ds, 0x0693);
 case 0x1d1da:
-    yield 1;
+    frame.pc=2097153;frame.parked=1;yield 1;
+case 2097153: frame.parked=null;
     if (r.ax == memoryAGet16(r.ds, 0x0693))
         { pc = 0x1d1da; continue dispatch; }
 
@@ -12926,35 +19521,65 @@ case 0x1d1da:
     default: throw new Error("Invalid control flow in sub_1d1c7");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d1e1() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d1e1',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.bx = memoryAGet16(r.ds, 0x6d8f);
     r.dx = memoryAGet16(r.ds, r.bx + 28003);
-    yield* sub_1d08b();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1d08b();
+frame.pc=2097154;
+case 2097154:;
     r.bx = memoryAGet16(r.ds, 0x6d8f);
     memoryASet16(r.ds, 0x6d8f, memoryAGet16(r.ds, 0x6d8f) + 0x0002);
     r.si = memoryAGet16(r.ds, r.bx + 27959);
-    yield* sub_1d05b();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1d05b();
+frame.pc=2097156;
+case 2097156:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d1e1");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d1fd() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d1fd',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -12973,30 +19598,57 @@ function* sub_1d1fd() {
     default: throw new Error("Invalid control flow in sub_1d1fd");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d215() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d215',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
-    yield* interrupt(0x11);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x11);
+frame.pc=2097154;
+case 2097154:;
     if (!(r.ax & 0x1000))
         { pc = 0x1d226; continue dispatch; }
-    yield* sub_1d23f();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1d23f();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         return;
-    yield* sub_1d23f();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1d23f();
+frame.pc=2097158;
+case 2097158:;
     if (!flags.carry)
         return;
 case 0x1d226:
     memoryASet16(r.ds, 0x6d8f, 0x0024);
     r.cx = 0x0004;
 case 0x1d22f:
-    yield* sub_1d1e1();
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1d1e1();
+frame.pc=2097160;
+case 2097160:;
     if (--r.cx)
         { pc = 0x1d22f; continue dispatch; }
     r.ax = memoryAGet16(r.ds, 0x0693);
@@ -13009,20 +19661,35 @@ case 0x1d237:
     default: throw new Error("Invalid control flow in sub_1d215");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d23f() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d23f',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.dx = 0x0201;
     out(r.dx, r.al);
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     memoryASet16(r.ds, 0x6dfa, r.dx);
 case 0x1d24b:
     r.dx = 0x0201;
@@ -13033,7 +19700,11 @@ case 0x1d24b:
     return;
 case 0x1d255:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097155;
+case 2097155:
+yield* interrupt(0x1a);
+frame.pc=2097156;
+case 2097156:;
     r.dx -= memoryAGet16(r.ds, 0x6dfa);
     if (r.dx < 0x0012)
         { pc = 0x1d24b; continue dispatch; }
@@ -13043,13 +19714,24 @@ case 0x1d255:
     default: throw new Error("Invalid control flow in sub_1d23f");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d270() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d270',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -13064,21 +19746,37 @@ function* sub_1d270() {
     r.ax = 0xb800;
     r.es = r.ax;
 case 0x1d288:
-    yield* sub_18608();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_18608();
+frame.pc=2097154;
+case 2097154:;
     if (flags.zero)
         { pc = 0x1d288; continue dispatch; }
     r.si = 0x000e;
     r.di = memoryAGet16(r.ds, 0x6f24);
     r.cx = 0x0c03;
-    yield* sub_19fcd();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_19fcd();
+frame.pc=2097156;
+case 2097156:;
     memoryASet16(r.ds, 0x6f24, memoryAGet16(r.ds, 0x6f24) + 0x01e0);
     r.si = 0x6e10;
     r.di = memoryAGet16(r.ds, 0x6f24);
     r.cx = 0x0c03;
-    yield* sub_19fcd();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_19fcd();
+frame.pc=2097158;
+case 2097158:;
 case 0x1d2ad:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097159;
+case 2097159:
+yield* interrupt(0x1a);
+frame.pc=2097160;
+case 2097160:;
     if (r.dx == memoryAGet16(r.ds, 0x6f26))
         { pc = 0x1d2ad; continue dispatch; }
     memoryASet16(r.ds, 0x6f26, r.dx);
@@ -13100,10 +19798,18 @@ case 0x1d2d7:
     r.si = 0x6e58;
     r.di = memoryAGet16(r.ds, 0x6f24);
     r.cx = 0x1106;
-    yield* sub_19fcd();
+    frame.pc=2097161;
+case 2097161:
+yield* sub_19fcd();
+frame.pc=2097162;
+case 2097162:;
 case 0x1d2ec:
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097163;
+case 2097163:
+yield* interrupt(0x1a);
+frame.pc=2097164;
+case 2097164:;
     if (r.dx == memoryAGet16(r.ds, 0x6f28))
         { pc = 0x1d2ec; continue dispatch; }
     memoryASet16(r.ds, 0x6f28, r.dx);
@@ -13123,19 +19829,34 @@ case 0x1d316:
     r.dx -= memoryAGet16(r.ds, 0x6f26);
     if (r.dx < 0x0012)
         { pc = 0x1d2ec; continue dispatch; }
-    yield* sub_1cd51();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1cd51();
+frame.pc=2097166;
+case 2097166:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d270");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d330() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d330',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -13145,36 +19866,71 @@ function* sub_1d330() {
     default: throw new Error("Invalid control flow in sub_1d330");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d336() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d336',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
     r.ah = 0;
-    yield* interrupt(0x1a);
+    frame.pc=2097153;
+case 2097153:
+yield* interrupt(0x1a);
+frame.pc=2097154;
+case 2097154:;
     if (r.dx != memoryAGet16(r.ds, 0x70ee))
         { pc = 0x1d341; continue dispatch; }
     return;
 case 0x1d341:
     memoryASet16(r.ds, 0x70ee, r.dx);
-    yield* sub_1d4d6();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1d4d6();
+frame.pc=2097156;
+case 2097156:;
     if (!flags.carry)
         { pc = 0x1d359; continue dispatch; }
-    yield* sub_18413();
-    yield* sub_1d45b();
-    yield* sub_18375();
+    frame.pc=2097157;
+case 2097157:
+yield* sub_18413();
+frame.pc=2097158;
+case 2097158:;
+    frame.pc=2097159;
+case 2097159:
+yield* sub_1d45b();
+frame.pc=2097160;
+case 2097160:;
+    frame.pc=2097161;
+case 2097161:
+yield* sub_18375();
+frame.pc=2097162;
+case 2097162:;
     memoryASet(r.ds, 0x70f2, 0x00);
     return;
 case 0x1d359:
     if (memoryAGet(r.ds, 0x70f2) != 0x00)
         { pc = 0x1d3ce; continue dispatch; }
 case 0x1d360:
-    yield* sub_1a02d();
+    frame.pc=2097163;
+case 2097163:
+yield* sub_1a02d();
+frame.pc=2097164;
+case 2097164:;
     r.bx = r.dx;
     r.bx &= 0x001f;
     if (r.bl < 0x10)
@@ -13234,31 +19990,66 @@ case 0x1d3f7:
         { pc = 0x1d40d; continue dispatch; }
 case 0x1d404:
     memoryASet(r.ds, 0x70f2, 0x00);
-    yield* sub_1d45b();
+    frame.pc=2097165;
+case 2097165:
+yield* sub_1d45b();
+frame.pc=2097166;
+case 2097166:;
     return;
 case 0x1d40d:
     r.cx = memoryAGet16(r.ds, 0x70f3);
     r.dl = memoryAGet(r.ds, 0x70f5);
-    yield* sub_19ee0();
+    frame.pc=2097167;
+case 2097167:
+yield* sub_19ee0();
+frame.pc=2097168;
+case 2097168:;
     memoryASet16(r.ds, 0x70fa, r.ax);
-    yield* sub_1d4d6();
+    frame.pc=2097169;
+case 2097169:
+yield* sub_1d4d6();
+frame.pc=2097170;
+case 2097170:;
     if (flags.carry)
         { pc = 0x1d404; continue dispatch; }
-    yield* sub_1d475();
-    yield* sub_1d45b();
-    yield* sub_1d42a();
+    frame.pc=2097171;
+case 2097171:
+yield* sub_1d475();
+frame.pc=2097172;
+case 2097172:;
+    frame.pc=2097173;
+case 2097173:
+yield* sub_1d45b();
+frame.pc=2097174;
+case 2097174:;
+    frame.pc=2097175;
+case 2097175:
+yield* sub_1d42a();
+frame.pc=2097176;
+case 2097176:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d336");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d42a() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d42a',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -13277,19 +20068,34 @@ case 0x1d447:
     memoryASet16(r.ds, 0x70f8, r.di);
     r.bp = 0x70cc;
     r.cx = 0x0802;
-    yield* sub_19efc();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19efc();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d42a");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d45b() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d45b',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -13300,19 +20106,34 @@ function* sub_1d45b() {
     r.si = 0x70cc;
     r.di = memoryAGet16(r.ds, 0x70f8);
     r.cx = 0x0802;
-    yield* sub_19fcd();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_19fcd();
+frame.pc=2097154;
+case 2097154:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d45b");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d475() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d475',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -13356,24 +20177,47 @@ case 0x1d48b:
     push(r.ax);
     push(r.cx);
     push(r.dx);
-    yield* sub_1d45b();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1d45b();
+frame.pc=2097154;
+case 2097154:;
     r.dx = pop();
     r.cx = pop();
     r.bx = pop();
-    yield* sub_1a313();
-    yield* sub_1d42a();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1a313();
+frame.pc=2097156;
+case 2097156:;
+    frame.pc=2097157;
+case 2097157:
+yield* sub_1d42a();
+frame.pc=2097158;
+case 2097158:;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d475");
     }
   }
+  } finally {execution.leave(frame);}
 }
 
 function* sub_1d4d6() {
   let pc=0;
-  
+  const frame=execution.enter('sub_1d4d6',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {
+  if(execution.restoring && execution.pending.length===0) {
+    execution.restoring=false;
+    if(frame.parked!==null) {yield frame.parked;frame.parked=null;frame.budget=false;}
+  }
   dispatch: while (true) {
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }
+    skipBudget=false;
     switch(pc) {
     case 0:
 
@@ -13389,7 +20233,11 @@ case 0x1d4df:
     r.dh = memoryAGet(r.ds, 0x057b);
     r.di = 0x0018;
     r.cx = 0x0e08;
-    yield* sub_1a059();
+    frame.pc=2097153;
+case 2097153:
+yield* sub_1a059();
+frame.pc=2097154;
+case 2097154:;
     if (!flags.carry)
         return;
     memoryASet(r.ds, 0x0571, 0x01);
@@ -13398,29 +20246,34 @@ case 0x1d4df:
     memoryASet(r.ds, 0x055b, 0x08);
     r.ax = 0x091d;
     r.bx = 0x0ce4;
-    yield* sub_1cb6b();
+    frame.pc=2097155;
+case 2097155:
+yield* sub_1cb6b();
+frame.pc=2097156;
+case 2097156:;
     flags.carry = true;
 
       return;
     default: throw new Error("Invalid control flow in sub_1d4d6");
     }
   }
+  } finally {execution.leave(frame);}
 }
 const original_sub_19f65=sub_19f65;
 sub_19f65=function*() {
-  colorArt.beginBlit('sub_19f65');
+  if(!execution.restoring)colorArt.beginBlit('sub_19f65');
   try {yield* original_sub_19f65();} finally {colorArt.endBlit();}
 };
 
 const original_sub_19efc=sub_19efc;
 sub_19efc=function*() {
-  colorArt.beginBlit('sub_19efc');
+  if(!execution.restoring)colorArt.beginBlit('sub_19efc');
   try {yield* original_sub_19efc();} finally {colorArt.endBlit();}
 };
 
 const original_sub_19fcd=sub_19fcd;
 sub_19fcd=function*() {
-  if(r.es===0xb800)colorArt.skinStatic(r.ds,r.si,r.cx);
+  if(!execution.restoring && r.es===0xb800)colorArt.skinStatic(r.ds,r.si,r.cx);
   yield* original_sub_19fcd();
 };
 
@@ -13429,3 +20282,7 @@ sub_1b1ce=function*() {
   yield* original_sub_1b1ce();
   colorArt.captureCheese();
 };
+
+const ROUTINES={start,sub_17230,sub_176d0,sub_17863,sub_17888,sub_178ad,sub_1790e,sub_17930,sub_1793d,sub_179d1,sub_17aa2,sub_17b15,sub_181b7,sub_181f9,sub_18250,sub_18299,sub_1830d,sub_18342,sub_18354,sub_18375,sub_18396,sub_18413,sub_18430,sub_184d1,sub_184f1,sub_18568,sub_185da,sub_185e7,sub_18608,sub_18618,sub_18649,sub_186af,sub_18800,sub_18838,sub_18887,sub_188f6,sub_189c9,sub_189dd,sub_18a60,sub_18a7b,sub_18b52,sub_18b66,sub_18d1a,sub_18d35,sub_18d7c,sub_18daa,sub_18e20,sub_18e97,sub_18f61,sub_18f9e,sub_18fa6,sub_19047,sub_19070,sub_19093,sub_19252,sub_19289,sub_192cb,sub_19311,sub_19325,sub_19366,sub_19410,sub_19440,sub_19446,sub_1950c,sub_19527,sub_19560,sub_195ab,sub_1977d,sub_19797,sub_1988e,sub_198c0,sub_198e3,sub_1990a,sub_19911,sub_19918,sub_19922,sub_1992c,sub_19936,sub_1994e,sub_19969,sub_199c0,sub_19b75,sub_19b88,sub_19ba0,sub_19bb8,sub_19bd0,sub_19c11,sub_19c30,sub_19c60,sub_19c98,sub_19cb0,sub_19cf6,sub_19d54,sub_19da1,sub_19dbb,sub_19dce,sub_19e6d,sub_19eb4,sub_19ee0,sub_19efc,sub_19f65,sub_19fa0,sub_19fcd,sub_19ffa,sub_1a02d,sub_1a040,sub_1a059,sub_1a090,sub_1a196,sub_1a23f,sub_1a313,sub_1a32a,sub_1a380,sub_1a569,sub_1a5d0,sub_1a5ea,sub_1a635,sub_1a675,sub_1a6af,sub_1a6d0,sub_1a7f9,sub_1a86d,sub_1a8a5,sub_1a9f1,sub_1aa15,sub_1aa80,sub_1aae0,sub_1ac2a,sub_1ac4c,sub_1ac6a,sub_1ac9c,sub_1acc6,sub_1acdc,sub_1ad24,sub_1ad60,sub_1ad72,sub_1add3,sub_1ae0b,sub_1ae73,sub_1aec0,sub_1aee1,sub_1b044,sub_1b068,sub_1b082,sub_1b09e,sub_1b0c0,sub_1b1ce,sub_1b295,sub_1b2c0,sub_1b2f2,sub_1b484,sub_1b4a7,sub_1b4e4,sub_1b50b,sub_1b52c,sub_1b54c,sub_1b570,sub_1b717,sub_1b72b,sub_1b75d,sub_1b787,sub_1b7aa,sub_1b7db,sub_1b96e,sub_1b989,sub_1b9a3,sub_1b9b6,sub_1b9e0,sub_1ba06,sub_1babd,sub_1bad1,sub_1baf1,sub_1bb07,sub_1bb46,sub_1bb73,sub_1bd33,sub_1bd4d,sub_1bd77,sub_1bdf8,sub_1be18,sub_1be30,sub_1be40,sub_1c000,sub_1c06e,sub_1c0a5,sub_1c140,sub_1c17a,sub_1c189,sub_1c1eb,sub_1c1fd,sub_1c20f,sub_1c238,sub_1c25d,sub_1c290,sub_1c37a,sub_1c3cb,sub_1c45a,sub_1c4bb,sub_1c500,sub_1c543,sub_1c598,sub_1c5e0,sub_1c630,sub_1c680,sub_1c69d,sub_1c8c1,sub_1c924,sub_1c934,sub_1c95e,sub_1c99e,sub_1c9c7,sub_1c9d6,sub_1ca05,sub_1ca14,sub_1ca59,sub_1ca65,sub_1ca99,sub_1cab9,sub_1cac6,sub_1cac7,sub_1caed,sub_1cb28,sub_1cb3e,sub_1cb4f,sub_1cb6b,sub_1cb8d,sub_1cbaf,sub_1cbd3,sub_1cbfb,sub_1cc4c,sub_1ccc0,sub_1ccf2,sub_1cd51,sub_1cd58,sub_1cd84,sub_1cd93,sub_1cdef,sub_1ce10,sub_1ce90,sub_1cece,sub_1cee0,sub_1d004,sub_1d05b,sub_1d06b,sub_1d08b,sub_1d0a0,sub_1d115,sub_1d1c7,sub_1d1e1,sub_1d1fd,sub_1d215,sub_1d23f,sub_1d270,sub_1d330,sub_1d336,sub_1d42a,sub_1d45b,sub_1d475,sub_1d4d6};
+const ROUTINE_PCS={"start": [0, 2097153, 2097154], "sub_17230": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 94831, 2097163, 2097164, 2097165, 2097166, 94869, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 94897, 2097173, 2097174, 2097175, 2097176, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182, 94931, 2097183, 2097184, 2097185, 2097186, 94942, 2097187, 2097188, 2097189, 2097190, 2097191, 2097192, 2097193, 2097194, 2097195, 2097196, 95011, 2097197, 2097198, 2097199, 2097200, 2097201, 2097202, 2097203, 2097204, 95079, 2097205, 2097206, 95088, 2097207, 2097208, 2097209, 2097210, 2097211, 2097212, 2097213, 2097214, 2097215, 2097216, 2097217, 2097218, 2097219, 2097220, 95109, 95119, 2097221, 2097222, 95132, 95142, 2097223, 2097224, 2097225, 2097226, 2097227, 2097228, 95169, 2097229, 2097230, 2097231, 2097232, 2097233, 2097234, 2097235, 2097236, 2097237, 2097238, 2097239, 2097240, 2097241, 2097242, 95207, 2097243, 2097244, 95253, 2097245, 2097246, 95290, 2097247, 2097248, 95308, 95322, 95336, 95353, 95376, 2097249, 2097250, 2097251, 2097252, 2097253, 2097254, 2097255, 2097256, 2097257, 2097258, 2097259, 2097260, 2097261, 2097262, 2097263, 2097264, 95406, 2097265, 2097266, 2097267, 2097268, 2097269, 2097270, 2097271, 2097272, 2097273, 2097274, 2097275, 2097276, 2097277, 2097278, 2097279, 2097280, 95450, 2097281, 2097282, 2097283, 2097284, 2097285, 2097286, 2097287, 2097288, 2097289, 2097290, 2097291, 2097292, 2097293, 2097294, 95477, 2097295, 2097296, 2097297, 2097298, 2097299, 2097300, 2097301, 2097302, 2097303, 2097304, 2097305, 2097306, 2097307, 2097308, 95507, 2097309, 2097310, 95510, 95534, 2097311, 2097312, 2097313, 2097314, 2097315, 2097316, 2097317, 2097318, 2097319, 2097320, 2097321, 2097322, 2097323, 2097324, 95561, 2097325, 2097326, 2097327, 2097328, 2097329, 2097330, 2097331, 2097332, 2097333, 2097334, 2097335, 2097336, 2097337, 2097338, 2097339, 2097340, 95609, 2097341, 2097342, 2097343, 2097344, 2097345, 2097346, 2097347, 2097348, 2097349, 2097350, 2097351, 2097352, 2097353, 2097354, 95636, 2097355, 2097356, 2097357, 2097358, 2097359, 2097360, 2097361, 2097362, 2097363, 2097364, 2097365, 2097366, 2097367, 2097368, 2097369, 2097370, 95684, 2097371, 2097372, 2097373, 2097374, 2097375, 2097376, 2097377, 2097378, 2097379, 2097380, 2097381, 2097382, 2097383, 2097384, 2097385, 2097386, 95714, 2097387, 2097388, 2097389, 2097390, 2097391, 2097392, 2097393, 2097394, 2097395, 2097396, 2097397, 2097398, 2097399, 2097400, 2097401, 2097402, 95762, 2097403, 2097404, 2097405, 2097406, 2097407, 2097408, 2097409, 2097410, 2097411, 2097412, 2097413, 2097414, 95786, 2097415, 2097416, 2097417, 2097418, 2097419, 2097420, 2097421, 2097422, 2097423, 2097424, 2097425, 2097426, 2097427, 2097428, 95831, 95841, 95851, 95863, 2097429, 2097430, 95881, 2097431, 2097432, 2097433, 2097434, 2097435, 2097436, 2097437, 2097438, 2097439, 2097440, 95912, 2097441, 2097442, 2097443, 2097444, 2097445, 2097446, 2097447, 2097448, 2097449, 2097450, 2097451, 2097452], "sub_176d0": [0, 95958, 95959, 2097153, 2097154, 2097155, 2097156, 96015, 2097157, 2097158, 96038, 2097159, 2097160, 96060, 2097161, 2097162, 96083, 2097163, 2097164, 2097165, 2097166, 96101, 96105, 2097167, 2097168, 2097169, 2097170, 96158, 2097171, 2097172, 96172, 2097173, 2097174, 96179, 96206, 96239, 96253, 96256, 96289, 96291, 96331, 96352], "sub_17863": [0, 96372, 96382], "sub_17888": [0, 96420, 96425], "sub_178ad": [0, 2097153, 2097154, 96468, 96469, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 96503, 96512, 96518], "sub_1790e": [0, 2097153, 2097154, 96541, 96550], "sub_17930": [0], "sub_1793d": [0, 96591, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158], "sub_179d1": [0, 96741, 96751, 2097153, 2097154, 2097155, 2097156, 96821, 2097157, 2097158, 2097159, 2097160], "sub_17aa2": [0, 96944, 96962, 96981, 96993, 97001], "sub_17b15": [0, 2097153, 2097154, 97068, 97069, 97081, 97084, 97101, 2097155, 2097156, 97110, 97131, 97145, 97155, 97185, 2097157, 2097158, 97218, 97228, 2097159, 2097160, 2097161, 2097162, 97257, 2097163, 2097164, 97286, 97318, 2097165, 2097166, 97354, 97374, 97383, 97406, 2097167, 2097168, 97434, 97454, 97462, 97488, 97508, 97517, 97532, 97534, 2097169, 2097170, 97561, 97579, 97584, 97603, 97617, 97631, 97644, 97667, 97684, 97717, 97723, 2097171, 2097172, 97728, 2097173, 2097174, 97733, 97735, 2097175, 2097176, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182, 97755, 97756, 2097183, 2097184, 97761, 97762, 97794, 97795, 2097185, 2097186, 97813, 2097187, 2097188, 2097189, 2097190, 2097191, 2097192, 97840, 2097193, 2097194, 2097195, 2097196, 2097197, 2097198, 2097199, 2097200, 97867, 97868, 2097201, 2097202, 2097203, 2097204, 2097205, 2097206, 2097207, 2097208, 2097209, 2097210, 97935, 97942, 97943, 97946, 97956, 2097211, 2097212, 97984, 98014, 98022, 98033, 98053, 2097213, 2097214, 98071, 98102, 98130, 98137, 2097215, 2097216, 98175, 98184, 2097217, 2097218, 2097219, 2097220, 98211, 2097221, 2097222, 2097223, 2097224, 98257, 98264, 98284, 98292, 98298, 98318, 98334, 98348, 98354, 98367, 2097225, 2097226, 2097227, 2097228, 98374, 98383, 2097229, 2097230, 98387, 98401, 2097231, 2097232, 98419, 2097233, 2097234, 98438, 2097235, 2097236, 98448, 2097237, 2097238, 98468, 98472, 98497, 98529, 98553, 98569, 98593, 98628, 2097239, 2097240, 98659, 98660, 2097241, 2097242, 98677, 2097243, 2097244, 2097245, 2097246, 2097247, 2097248, 98707, 2097249, 2097250, 2097251, 2097252, 2097253, 2097254, 2097255, 2097256, 2097257, 2097258], "sub_181b7": [0, 98774, 98788, 2097153, 2097154], "sub_181f9": [0, 98840, 98871, 98883, 98891, 98894], "sub_18250": [0, 98911, 98933, 98946, 98960], "sub_18299": [0, 98999, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166], "sub_1830d": [0], "sub_18342": [0, 2097153, 2097154, 2097155, 2097156], "sub_18354": [0, 2097153, 2097154], "sub_18375": [0, 2097153, 2097154], "sub_18396": [0, 99237, 99246, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 99291, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166], "sub_18413": [0, 2097153, 2097154], "sub_18430": [0, 2097153, 2097154, 99392, 2097155, 2097156, 2097157, 99422, 2097158, 2097159, 99446, 2097160, 2097161, 99470, 2097162, 2097163, 99493, 2097164, 2097165, 99524], "sub_184d1": [0, 2097153, 2097154, 99557, 99566], "sub_184f1": [0, 99587, 99593, 99614, 99623, 99641, 99647, 99668, 99677], "sub_18568": [0, 2097153, 2097154, 99719, 99720, 99728, 99741, 99761, 99774, 2097155, 2097156, 99795, 99796, 99797, 2097157, 2097158], "sub_185da": [0], "sub_185e7": [0, 2097153], "sub_18608": [0], "sub_18618": [0], "sub_18649": [0, 99968, 100013], "sub_186af": [0, 100065], "sub_18800": [0, 100360, 2097153, 2097154, 100399], "sub_18838": [0, 2097153, 2097154, 100419, 2097155, 2097156, 100430, 2097157, 2097158, 2097159, 2097160, 100448, 2097161, 2097162, 100483, 100485], "sub_18887": [0, 100505, 100520, 100529, 2097153, 2097154, 100596], "sub_188f6": [0, 2097153, 2097154, 100652, 2097155, 2097156, 100670, 100687, 100698, 100749, 100784, 100807], "sub_189c9": [0], "sub_189dd": [0, 100857, 100894, 100908, 2097153, 2097154, 100928, 100930], "sub_18a60": [0], "sub_18a7b": [0, 2097153, 2097154, 101004, 101005, 101039, 101054, 101087, 101093, 101123, 2097155, 2097156, 101136, 101137, 2097157, 2097158, 2097159, 2097160, 101165, 2097161, 2097162, 2097163, 2097164], "sub_18b52": [0, 2097153, 2097154], "sub_18b66": [0, 101228, 101229, 2097153, 2097154, 2097155, 2097156, 101249, 2097157, 2097158, 101306, 2097159, 2097160, 101322, 101330, 2097161, 2097162, 2097163, 2097164, 101373, 2097165, 2097166, 2097167, 2097168, 101392, 101393, 2097169, 2097170, 101408, 2097171, 2097172, 2097173, 2097174, 101490, 2097175, 2097176, 101541, 101542, 101571, 101578, 2097177, 2097178, 101634, 101639], "sub_18d1a": [0], "sub_18d35": [0, 2097153, 2097154, 101754], "sub_18d7c": [0, 101772, 101792, 101800], "sub_18daa": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 101883, 101903, 101905], "sub_18e20": [0, 2097153, 2097154, 2097155, 2097156, 101954, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 102001, 2097165, 2097166, 102006, 2097167, 2097168, 102009, 102026, 102029, 2097169, 2097170, 2097171, 2097172], "sub_18e97": [0, 2097153, 2097154, 102076, 2097155, 2097156, 2097157, 2097158, 102096, 102138, 2097159, 102150, 102180, 102203, 102215, 102226, 102238], "sub_18f61": [0, 2097153, 2097154, 102264, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 102295, 2097161, 2097162], "sub_18f9e": [0, 2097153, 2097154], "sub_18fa6": [0, 2097153, 2097154, 102321, 2097155, 2097156, 102362, 2097157, 2097158, 2097159, 2097160, 102390, 102404, 2097161, 2097162, 2097163, 2097164, 102415, 2097165, 2097166, 2097167, 2097168, 102450, 102458, 2097169, 2097170], "sub_19047": [0, 102484, 2097153, 2097154], "sub_19070": [0, 2097153, 2097154], "sub_19093": [0, 2097153, 2097154, 102570, 102571, 2097155, 2097156, 2097157, 2097158, 102631, 102642, 2097159, 2097160, 2097161, 2097162, 102649, 2097163, 2097164, 102668, 2097165, 2097166, 102674, 2097167, 2097168, 102706, 102716, 2097169, 2097170, 102764, 102765, 102783, 102791, 102805, 2097171, 2097172, 2097173, 2097174, 102821, 2097175, 2097176, 102870, 102875, 102891, 102908, 102922, 102930, 102943, 2097177, 2097178, 102955, 2097179, 2097180, 2097181, 2097182, 102979, 2097183, 2097184, 2097185, 2097186], "sub_19252": [0, 103019, 103041], "sub_19289": [0, 103080, 103094, 2097153, 2097154], "sub_192cb": [0, 2097153, 2097154, 103150, 2097155, 2097156, 2097157, 2097158], "sub_19311": [0, 2097153, 2097154], "sub_19325": [0, 103258, 2097153, 2097154, 103268], "sub_19366": [0, 103289, 103306, 103326, 103331, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 103405, 2097159, 2097160, 2097161, 2097162, 103425, 2097163, 2097164, 103438], "sub_19410": [0, 2097153, 2097154, 103481], "sub_19440": [0], "sub_19446": [0, 2097153, 2097154, 103504, 103505, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 103550, 2097161, 2097162, 2097163, 2097164, 103581, 103617, 103631, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 103660, 103661, 2097171, 2097172], "sub_1950c": [0, 2097153, 2097154], "sub_19527": [0, 103728, 2097153, 2097154], "sub_19560": [0, 103799], "sub_195ab": [0, 2097153, 2097154, 103861, 103862, 103886, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 103948, 103963, 103987, 103999, 104008, 2097161, 2097162, 104021, 2097163, 2097164, 104083, 104086, 104106, 2097165, 2097166, 104122, 104130, 104134, 104168, 104178, 2097167, 2097168, 2097169, 2097170, 104224, 2097171, 2097172, 2097173, 2097174, 104234, 104235, 104264, 104281, 104291, 2097175, 2097176], "sub_1977d": [0, 2097153, 2097154], "sub_19797": [0, 2097153, 2097154, 104382, 104447, 2097155, 2097156, 2097157, 2097158, 104476, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 104508, 104510, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 2097175, 2097176, 2097177, 2097178], "sub_1988e": [0, 104599, 2097153, 2097154], "sub_198c0": [0, 104648, 104663], "sub_198e3": [0, 104685, 2097153, 2097154], "sub_1990a": [0, 2097153, 2097154], "sub_19911": [0, 2097153, 2097154], "sub_19918": [0], "sub_19922": [0, 2097153, 2097154], "sub_1992c": [0, 2097153, 2097154], "sub_19936": [0, 104761, 2097153, 2097154], "sub_1994e": [0, 104790], "sub_19969": [0, 104827, 2097153, 2097154], "sub_199c0": [0, 104933, 2097153, 2097154, 2097155, 2097156, 104990, 2097157, 2097158, 105001, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 105070, 2097173, 2097174, 2097175, 2097176, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182, 2097183, 2097184, 2097185, 2097186, 2097187, 2097188, 105149, 2097189, 2097190, 2097191, 2097192, 2097193, 2097194, 2097195, 2097196, 2097197, 2097198, 105198, 2097199, 2097200, 2097201, 2097202, 2097203, 2097204, 2097205, 2097206, 2097207, 2097208, 2097209, 2097210, 2097211, 2097212, 2097213, 2097214, 105273, 2097215, 2097216, 2097217, 2097218, 2097219, 2097220, 2097221, 2097222, 2097223, 2097224, 2097225, 2097226, 2097227, 2097228], "sub_19b75": [0, 2097153, 2097154, 2097155, 2097156], "sub_19b88": [0, 105358, 2097153, 2097154], "sub_19ba0": [0, 105382, 2097153, 2097154], "sub_19bb8": [0, 105406, 2097153, 2097154], "sub_19bd0": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158], "sub_19c11": [0, 105492, 105508], "sub_19c30": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165], "sub_19c60": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160], "sub_19c98": [0, 2097153, 2097154], "sub_19cb0": [0, 105651, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158], "sub_19cf6": [0, 105727, 2097153, 2097154, 2097155, 2097156], "sub_19d54": [0, 105824, 2097153, 105833, 105851, 105874], "sub_19da1": [0, 105894, 2097153, 2097154], "sub_19dbb": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158], "sub_19dce": [0, 105940, 105955, 2097153, 2097154, 2097155, 2097156, 105986, 2097157, 106012, 106017, 2097158, 2097159, 2097160, 2097161, 106064, 2097162, 2097163, 2097164, 2097165], "sub_19e6d": [0, 106107, 2097153, 2097154, 106125, 2097155, 2097156, 2097157, 2097158], "sub_19eb4": [0, 106172, 106186, 2097153, 2097154], "sub_19ee0": [0, 106222], "sub_19efc": [0, 106250, 106254, 106268, 106274, 106280, 106286, 106292, 106334], "sub_19f65": [0, 106352, 106356, 106393], "sub_19fa0": [0, 106420], "sub_19fcd": [0, 106456, 106483], "sub_19ffa": [0, 106503, 106533], "sub_1a02d": [0], "sub_1a040": [0, 106581], "sub_1a059": [0, 106599, 106617, 106623], "sub_1a090": [0, 106647, 106648, 106669, 106683, 106696, 106712, 106744, 106757, 2097153, 2097154, 106807, 2097155, 2097156, 2097157, 2097158, 106822, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 106889, 2097169, 2097170, 2097171, 2097172], "sub_1a196": [0, 2097153, 2097154, 106913, 106927, 2097155, 2097156, 106970, 106972, 106978, 106979, 2097157, 2097158, 2097159, 2097160, 107002, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 107051, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172], "sub_1a23f": [0, 2097153, 2097154, 107090, 107096, 2097155, 2097156, 107113, 2097157, 2097158, 107144, 107152, 107232, 107240, 2097159, 2097160, 2097161, 2097162], "sub_1a313": [0, 2097153, 2097154, 2097155, 2097156], "sub_1a32a": [0, 107316, 107329, 107348, 107356, 107389], "sub_1a380": [0, 2097153, 2097154, 107416, 107417, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 107462, 107485, 107516, 2097161, 2097162, 107548, 2097163, 2097164, 107579, 107583, 107586, 2097165, 2097166, 107603, 2097167, 2097168, 107617, 107624, 107643, 107666, 107673, 107704, 2097169, 2097170, 2097171, 2097172, 107740, 107779, 107786, 107815, 107822, 2097173, 2097174, 2097175, 2097176, 107837, 107864, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182], "sub_1a569": [0, 107881, 107899, 107936, 107940, 107977], "sub_1a5d0": [0, 2097153, 2097154], "sub_1a5ea": [0, 2097153, 2097154, 108035, 2097155, 2097156, 108078, 2097157, 2097158, 108081, 108083], "sub_1a635": [0, 2097153, 2097154], "sub_1a675": [0, 2097153, 2097154], "sub_1a6af": [0, 2097153, 2097154], "sub_1a6d0": [0, 108251, 108262, 108265, 108288, 2097153, 2097154, 108353, 108362, 108373, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 108403, 108404, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 108426, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 108447, 2097175, 2097176, 2097177, 2097178, 108470, 2097179, 2097180, 108509, 108523, 2097181, 2097182, 108535], "sub_1a7f9": [0, 108557, 2097153, 2097154, 108593, 2097155, 2097156, 108620, 2097157, 2097158], "sub_1a86d": [0, 108653, 108656, 108689, 108706], "sub_1a8a5": [0, 2097153, 2097154, 108719, 108720, 108756, 108775, 108781, 2097155, 2097156, 108807, 2097157, 2097158, 108821, 108825, 108835, 108859, 108874, 108908, 108928, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 109007, 109020, 109030, 2097165, 2097166], "sub_1a9f1": [0, 109073, 2097153, 2097154], "sub_1aa15": [0, 2097153, 2097154, 109115, 109140, 109145, 2097155, 2097156], "sub_1aa80": [0, 2097153, 2097154, 109200, 2097155, 2097156, 2097157, 2097158], "sub_1aae0": [0, 109290, 2097153, 2097154, 2097155, 2097156, 109315, 2097157, 2097158, 109339, 109343, 109359, 109365, 109374, 2097159, 2097160, 2097161, 2097162, 109427, 109430, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 109470, 2097171, 2097172, 2097173, 2097174, 2097175, 2097176, 2097177, 2097178, 109527, 2097179, 2097180, 109535, 2097181, 2097182, 109547, 2097183, 2097184, 109550, 2097185, 2097186, 2097187, 2097188, 2097189, 2097190, 109580, 2097191, 2097192, 2097193, 2097194], "sub_1ac2a": [0, 2097153, 2097154, 2097155, 2097156], "sub_1ac4c": [0, 2097153, 2097154, 109649, 2097155, 2097156, 109668, 2097157, 2097158], "sub_1ac6a": [0, 2097153, 2097154, 109696, 2097155, 2097156], "sub_1ac9c": [0, 2097153, 2097154, 109747, 2097155, 2097156], "sub_1acc6": [0, 109781], "sub_1acdc": [0, 2097153, 2097154, 109802, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 109829, 2097161, 2097162, 109842, 109856, 2097163, 2097164], "sub_1ad24": [0, 109883, 2097153, 2097154, 109897], "sub_1ad60": [0], "sub_1ad72": [0, 2097153, 2097154, 109949, 109959, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 110027], "sub_1add3": [0, 2097153, 2097154], "sub_1ae0b": [0, 110105, 110109, 2097153, 2097154, 110149, 110158, 2097155, 2097156, 110182, 2097157, 2097158], "sub_1ae73": [0, 110255], "sub_1aec0": [0], "sub_1aee1": [0, 2097153, 2097154, 110320, 110321, 2097155, 2097156, 2097157, 2097158, 110338, 110397, 110412, 110416, 110421, 110457, 110466, 110486, 110497, 110502, 110505, 2097159, 2097160, 110523, 2097161, 2097162, 110528, 110536, 110547, 110556, 110567, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 110600, 2097171, 2097172, 2097173, 2097174, 110622, 2097175, 2097176, 2097177, 2097178, 110656, 2097179, 2097180], "sub_1b044": [0, 2097153, 2097154], "sub_1b068": [0, 2097153, 2097154], "sub_1b082": [0, 2097153, 2097154], "sub_1b09e": [0, 2097153, 2097154], "sub_1b0c0": [0, 2097153, 2097154, 110804, 110825, 110826, 2097155, 2097156, 2097157, 2097158, 110885, 110914, 2097159, 2097160, 110949, 2097161, 2097162, 110959, 110984, 111008, 2097163, 2097164, 2097165, 2097166, 111035, 2097167, 2097168, 2097169, 2097170], "sub_1b1ce": [0, 111081, 111093, 2097153, 2097154, 111115, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 111212], "sub_1b295": [0, 2097153, 2097154], "sub_1b2c0": [0, 111299, 2097153, 2097154, 2097155, 2097156], "sub_1b2f2": [0, 2097153, 2097154, 111356, 111357, 111381, 111385, 2097155, 2097156, 111404, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 111432, 2097163, 2097164, 111444, 111458, 111459, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 111493, 2097171, 2097172, 2097173, 2097174, 111537, 2097175, 2097176, 2097177, 2097178, 111580, 111584, 111607, 111624, 111635, 111646, 111651, 111656, 111668, 2097179, 2097180, 2097181, 2097182, 2097183, 2097184, 111702, 111715, 2097185, 2097186], "sub_1b484": [0, 2097153, 2097154], "sub_1b4a7": [0, 111788, 2097153, 2097154, 111797, 111807, 2097155, 2097156, 2097157, 2097158], "sub_1b4e4": [0, 111861], "sub_1b50b": [0, 2097153, 2097154], "sub_1b52c": [0, 2097153, 2097154], "sub_1b54c": [0, 111960, 111972, 111982], "sub_1b570": [0, 2097153, 2097154, 111994, 111995, 112010, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 112076, 2097165, 2097166, 112097, 112100, 112128, 112151, 2097167, 2097168, 2097169, 2097170, 112178, 2097171, 2097172, 112193, 2097173, 2097174, 112207, 112211, 2097175, 2097176, 112222, 112249, 112262, 112265, 112295, 112307, 112310, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182, 112352, 2097183, 2097184, 112389, 2097185, 2097186], "sub_1b717": [0, 112425], "sub_1b72b": [0, 112442, 112464], "sub_1b75d": [0, 2097153, 2097154], "sub_1b787": [0, 2097153, 2097154], "sub_1b7aa": [0, 2097153, 2097154, 2097155, 2097156], "sub_1b7db": [0, 2097153, 2097154, 112613, 112614, 2097155, 2097156, 2097157, 2097158, 112646, 2097159, 2097160, 112679, 112682, 112690, 112709, 112712, 112735, 112737, 112745, 2097161, 2097162, 112754, 2097163, 2097164, 2097165, 2097166, 112760, 112761, 112790, 112793, 2097167, 2097168, 112802, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 2097175, 2097176, 112850, 2097177, 2097178, 112877, 112878, 2097179, 2097180, 112924, 2097181, 2097182, 2097183, 2097184, 2097185, 2097186, 112958, 2097187, 2097188, 2097189, 2097190, 2097191, 2097192, 2097193, 2097194], "sub_1b96e": [0, 2097153, 2097154], "sub_1b989": [0, 2097153, 2097154], "sub_1b9a3": [0, 2097153, 2097154], "sub_1b9b6": [0, 113108], "sub_1b9e0": [0, 113141, 2097153, 2097154], "sub_1ba06": [0, 2097153, 2097154, 113180, 113181, 113200, 113234, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 113276, 113293, 2097165, 2097166, 113312, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 113325, 2097173, 2097174, 113337, 113338], "sub_1babd": [0, 2097153, 2097154, 113357, 2097155, 2097156], "sub_1bad1": [0, 2097153, 2097154], "sub_1baf1": [0, 2097153, 2097154, 113410, 113411, 2097155, 2097156], "sub_1bb07": [0, 2097153, 2097154, 113458, 2097155, 2097156, 2097157, 2097158, 113474, 2097159, 2097160], "sub_1bb46": [0, 113509, 2097153, 2097154], "sub_1bb73": [0, 113548, 2097153, 2097154, 113558, 113559, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 113604, 113605, 113615, 113638, 113670, 113696, 113705, 2097163, 2097164, 2097165, 2097166, 113723, 113744, 113763, 113787, 2097167, 2097168, 2097169, 2097170, 113805, 113821, 113861, 113868, 2097171, 2097172, 113874, 2097173, 2097174, 2097175, 2097176, 2097177, 2097178, 113943, 2097179, 2097180, 2097181, 2097182, 2097183, 2097184, 2097185, 2097186, 113964, 2097187, 2097188, 113967, 2097189, 2097190], "sub_1bd33": [0, 2097153, 2097154], "sub_1bd4d": [0, 114032, 2097153, 2097154], "sub_1bd77": [0, 114066, 2097153, 2097154, 2097155, 2097156, 114120, 2097157, 2097158], "sub_1bdf8": [0, 2097153, 2097154, 2097155, 2097156], "sub_1be18": [0, 2097153, 2097154], "sub_1be30": [0], "sub_1be40": [0, 2097153, 2097154, 114251, 114280, 114284, 2097155, 2097156, 2097157, 2097158, 114292, 114293, 2097159, 2097160, 114327, 114356, 114364, 2097161, 2097162, 2097163, 2097164, 114377, 114401, 114405, 114408, 114431, 2097165, 2097166, 114444, 114470, 114497, 114500, 114519, 2097167, 2097168, 114544, 114550, 114576, 114587, 114600, 114621, 2097169, 2097170, 114641, 2097171, 2097172, 2097173, 2097174, 114661, 2097175, 2097176, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182, 114680, 2097183, 2097184], "sub_1c000": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 114736, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 114783, 2097165, 2097166], "sub_1c06e": [0, 114813, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 114837], "sub_1c0a5": [0, 114856, 2097153, 2097154, 114899, 114902, 2097155, 2097156, 2097157, 2097158, 114923, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 114981, 2097167, 2097168, 114984, 2097169, 2097170, 115003], "sub_1c140": [0, 115040, 115050, 115054, 2097153, 2097154], "sub_1c17a": [0, 2097153, 2097154], "sub_1c189": [0, 115087, 2097153, 2097154, 2097155, 2097156, 115141, 2097157, 2097158], "sub_1c1eb": [0], "sub_1c1fd": [0], "sub_1c20f": [0, 115223, 115226, 115251], "sub_1c238": [0, 115267, 115288], "sub_1c25d": [0, 115302, 2097153, 2097154], "sub_1c290": [0, 115360, 115367, 115385, 115397, 115409, 2097153, 2097154, 115419, 2097155, 2097156, 115446, 115454, 115458, 115469, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 115536, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 115569], "sub_1c37a": [0, 115581, 2097153, 2097154], "sub_1c3cb": [0, 115667, 2097153, 2097154, 115703, 2097155, 2097156, 115714, 2097157, 2097158, 115738, 2097159, 2097160, 2097161, 2097162, 2097163, 115765, 2097164, 2097165, 115772, 2097166, 2097167, 2097168, 2097169], "sub_1c45a": [0, 115834, 115846, 115850, 115882, 115894], "sub_1c4bb": [0, 2097153, 2097154, 2097155, 2097156, 115916, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 115936, 115947, 2097163, 2097164, 2097165, 2097166], "sub_1c500": [0, 2097153, 2097154, 2097155, 2097156, 116012], "sub_1c543": [0, 2097153, 2097154, 116076, 2097155, 2097156, 116085, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162], "sub_1c598": [0, 116138, 116150, 2097153, 2097154, 2097155, 2097156], "sub_1c5e0": [0, 2097153, 2097154, 2097155, 116237, 2097156, 2097157, 116241], "sub_1c630": [0, 116300, 2097153, 2097154, 2097155, 2097156], "sub_1c680": [0], "sub_1c69d": [0, 2097153, 2097154, 2097155, 2097156, 116437, 116438, 116452, 116469, 2097157, 2097158, 116484, 116497, 2097159, 2097160, 2097161, 2097162, 116519, 116520, 2097163, 2097164, 2097165, 2097166, 116558, 2097167, 2097168, 116562, 116601, 116626, 116627, 116649, 116670, 2097169, 2097170, 116686, 116715, 2097171, 2097172, 116776, 2097173, 2097174, 116798, 116806, 116819, 116848, 116862, 116867, 116887, 116925, 2097175, 2097176], "sub_1c8c1": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 116964, 116967, 117000, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164], "sub_1c924": [0, 117040], "sub_1c934": [0], "sub_1c95e": [0, 117092, 2097153, 2097154, 117114, 2097155, 2097156, 117130, 2097157, 2097158, 2097159, 2097160], "sub_1c99e": [0, 117162], "sub_1c9c7": [0, 2097153, 2097154], "sub_1c9d6": [0, 117223, 117240], "sub_1ca05": [0, 2097153, 2097154], "sub_1ca14": [0, 2097153, 2097154, 2097155, 2097156, 117323, 117327, 2097157, 2097158], "sub_1ca59": [0], "sub_1ca65": [0, 2097153, 2097154, 117366, 117367, 117393, 2097155, 2097156], "sub_1ca99": [0, 2097153, 2097154], "sub_1cab9": [0], "sub_1cac6": [0], "sub_1cac7": [0, 2097153, 2097154], "sub_1caed": [0], "sub_1cb28": [0, 2097153, 2097154, 117560], "sub_1cb3e": [0, 2097153, 2097154], "sub_1cb4f": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158], "sub_1cb6b": [0, 2097153, 2097154, 2097155, 2097156], "sub_1cb8d": [0, 2097153, 2097154, 2097155, 2097156], "sub_1cbaf": [0, 2097153, 2097154], "sub_1cbd3": [0, 117749, 2097153, 2097154], "sub_1cbfb": [0, 2097153, 2097154, 117775, 117785, 117787, 2097155, 2097156, 2097157, 2097158, 117832, 2097159, 2097160], "sub_1cc4c": [0, 2097153, 2097154, 117860, 117861, 117897, 117917], "sub_1ccc0": [0, 2097153, 2097154, 117969, 117970, 2097155, 2097156], "sub_1ccf2": [0, 2097153, 2097154, 2097155, 2097156, 118022, 2097157, 2097158, 2097159, 2097160, 118080, 2097161, 2097162, 2097163, 2097164], "sub_1cd51": [0], "sub_1cd58": [0, 2097153, 2097154, 118128, 2097155, 2097156], "sub_1cd84": [0, 2097153, 2097154], "sub_1cd93": [0, 2097153, 2097154, 118185, 118186, 118210, 2097155, 2097156, 118234], "sub_1cdef": [0, 118255, 2097153, 2097154], "sub_1ce10": [0, 2097153, 2097154, 118302, 2097155, 2097156, 118333, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 118374, 2097163, 2097164, 118401, 2097165, 2097166], "sub_1ce90": [0, 2097153, 2097154, 2097155, 2097156, 118469, 118470, 2097157, 2097158, 118476], "sub_1cece": [0, 2097153, 2097154], "sub_1cee0": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 2097175, 2097176, 2097177, 2097178, 2097179, 2097180, 2097181, 2097182, 118660, 2097183, 2097184, 118689, 2097185, 2097186, 2097187, 2097188, 118713, 118736, 118743, 2097189, 2097190, 2097191, 2097192, 118771, 118778], "sub_1d004": [0, 118802, 118817, 2097153, 2097154, 2097155, 2097156, 118856, 118860, 2097157, 2097158, 2097159, 2097160], "sub_1d05b": [0, 118875, 2097153, 2097154], "sub_1d06b": [0, 2097153, 2097154], "sub_1d08b": [0, 2097153, 2097154], "sub_1d0a0": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 2097163, 2097164, 119018, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172], "sub_1d115": [0, 2097183, 2097184, 2097185, 2097186, 2097153, 2097154, 119064, 2097155, 2097156, 2097157, 2097158, 119076, 119079, 2097159, 119106, 2097160, 2097161, 119116, 119119, 2097162, 2097163, 119126, 119129, 2097164, 119168, 119174, 2097165, 2097166, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 119214, 2097175, 2097176, 2097177, 2097178, 2097179, 2097180, 119235, 2097181, 2097182], "sub_1d1c7": [0, 119246, 119255, 119258, 2097153], "sub_1d1e1": [0, 2097153, 2097154, 2097155, 2097156], "sub_1d1fd": [0], "sub_1d215": [0, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 119334, 119343, 2097159, 2097160, 119351], "sub_1d23f": [0, 2097153, 2097154, 119371, 119381, 2097155, 2097156], "sub_1d270": [0, 119432, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158, 119469, 2097159, 2097160, 119511, 2097161, 2097162, 119532, 2097163, 2097164, 119568, 119574, 2097165, 2097166], "sub_1d330": [0], "sub_1d336": [0, 2097153, 2097154, 119617, 2097155, 2097156, 2097157, 2097158, 2097159, 2097160, 2097161, 2097162, 119641, 119648, 2097163, 2097164, 119679, 119702, 119717, 119736, 119758, 119771, 119799, 119812, 2097165, 2097166, 119821, 2097167, 2097168, 2097169, 2097170, 2097171, 2097172, 2097173, 2097174, 2097175, 2097176], "sub_1d42a": [0, 119879, 2097153, 2097154], "sub_1d45b": [0, 2097153, 2097154], "sub_1d475": [0, 119935, 119946, 119947, 2097153, 2097154, 2097155, 2097156, 2097157, 2097158], "sub_1d4d6": [0, 120031, 2097153, 2097154, 2097155, 2097156]};
+const ROUTINE_CALLS={"start": {"2097153": "sub_17230"}, "sub_17230": {"2097153": "sub_1ce90", "2097155": "sub_185da", "2097157": "sub_18649", "2097159": "sub_18618", "2097161": "interrupt", "2097163": "interrupt", "2097165": "sub_18f61", "2097167": "sub_1a040", "2097169": "sub_19911", "2097171": "sub_1990a", "2097173": "sub_198c0", "2097175": "sub_18f61", "2097177": "sub_1cd51", "2097179": "sub_1cee0", "2097181": "sub_1cd51", "2097183": "sub_1cd51", "2097185": "sub_1d115", "2097187": "sub_1990a", "2097189": "sub_18f61", "2097191": "sub_1cd51", "2097193": "interrupt", "2097195": "sub_1cd51", "2097197": "sub_19c30", "2097199": "sub_1c630", "2097201": "sub_1cd51", "2097203": "sub_179d1", "2097205": "sub_1793d", "2097207": "sub_19070", "2097209": "sub_18a60", "2097211": "sub_19440", "2097213": "sub_19560", "2097215": "sub_19922", "2097217": "sub_1992c", "2097219": "sub_1caed", "2097221": "sub_18568", "2097223": "sub_18430", "2097225": "sub_17b15", "2097227": "sub_19093", "2097229": "sub_1c69d", "2097231": "sub_176d0", "2097233": "sub_18b66", "2097235": "sub_18a7b", "2097237": "sub_19446", "2097239": "sub_195ab", "2097241": "sub_198e3", "2097243": "interrupt", "2097245": "sub_1a02d", "2097247": "sub_1a02d", "2097249": "sub_18e20", "2097251": "sub_199c0", "2097253": "sub_179d1", "2097255": "sub_19070", "2097257": "sub_1a635", "2097259": "sub_1d330", "2097261": "sub_1c189", "2097263": "sub_1caed", "2097265": "sub_18568", "2097267": "sub_18430", "2097269": "sub_1c69d", "2097271": "sub_17b15", "2097273": "sub_1d336", "2097275": "sub_1a196", "2097277": "sub_1a090", "2097279": "sub_1be40", "2097281": "sub_18e20", "2097283": "sub_199c0", "2097285": "sub_1be30", "2097287": "sub_179d1", "2097289": "sub_1a635", "2097291": "sub_19070", "2097293": "sub_1caed", "2097295": "sub_18568", "2097297": "sub_18430", "2097299": "sub_1c69d", "2097301": "sub_1bb73", "2097303": "sub_1ba06", "2097305": "sub_17b15", "2097307": "sub_19093", "2097309": "sub_1a380", "2097311": "sub_18e20", "2097313": "sub_199c0", "2097315": "sub_1b7aa", "2097317": "sub_179d1", "2097319": "sub_1a635", "2097321": "sub_19070", "2097323": "sub_1caed", "2097325": "sub_18568", "2097327": "sub_18430", "2097329": "sub_1c69d", "2097331": "sub_1b7db", "2097333": "sub_1b570", "2097335": "sub_17b15", "2097337": "sub_1a380", "2097339": "sub_19093", "2097341": "sub_18e20", "2097343": "sub_199c0", "2097345": "sub_179d1", "2097347": "sub_1a635", "2097349": "sub_19070", "2097351": "sub_1b2c0", "2097353": "sub_1caed", "2097355": "sub_18568", "2097357": "sub_18430", "2097359": "sub_1c69d", "2097361": "sub_17b15", "2097363": "sub_1b0c0", "2097365": "sub_1b2f2", "2097367": "sub_1a380", "2097369": "sub_19093", "2097371": "sub_18e20", "2097373": "sub_199c0", "2097375": "sub_179d1", "2097377": "sub_1a635", "2097379": "sub_19070", "2097381": "sub_1ad60", "2097383": "sub_1aec0", "2097385": "sub_1caed", "2097387": "sub_18568", "2097389": "sub_18430", "2097391": "sub_1c69d", "2097393": "sub_17b15", "2097395": "sub_1aee1", "2097397": "sub_1ad72", "2097399": "sub_1a380", "2097401": "sub_19093", "2097403": "sub_18e20", "2097405": "sub_199c0", "2097407": "sub_179d1", "2097409": "sub_1a635", "2097411": "sub_19070", "2097413": "sub_1caed", "2097415": "sub_18568", "2097417": "sub_18430", "2097419": "sub_1c69d", "2097421": "sub_17b15", "2097423": "sub_1a380", "2097425": "sub_19093", "2097427": "sub_1aa80", "2097429": "sub_18e20", "2097431": "sub_18e20", "2097433": "sub_199c0", "2097435": "sub_1a7f9", "2097437": "sub_179d1", "2097439": "sub_1caed", "2097441": "sub_18568", "2097443": "sub_18430", "2097445": "sub_1c69d", "2097447": "sub_17b15", "2097449": "sub_1a8a5", "2097451": "sub_1aa15"}, "sub_176d0": {"2097153": "sub_18608", "2097155": "interrupt", "2097157": "sub_17888", "2097159": "sub_1a02d", "2097161": "sub_1a02d", "2097163": "sub_1a02d", "2097165": "sub_17888", "2097167": "sub_178ad", "2097169": "sub_17863", "2097171": "sub_17863", "2097173": "sub_17863"}, "sub_17863": {}, "sub_17888": {}, "sub_178ad": {"2097153": "sub_1a02d", "2097155": "sub_1a02d", "2097157": "sub_1790e", "2097159": "sub_1790e"}, "sub_1790e": {"2097153": "sub_1a02d"}, "sub_17930": {}, "sub_1793d": {"2097153": "sub_19ee0", "2097155": "sub_18354", "2097157": "sub_17930"}, "sub_179d1": {"2097153": "sub_19ee0", "2097155": "sub_18354", "2097157": "sub_17930", "2097159": "interrupt"}, "sub_17aa2": {}, "sub_17b15": {"2097153": "interrupt", "2097155": "sub_18608", "2097157": "sub_1cbaf", "2097159": "sub_19ee0", "2097161": "sub_19f65", "2097163": "interrupt", "2097165": "interrupt", "2097167": "sub_181f9", "2097169": "sub_19ee0", "2097171": "sub_18608", "2097173": "sub_18608", "2097175": "sub_18413", "2097177": "sub_18375", "2097179": "sub_1a6d0", "2097181": "sub_18375", "2097183": "sub_18daa", "2097185": "sub_181f9", "2097187": "sub_18250", "2097189": "sub_181b7", "2097191": "sub_18413", "2097193": "sub_18daa", "2097195": "sub_19325", "2097197": "sub_19ee0", "2097199": "sub_18375", "2097201": "sub_19ee0", "2097203": "sub_18413", "2097205": "sub_18daa", "2097207": "sub_19325", "2097209": "sub_18375", "2097211": "sub_181f9", "2097213": "sub_18838", "2097215": "sub_1ccf2", "2097217": "sub_19ee0", "2097219": "sub_18413", "2097221": "sub_18daa", "2097223": "sub_19325", "2097225": "sub_1793d", "2097227": "sub_1cbfb", "2097229": "sub_18375", "2097231": "sub_18838", "2097233": "sub_19527", "2097235": "sub_1cb4f", "2097237": "sub_1a02d", "2097239": "sub_1cb28", "2097241": "sub_1a675", "2097243": "sub_181f9", "2097245": "sub_19ee0", "2097247": "sub_18299", "2097249": "sub_18250", "2097251": "sub_18413", "2097253": "sub_18daa", "2097255": "sub_19325", "2097257": "sub_18375"}, "sub_181b7": {"2097153": "sub_19fa0"}, "sub_181f9": {}, "sub_18250": {}, "sub_18299": {"2097153": "sub_18413", "2097155": "sub_18daa", "2097157": "sub_19325", "2097159": "sub_1a02d", "2097161": "sub_19f65", "2097163": "sub_1a02d", "2097165": "sub_19f65"}, "sub_1830d": {}, "sub_18342": {"2097153": "sub_19ee0", "2097155": "sub_18354"}, "sub_18354": {"2097153": "sub_19ffa"}, "sub_18375": {"2097153": "sub_19f65"}, "sub_18396": {"2097153": "sub_19ee0", "2097155": "sub_19efc", "2097157": "interrupt", "2097159": "sub_1cc4c", "2097161": "interrupt", "2097163": "sub_1cd51", "2097165": "sub_19fcd"}, "sub_18413": {"2097153": "sub_19fcd"}, "sub_18430": {"2097153": "interrupt", "2097155": "sub_184f1", "2097158": "sub_185e7", "2097160": "sub_184d1", "2097162": "sub_184d1", "2097164": "sub_185e7"}, "sub_184d1": {"2097153": "sub_185e7"}, "sub_184f1": {}, "sub_18568": {"2097153": "sub_1d0a0", "2097155": "sub_1cd51", "2097157": "sub_186af"}, "sub_185da": {}, "sub_185e7": {}, "sub_18608": {}, "sub_18618": {}, "sub_18649": {}, "sub_186af": {}, "sub_18800": {"2097153": "sub_1a02d"}, "sub_18838": {"2097153": "sub_1a32a", "2097155": "sub_188f6", "2097157": "sub_18887", "2097159": "sub_189dd", "2097161": "interrupt"}, "sub_18887": {"2097153": "sub_1cb3e"}, "sub_188f6": {"2097153": "sub_1a059", "2097155": "sub_1ae73"}, "sub_189c9": {}, "sub_189dd": {"2097153": "sub_189c9"}, "sub_18a60": {}, "sub_18a7b": {"2097153": "interrupt", "2097155": "sub_18b52", "2097157": "sub_19ee0", "2097159": "sub_18b52", "2097161": "sub_18daa", "2097163": "sub_19efc"}, "sub_18b52": {"2097153": "sub_19fcd"}, "sub_18b66": {"2097153": "sub_18608", "2097155": "sub_18d35", "2097157": "interrupt", "2097159": "sub_1a02d", "2097161": "sub_18d1a", "2097163": "sub_18d35", "2097165": "sub_18d35", "2097167": "sub_18d7c", "2097169": "interrupt", "2097171": "interrupt", "2097173": "sub_1a02d", "2097175": "sub_1a02d", "2097177": "sub_19ee0"}, "sub_18d1a": {}, "sub_18d35": {"2097153": "sub_1a059"}, "sub_18d7c": {}, "sub_18daa": {"2097153": "sub_1a059", "2097155": "sub_18413", "2097157": "sub_18b52", "2097159": "sub_1830d", "2097161": "sub_18396"}, "sub_18e20": {"2097153": "interrupt", "2097155": "sub_1c4bb", "2097157": "sub_18e97", "2097159": "sub_1cd51", "2097161": "sub_18f61", "2097163": "sub_1c543", "2097165": "sub_1aae0", "2097167": "sub_18fa6", "2097169": "sub_18e97", "2097171": "sub_1cd51"}, "sub_18e97": {"2097153": "sub_1cac6", "2097155": "sub_1cac7", "2097157": "sub_19ee0"}, "sub_18f61": {"2097153": "interrupt", "2097155": "sub_18f9e", "2097157": "sub_18f9e", "2097159": "sub_18f9e", "2097161": "interrupt"}, "sub_18f9e": {"2097153": "interrupt"}, "sub_18fa6": {"2097153": "sub_1d270", "2097155": "sub_1ca05", "2097157": "sub_1ce10", "2097159": "sub_1cd51", "2097161": "sub_19047", "2097163": "interrupt", "2097165": "sub_1ca14", "2097167": "interrupt", "2097169": "sub_1cd51"}, "sub_19047": {"2097153": "sub_19fcd"}, "sub_19070": {"2097153": "sub_1c680"}, "sub_19093": {"2097153": "interrupt", "2097155": "sub_18608", "2097157": "sub_1cd51", "2097159": "sub_19311", "2097161": "sub_19070", "2097163": "sub_19252", "2097165": "sub_19289", "2097167": "sub_1a02d", "2097169": "sub_1a02d", "2097171": "sub_19252", "2097173": "sub_19289", "2097175": "sub_1a02d", "2097177": "sub_19252", "2097179": "sub_19ee0", "2097181": "sub_19311", "2097183": "sub_19325", "2097185": "sub_192cb"}, "sub_19252": {}, "sub_19289": {"2097153": "sub_19fa0"}, "sub_192cb": {"2097153": "sub_19efc", "2097155": "sub_19ffa", "2097157": "sub_19fcd"}, "sub_19311": {"2097153": "sub_19fcd"}, "sub_19325": {"2097153": "sub_19366"}, "sub_19366": {"2097153": "sub_18413", "2097155": "sub_19ee0", "2097157": "sub_192cb", "2097159": "sub_19311", "2097161": "sub_18413", "2097163": "sub_1793d"}, "sub_19410": {"2097153": "sub_1a059"}, "sub_19440": {}, "sub_19446": {"2097153": "interrupt", "2097155": "sub_18608", "2097157": "sub_19527", "2097159": "sub_1a02d", "2097161": "sub_18800", "2097163": "sub_1a02d", "2097165": "sub_19ee0", "2097167": "sub_1950c", "2097169": "sub_19527", "2097171": "sub_19efc"}, "sub_1950c": {"2097153": "sub_19fcd"}, "sub_19527": {"2097153": "sub_1a059"}, "sub_19560": {}, "sub_195ab": {"2097153": "interrupt", "2097155": "sub_1988e", "2097157": "sub_19797", "2097159": "interrupt", "2097161": "sub_1a02d", "2097163": "sub_1a02d", "2097165": "sub_1a02d", "2097167": "sub_19ee0", "2097169": "sub_1977d", "2097171": "sub_1988e", "2097173": "sub_19797", "2097175": "sub_19f65"}, "sub_1977d": {"2097153": "sub_19fcd"}, "sub_19797": {"2097153": "sub_1a059", "2097155": "sub_19efc", "2097157": "interrupt", "2097159": "sub_1ccc0", "2097161": "interrupt", "2097163": "sub_1cd51", "2097165": "sub_19fcd", "2097167": "interrupt", "2097169": "sub_18413", "2097171": "sub_19efc", "2097173": "sub_18354", "2097175": "sub_19936", "2097177": "sub_1cb6b"}, "sub_1988e": {"2097153": "sub_1a059"}, "sub_198c0": {}, "sub_198e3": {"2097153": "sub_19fcd"}, "sub_1990a": {"2097153": "sub_19918"}, "sub_19911": {"2097153": "sub_19918"}, "sub_19918": {}, "sub_19922": {"2097153": "sub_19969"}, "sub_1992c": {"2097153": "sub_19969"}, "sub_19936": {"2097153": "sub_1992c"}, "sub_1994e": {}, "sub_19969": {"2097153": "sub_19fcd"}, "sub_199c0": {"2097153": "sub_1a02d", "2097155": "sub_19fcd", "2097157": "sub_1a23f", "2097159": "sub_19bd0", "2097161": "sub_19d54", "2097163": "sub_19b88", "2097165": "sub_19ba0", "2097167": "sub_19fcd", "2097169": "sub_19d54", "2097171": "sub_1bd77", "2097173": "sub_19bd0", "2097175": "sub_19d54", "2097177": "sub_19b88", "2097179": "sub_19ba0", "2097181": "sub_19ba0", "2097183": "sub_19bb8", "2097185": "sub_19d54", "2097187": "sub_19fcd", "2097189": "sub_19bd0", "2097191": "sub_19d54", "2097193": "sub_19b88", "2097195": "sub_19b75", "2097197": "sub_1b1ce", "2097199": "sub_19bd0", "2097201": "sub_19d54", "2097203": "sub_19b88", "2097205": "sub_19ba0", "2097207": "sub_19d54", "2097209": "sub_19d54", "2097211": "sub_19d54", "2097213": "sub_1ae0b", "2097215": "sub_19bd0", "2097217": "sub_19d54", "2097219": "sub_19b88", "2097221": "sub_19d54", "2097223": "sub_19ba0", "2097225": "sub_19bb8", "2097227": "sub_19b75"}, "sub_19b75": {"2097153": "sub_19d54", "2097155": "sub_19d54"}, "sub_19b88": {"2097153": "sub_19d54"}, "sub_19ba0": {"2097153": "sub_19d54"}, "sub_19bb8": {"2097153": "sub_19d54"}, "sub_19bd0": {"2097153": "sub_19d54", "2097155": "sub_19c11", "2097157": "sub_19c11"}, "sub_19c11": {}, "sub_19c30": {"2097154": "sub_19dce", "2097156": "sub_19d54", "2097158": "sub_19c98", "2097160": "sub_19eb4", "2097162": "sub_19dbb", "2097164": "sub_19cb0"}, "sub_19c60": {"2097153": "sub_19dce", "2097155": "sub_19d54", "2097157": "sub_19c98", "2097159": "sub_19eb4"}, "sub_19c98": {"2097153": "sub_19fcd"}, "sub_19cb0": {"2097153": "sub_19cf6", "2097155": "sub_19cf6", "2097157": "sub_19cf6"}, "sub_19cf6": {"2097153": "sub_178ad", "2097155": "sub_19fcd"}, "sub_19d54": {}, "sub_19da1": {"2097153": "sub_19fcd"}, "sub_19dbb": {"2097153": "sub_19da1", "2097155": "sub_19da1", "2097157": "sub_19da1"}, "sub_19dce": {"2097153": "sub_1a02d", "2097155": "sub_19fcd", "2097158": "sub_1a02d", "2097160": "sub_19fcd", "2097162": "sub_1a02d", "2097164": "sub_19fcd"}, "sub_19e6d": {"2097153": "sub_19fcd", "2097155": "sub_19fcd", "2097157": "sub_19fcd"}, "sub_19eb4": {"2097153": "sub_19e6d"}, "sub_19ee0": {}, "sub_19efc": {}, "sub_19f65": {}, "sub_19fa0": {}, "sub_19fcd": {}, "sub_19ffa": {}, "sub_1a02d": {}, "sub_1a040": {}, "sub_1a059": {}, "sub_1a090": {"2097153": "sub_1a059", "2097155": "sub_18413", "2097157": "sub_1d45b", "2097159": "sub_19ee0", "2097161": "sub_19fcd", "2097163": "interrupt", "2097165": "sub_1c06e", "2097167": "sub_1d42a", "2097169": "sub_18375", "2097171": "sub_1cb6b"}, "sub_1a196": {"2097153": "interrupt", "2097155": "sub_1a059", "2097157": "sub_18413", "2097159": "sub_1d45b", "2097161": "sub_19ee0", "2097163": "sub_19fcd", "2097165": "sub_1d42a", "2097167": "sub_18375", "2097169": "interrupt", "2097171": "sub_1cb6b"}, "sub_1a23f": {"2097153": "sub_19d54", "2097155": "sub_1a02d", "2097157": "sub_1a313", "2097159": "sub_19ee0", "2097161": "sub_19fcd"}, "sub_1a313": {"2097153": "sub_19ee0", "2097155": "sub_19fcd"}, "sub_1a32a": {}, "sub_1a380": {"2097153": "interrupt", "2097155": "sub_1a5ea", "2097157": "sub_19410", "2097159": "sub_1a02d", "2097161": "interrupt", "2097163": "sub_1a02d", "2097165": "sub_1a02d", "2097167": "sub_1a02d", "2097169": "sub_19fcd", "2097171": "sub_1a6af", "2097173": "sub_19ee0", "2097175": "sub_1a5ea", "2097177": "sub_19410", "2097179": "sub_1a5d0", "2097181": "sub_1a569"}, "sub_1a569": {}, "sub_1a5d0": {"2097153": "sub_19fcd"}, "sub_1a5ea": {"2097153": "sub_1b9e0", "2097155": "sub_1a059", "2097157": "sub_17aa2"}, "sub_1a635": {"2097153": "sub_1a02d"}, "sub_1a675": {"2097153": "sub_1a6af"}, "sub_1a6af": {"2097153": "sub_19fcd"}, "sub_1a6d0": {"2097153": "sub_1a059", "2097155": "sub_19ee0", "2097157": "sub_19fcd", "2097159": "sub_1c9c7", "2097161": "interrupt", "2097163": "sub_1c9d6", "2097165": "sub_18608", "2097167": "sub_1c9d6", "2097169": "interrupt", "2097171": "sub_1c9d6", "2097173": "interrupt", "2097175": "sub_1cb6b", "2097177": "sub_18413", "2097179": "sub_1a9f1", "2097181": "sub_1a86d"}, "sub_1a7f9": {"2097153": "sub_1a02d", "2097155": "sub_1a02d", "2097157": "sub_1a02d"}, "sub_1a86d": {}, "sub_1a8a5": {"2097153": "interrupt", "2097155": "sub_1a02d", "2097157": "sub_1a02d", "2097159": "sub_19ee0", "2097161": "sub_1a9f1", "2097163": "sub_19fcd", "2097165": "sub_19fcd"}, "sub_1a9f1": {"2097153": "sub_19fcd"}, "sub_1aa15": {"2097153": "interrupt", "2097155": "sub_19fcd"}, "sub_1aa80": {"2097153": "interrupt", "2097155": "sub_19fcd", "2097157": "sub_1a059"}, "sub_1aae0": {"2097153": "sub_1acc6", "2097155": "sub_1acdc", "2097157": "interrupt", "2097159": "sub_1ad24", "2097161": "sub_1994e", "2097163": "sub_1994e", "2097165": "sub_1ac2a", "2097167": "sub_1ac6a", "2097169": "sub_1ac9c", "2097171": "sub_1994e", "2097173": "sub_1acc6", "2097175": "sub_1acdc", "2097177": "sub_1ac6a", "2097179": "interrupt", "2097181": "sub_1cd93", "2097183": "sub_1ca65", "2097185": "sub_1ac4c", "2097187": "interrupt", "2097189": "sub_1cd51", "2097191": "sub_19fcd", "2097193": "sub_19fcd"}, "sub_1ac2a": {"2097153": "sub_19ffa", "2097155": "sub_19ffa"}, "sub_1ac4c": {"2097153": "interrupt", "2097155": "sub_18608", "2097157": "interrupt"}, "sub_1ac6a": {"2097153": "interrupt", "2097155": "interrupt"}, "sub_1ac9c": {"2097153": "interrupt", "2097155": "interrupt"}, "sub_1acc6": {}, "sub_1acdc": {"2097153": "sub_1ca59", "2097155": "sub_19d54", "2097157": "sub_1ca99", "2097159": "interrupt", "2097161": "interrupt", "2097163": "sub_1cd51"}, "sub_1ad24": {"2097153": "sub_1994e"}, "sub_1ad60": {}, "sub_1ad72": {"2097153": "interrupt", "2097155": "sub_1a059", "2097157": "sub_1cb6b", "2097159": "sub_18413", "2097161": "sub_1b068", "2097163": "sub_1add3", "2097165": "sub_18354", "2097167": "sub_1b044"}, "sub_1add3": {"2097153": "sub_19fcd"}, "sub_1ae0b": {"2097153": "sub_19fcd", "2097155": "sub_1a02d", "2097157": "sub_1a02d"}, "sub_1ae73": {}, "sub_1aec0": {}, "sub_1aee1": {"2097153": "interrupt", "2097155": "sub_1b082", "2097157": "sub_1b09e", "2097159": "sub_1b082", "2097161": "sub_1b09e", "2097163": "sub_19ee0", "2097165": "sub_19efc", "2097167": "sub_1c924", "2097169": "interrupt", "2097171": "sub_1c934", "2097173": "interrupt", "2097175": "sub_19ee0", "2097177": "sub_1b068", "2097179": "sub_1b044"}, "sub_1b044": {"2097153": "sub_19efc"}, "sub_1b068": {"2097153": "sub_19fcd"}, "sub_1b082": {"2097153": "sub_1a059"}, "sub_1b09e": {"2097153": "sub_1a059"}, "sub_1b0c0": {"2097153": "interrupt", "2097155": "sub_1b295", "2097157": "interrupt", "2097159": "sub_18413", "2097161": "sub_1a5d0", "2097163": "sub_19fcd", "2097165": "sub_1a569", "2097167": "interrupt", "2097169": "sub_18342"}, "sub_1b1ce": {"2097153": "sub_1a02d", "2097155": "sub_19fcd", "2097157": "sub_19d54", "2097159": "sub_19d54", "2097161": "sub_19d54", "2097163": "sub_19d54", "2097165": "sub_19f65"}, "sub_1b295": {"2097153": "sub_1a059"}, "sub_1b2c0": {"2097153": "sub_1b4a7", "2097155": "sub_1a02d"}, "sub_1b2f2": {"2097153": "interrupt", "2097155": "sub_1b50b", "2097157": "sub_1b52c", "2097159": "sub_1b4a7", "2097161": "sub_1a02d", "2097163": "sub_1b50b", "2097165": "sub_18413", "2097167": "sub_1b484", "2097169": "sub_18354", "2097171": "sub_19f65", "2097173": "sub_1cb6b", "2097175": "sub_1b4e4", "2097177": "sub_1b54c", "2097179": "sub_19ee0", "2097181": "sub_1b484", "2097183": "sub_1b52c", "2097185": "sub_19f65"}, "sub_1b484": {"2097153": "sub_19fcd"}, "sub_1b4a7": {"2097153": "sub_1a02d", "2097155": "sub_1b4e4", "2097157": "sub_1b54c"}, "sub_1b4e4": {}, "sub_1b50b": {"2097153": "sub_1a059"}, "sub_1b52c": {"2097153": "sub_1a059"}, "sub_1b54c": {}, "sub_1b570": {"2097153": "interrupt", "2097155": "sub_1b75d", "2097157": "sub_1b787", "2097159": "sub_1a02d", "2097161": "sub_1b72b", "2097163": "sub_1cb8d", "2097165": "sub_1a02d", "2097167": "sub_1a02d", "2097169": "sub_1cb8d", "2097171": "sub_1a02d", "2097173": "sub_1a02d", "2097175": "sub_1a02d", "2097177": "sub_1b75d", "2097179": "sub_19ee0", "2097181": "sub_19fcd", "2097183": "sub_1b787", "2097185": "sub_19efc"}, "sub_1b717": {}, "sub_1b72b": {}, "sub_1b75d": {"2097153": "sub_1a059"}, "sub_1b787": {"2097153": "sub_1a059"}, "sub_1b7aa": {"2097153": "sub_19ee0", "2097155": "sub_1b989"}, "sub_1b7db": {"2097153": "interrupt", "2097155": "sub_1b9b6", "2097157": "sub_1b717", "2097159": "sub_1b96e", "2097161": "sub_1b96e", "2097163": "sub_18413", "2097165": "sub_18342", "2097167": "sub_1b96e", "2097169": "sub_1cb6b", "2097171": "sub_19ee0", "2097173": "sub_1b9a3", "2097175": "sub_1b989", "2097177": "sub_1b717", "2097179": "interrupt", "2097181": "sub_19ee0", "2097183": "sub_1b9a3", "2097185": "sub_1b989", "2097187": "sub_1cd51", "2097189": "sub_1b9a3", "2097191": "sub_19f65", "2097193": "sub_1b72b"}, "sub_1b96e": {"2097153": "sub_1a059"}, "sub_1b989": {"2097153": "sub_19f65"}, "sub_1b9a3": {"2097153": "sub_19fcd"}, "sub_1b9b6": {}, "sub_1b9e0": {"2097153": "sub_1a059"}, "sub_1ba06": {"2097153": "interrupt", "2097155": "sub_1babd", "2097157": "sub_1bad1", "2097159": "sub_1a569", "2097161": "sub_18375", "2097163": "sub_19366", "2097165": "sub_1a02d", "2097167": "sub_1bb07", "2097169": "sub_1bb46", "2097171": "sub_1baf1", "2097173": "sub_1c8c1"}, "sub_1babd": {"2097153": "sub_1bd33", "2097155": "sub_18413"}, "sub_1bad1": {"2097153": "sub_19fcd"}, "sub_1baf1": {"2097153": "sub_1bd4d", "2097155": "sub_18375"}, "sub_1bb07": {"2097153": "sub_1a059", "2097155": "sub_18608", "2097157": "sub_1bd33", "2097159": "sub_18413"}, "sub_1bb46": {"2097153": "sub_19fcd"}, "sub_1bb73": {"2097153": "interrupt", "2097155": "sub_1bd33", "2097157": "sub_1a5d0", "2097159": "sub_18354", "2097161": "sub_1a569", "2097163": "sub_1bd33", "2097165": "sub_18375", "2097167": "sub_18413", "2097169": "sub_18354", "2097171": "sub_19ee0", "2097173": "sub_18608", "2097175": "sub_1bd33", "2097177": "sub_1cb6b", "2097179": "sub_1b9e0", "2097181": "sub_1a5d0", "2097183": "sub_1bdf8", "2097185": "sub_1a569", "2097187": "sub_1bdf8", "2097189": "sub_1bd4d"}, "sub_1bd33": {"2097153": "sub_19fcd"}, "sub_1bd4d": {"2097153": "sub_19f65"}, "sub_1bd77": {"2097153": "sub_1a02d", "2097155": "sub_19fcd", "2097157": "sub_1bdf8"}, "sub_1bdf8": {"2097153": "sub_1be18", "2097155": "sub_19fcd"}, "sub_1be18": {"2097153": "sub_19ee0"}, "sub_1be30": {}, "sub_1be40": {"2097153": "interrupt", "2097155": "sub_1c1fd", "2097157": "sub_1c25d", "2097159": "interrupt", "2097161": "sub_1c000", "2097163": "sub_1c1eb", "2097165": "sub_1a02d", "2097167": "sub_1a02d", "2097169": "sub_1a02d", "2097171": "sub_19ee0", "2097173": "sub_1c25d", "2097175": "sub_1c000", "2097177": "sub_1c17a", "2097179": "sub_1c140", "2097181": "sub_1c0a5", "2097183": "sub_1c1eb"}, "sub_1c000": {"2097153": "sub_1a059", "2097155": "sub_18413", "2097157": "sub_1c17a", "2097159": "sub_18413", "2097161": "sub_1c17a", "2097163": "sub_18375", "2097165": "sub_1cb6b"}, "sub_1c06e": {"2097153": "sub_1c1fd", "2097155": "sub_1c0a5", "2097157": "sub_1c1eb"}, "sub_1c0a5": {"2097153": "sub_1a059", "2097155": "sub_18413", "2097157": "sub_1d45b", "2097159": "sub_1c17a", "2097161": "sub_19ee0", "2097163": "sub_19fcd", "2097165": "sub_1d42a", "2097167": "sub_18375", "2097169": "interrupt"}, "sub_1c140": {"2097153": "sub_1c20f"}, "sub_1c17a": {"2097153": "sub_1c238"}, "sub_1c189": {"2097153": "sub_1a02d", "2097155": "interrupt", "2097157": "sub_1c1eb"}, "sub_1c1eb": {}, "sub_1c1fd": {}, "sub_1c20f": {}, "sub_1c238": {}, "sub_1c25d": {"2097153": "sub_1a059"}, "sub_1c290": {"2097153": "sub_1cd93", "2097155": "interrupt", "2097157": "sub_19ee0", "2097159": "sub_19efc", "2097161": "sub_19fcd", "2097163": "sub_1c95e", "2097165": "sub_1cd84", "2097167": "sub_1cd93", "2097169": "interrupt", "2097171": "sub_1aae0", "2097173": "interrupt"}, "sub_1c37a": {"2097153": "sub_1c3cb"}, "sub_1c3cb": {"2097153": "sub_1cd93", "2097155": "interrupt", "2097157": "sub_1cd93", "2097159": "sub_19ee0", "2097161": "sub_19efc", "2097164": "sub_1c45a", "2097166": "sub_1cd93", "2097168": "interrupt"}, "sub_1c45a": {}, "sub_1c4bb": {"2097153": "sub_1cd84", "2097155": "interrupt", "2097157": "sub_1c290", "2097159": "sub_1c37a", "2097161": "sub_1cdef", "2097163": "interrupt", "2097165": "sub_1cd51"}, "sub_1c500": {"2097153": "interrupt", "2097155": "sub_1cd51"}, "sub_1c543": {"2097153": "interrupt", "2097155": "sub_1c598", "2097157": "sub_1c500", "2097159": "interrupt", "2097161": "sub_1cd51"}, "sub_1c598": {"2097153": "sub_19fcd", "2097155": "sub_1c500"}, "sub_1c5e0": {"2097154": "interrupt", "2097156": "sub_1cd51"}, "sub_1c630": {"2097153": "sub_1a02d", "2097155": "sub_19fcd"}, "sub_1c680": {}, "sub_1c69d": {"2097153": "interrupt", "2097155": "sub_1cab9", "2097157": "sub_1a02d", "2097159": "sub_1a02d", "2097161": "sub_1cab9", "2097163": "interrupt", "2097165": "sub_1cab9", "2097167": "sub_1cd51", "2097169": "sub_1cd58", "2097171": "sub_1a02d", "2097173": "sub_1a02d", "2097175": "sub_1cd58"}, "sub_1c8c1": {"2097153": "sub_1cd51", "2097155": "interrupt", "2097157": "interrupt", "2097159": "interrupt", "2097161": "interrupt", "2097163": "sub_1cd51"}, "sub_1c924": {}, "sub_1c934": {}, "sub_1c95e": {"2097153": "sub_1c99e", "2097155": "sub_1c99e", "2097157": "sub_1c99e", "2097159": "sub_1cd51"}, "sub_1c99e": {}, "sub_1c9c7": {"2097153": "sub_1cd51"}, "sub_1c9d6": {}, "sub_1ca05": {"2097153": "interrupt"}, "sub_1ca14": {"2097153": "interrupt", "2097155": "sub_1cd51", "2097157": "sub_1cab9"}, "sub_1ca59": {}, "sub_1ca65": {"2097153": "interrupt", "2097155": "sub_1cab9"}, "sub_1ca99": {"2097153": "sub_1cab9"}, "sub_1cab9": {}, "sub_1cac6": {}, "sub_1cac7": {"2097153": "sub_1cab9"}, "sub_1caed": {}, "sub_1cb28": {"2097153": "sub_1cbd3"}, "sub_1cb3e": {"2097153": "sub_1cbd3"}, "sub_1cb4f": {"2097153": "sub_1cbd3", "2097155": "sub_1cbd3", "2097157": "sub_1cbd3"}, "sub_1cb6b": {"2097153": "sub_1cab9", "2097155": "interrupt"}, "sub_1cb8d": {"2097153": "sub_1a02d", "2097155": "sub_1cb6b"}, "sub_1cbaf": {"2097153": "sub_1cb6b"}, "sub_1cbd3": {"2097153": "sub_1cd51"}, "sub_1cbfb": {"2097153": "interrupt", "2097155": "interrupt", "2097157": "sub_1a02d", "2097159": "sub_1cd51"}, "sub_1cc4c": {"2097153": "sub_185e7"}, "sub_1ccc0": {"2097153": "interrupt", "2097155": "sub_1a02d"}, "sub_1ccf2": {"2097153": "interrupt", "2097155": "sub_185e7", "2097157": "sub_185e7", "2097159": "sub_1a02d", "2097161": "interrupt", "2097163": "sub_1cd51"}, "sub_1cd51": {}, "sub_1cd58": {"2097153": "sub_185e7", "2097155": "sub_185e7"}, "sub_1cd84": {"2097153": "interrupt"}, "sub_1cd93": {"2097153": "interrupt", "2097155": "sub_1cd51"}, "sub_1cdef": {"2097153": "sub_1cd93"}, "sub_1ce10": {"2097153": "interrupt", "2097155": "sub_19fcd", "2097157": "sub_1ca14", "2097159": "interrupt", "2097161": "sub_19fcd", "2097163": "sub_19fcd", "2097165": "sub_1cd51"}, "sub_1ce90": {"2097153": "sub_1cece", "2097155": "interrupt", "2097157": "sub_1cece"}, "sub_1cece": {"2097153": "sub_1d05b"}, "sub_1cee0": {"2097153": "sub_18a60", "2097155": "sub_19560", "2097157": "sub_19c60", "2097159": "sub_19fcd", "2097161": "sub_19fcd", "2097163": "sub_19fcd", "2097165": "sub_19fcd", "2097167": "sub_19fcd", "2097169": "sub_19fcd", "2097171": "sub_1d06b", "2097173": "sub_1793d", "2097175": "sub_19922", "2097177": "sub_1992c", "2097179": "sub_198e3", "2097181": "sub_19070", "2097183": "interrupt", "2097185": "interrupt", "2097187": "sub_1d06b", "2097189": "sub_1c5e0", "2097191": "sub_1d004"}, "sub_1d004": {"2097153": "interrupt", "2097155": "sub_1a02d", "2097157": "sub_18608", "2097159": "sub_17b15"}, "sub_1d05b": {"2097153": "interrupt"}, "sub_1d06b": {"2097153": "sub_19fcd"}, "sub_1d08b": {"2097153": "interrupt"}, "sub_1d0a0": {"2097153": "sub_1cd51", "2097155": "interrupt", "2097157": "sub_19ffa", "2097159": "interrupt", "2097161": "sub_1d05b", "2097163": "interrupt", "2097165": "sub_1d05b", "2097167": "sub_1d1c7", "2097169": "sub_19fcd", "2097171": "interrupt"}, "sub_1d115": {"2097153": "sub_1cd51", "2097155": "sub_1d1fd", "2097157": "sub_1d1e1", "2097160": "sub_1d215", "2097162": "sub_1d1e1", "2097165": "sub_1d1e1", "2097167": "sub_1d1e1", "2097169": "sub_1d1e1", "2097171": "sub_1d1e1", "2097173": "sub_1d1e1", "2097175": "sub_1d1e1", "2097177": "sub_1d1e1", "2097179": "sub_1d1e1", "2097181": "sub_1d1c7", "2097183": "sub_1cd51", "2097185": "sub_1d1fd"}, "sub_1d1c7": {}, "sub_1d1e1": {"2097153": "sub_1d08b", "2097155": "sub_1d05b"}, "sub_1d1fd": {}, "sub_1d215": {"2097153": "interrupt", "2097155": "sub_1d23f", "2097157": "sub_1d23f", "2097159": "sub_1d1e1"}, "sub_1d23f": {"2097153": "interrupt", "2097155": "interrupt"}, "sub_1d270": {"2097153": "sub_18608", "2097155": "sub_19fcd", "2097157": "sub_19fcd", "2097159": "interrupt", "2097161": "sub_19fcd", "2097163": "interrupt", "2097165": "sub_1cd51"}, "sub_1d330": {}, "sub_1d336": {"2097153": "interrupt", "2097155": "sub_1d4d6", "2097157": "sub_18413", "2097159": "sub_1d45b", "2097161": "sub_18375", "2097163": "sub_1a02d", "2097165": "sub_1d45b", "2097167": "sub_19ee0", "2097169": "sub_1d4d6", "2097171": "sub_1d475", "2097173": "sub_1d45b", "2097175": "sub_1d42a"}, "sub_1d42a": {"2097153": "sub_19efc"}, "sub_1d45b": {"2097153": "sub_19fcd"}, "sub_1d475": {"2097153": "sub_1d45b", "2097155": "sub_1a313", "2097157": "sub_1d42a"}, "sub_1d4d6": {"2097153": "sub_1a059", "2097155": "sub_1cb6b"}};

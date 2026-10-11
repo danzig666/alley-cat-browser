@@ -11,6 +11,7 @@ function chord(code) {
 const phaseInfo={title:['TITLE SCREEN','Press Enter to continue.'],keyboard:['CHOOSE YOUR CONTROLS','Choose keyboard controls to begin.'],difficulty:['CHOOSE YOUR DIFFICULTY','How adventurous are you feeling?'],ready:['READY TO ROAM','Press Enter to start.'],playing:['IN THE ALLEY','Arrows / WASD · Space jump · Q/E diagonal jump · F action'],entering:['ENTERING THE WINDOW','A new adventure awaits.'],paused:['PAWS MODE','Press any key to resume.'],booting:['STARTING',''],error:['GAME STOPPED','Restart to try again.'],ended:['SESSION ENDED','Restart to play again.']};
 function updateUI() {
   const phase=game.phase;
+  updateSaveButtons();
   $('status').textContent=phase==='playing' && memoryAGet16(0x1010,4)!==0 ? 'ROOM CHALLENGE' : phaseInfo[phase]?.[0] || 'ALLEY CAT';
   $('hint').textContent=phaseInfo[phase]?.[1] || 'Keyboard & touch controls';
   $('pause').textContent=phase==='paused'?'Resume':'Pause';
@@ -82,14 +83,17 @@ function isFullscreen() {return document.fullscreenElement===$('arcade') || $('a
 function sizeFullscreen() {
   const active=isFullscreen();
   $('fullscreen').textContent=active?'Exit fullscreen':'Fullscreen';
-  if(!active) return;
-  let chrome=0;
-  for(const child of $('arcade').children) {
-    if(child===$('screen') || child.hidden) continue;
-    const style=getComputedStyle(child);
-    chrome+=child.getBoundingClientRect().height+(parseFloat(style.marginTop)||0)+(parseFloat(style.marginBottom)||0);
-  }
-  const width=Math.min($('arcade').clientWidth,Math.max(0,$('arcade').clientHeight-chrome)*4/3);
+  const arcade=$('arcade'),style=getComputedStyle(arcade);
+  const availableWidth=arcade.clientWidth-(parseFloat(style.paddingLeft)||0)-(parseFloat(style.paddingRight)||0);
+  const availableHeight=arcade.clientHeight-(parseFloat(style.paddingTop)||0)-(parseFloat(style.paddingBottom)||0);
+  const panel=Math.min(320,Math.max(240,availableWidth*.22)),gap=8;
+  const beside=Math.min(Math.max(0,availableWidth-panel-gap),availableHeight*4/3);
+  const below=Math.min(availableWidth,Math.max(0,availableHeight-Math.min(240,Math.max(160,availableHeight*.28))-gap)*4/3);
+  const side=availableWidth>=600 && beside>=below;
+  arcade.classList.toggle('side-layout',side);
+  arcade.style.setProperty('--sidebar-width',panel+'px');
+  const width=side?beside:below;
+  arcade.style.setProperty('--picture-height',(width*3/4)+'px');
   $('screen').style.setProperty('--game-width',width+'px');
   $('screen').style.setProperty('--game-height',(width*3/4)+'px');
 }
@@ -108,9 +112,56 @@ window.addEventListener('resize',sizeFullscreen);
 if(window.visualViewport) visualViewport.addEventListener('resize',sizeFullscreen);
 if(window.ResizeObserver) new ResizeObserver(sizeFullscreen).observe($('arcade'));
 const keyboardBindings=new Map();
+let saveBusy=false,saveItems=[];
+function updateSaveButtons() {
+  $('save-game').disabled=saveBusy || !started || !game.iterator || !!game.error;
+  $('load-game').disabled=saveBusy || !saveItems.length || !window.alleyCatPageReady;
+  for(const button of $('save-list').querySelectorAll('button'))button.disabled=saveBusy || !window.alleyCatPageReady;
+}
+async function refreshSaves() {
+  saveItems=await saveStore.list();$('save-count').textContent='('+saveItems.length+')';
+  $('save-list').replaceChildren(...saveItems.map((item,index)=>{
+    const li=document.createElement('li'),button=document.createElement('button'),small=document.createElement('small');
+    button.textContent=(index===0?'Latest · ':'')+new Date(item.created).toLocaleString();
+    small.textContent=(item.room?'Room '+item.room:'Alley')+' · '+item.lives+' lives';button.append(small);
+    button.addEventListener('click',()=>loadSavedGame(item.id));li.append(button);return li;
+  }));updateSaveButtons();
+}
+async function saveGame() {
+  if(saveBusy)return;saveBusy=true;updateSaveButtons();
+  try {
+    const id=await saveStore.save();await refreshSaves();
+    $('save-status').textContent='Saved. Latest + '+Math.max(0,saveItems.length-1)+' older saves available.';return id;
+  } catch(error) {$('save-status').textContent=error.message;return null;}
+  finally {saveBusy=false;updateSaveButtons();focusGame();}
+}
+async function loadSavedGame(id) {
+  if(saveBusy)return;saveBusy=true;updateSaveButtons();
+  try {
+    const record=await saveStore.read(id);
+    game.restore(record.snapshot);
+    keyboardBindings.clear();swipe=null;swipeActions.clear();started=true;lastPhase='';
+    $('cover').hidden=true;$('error').hidden=true;
+    for(const button of ['sound','pause','restart'])$(button).disabled=false;
+    updateStyleButtons();$('art-badge').innerHTML='<i></i> '+(colorArt.mode==='color'?'COLOR PIXEL ART':'ORIGINAL CGA GRAPHICS');
+    render(context,image);updateUI();
+    speaker.enable().catch(()=>{});
+    $('save-status').textContent='Loaded '+new Date(record.created).toLocaleString()+'.';return record.id;
+  } catch(error) {$('save-status').textContent=error.message;return null;}
+  finally {saveBusy=false;updateSaveButtons();focusGame();}
+}
+$('save-game').addEventListener('click',saveGame);
+$('load-game').addEventListener('click',()=>loadSavedGame());
+Object.assign(window.alleyCat,{save:saveGame,load:loadSavedGame,saves:saveStore});
+refreshSaves().catch(error=>{$('save-status').textContent=error.message;});
 const playKeys={KeyW:['ArrowUp'],KeyA:['ArrowLeft'],KeyS:['ArrowDown'],KeyD:['ArrowRight'],
   Space:['ArrowUp'],KeyQ:['Home'],KeyE:['PageUp'],KeyZ:['End'],KeyC:['PageDown'],KeyF:['AltLeft']};
 document.addEventListener('keydown',event=>{
+  if(event.code==='F6'||event.code==='F7') {
+    event.preventDefault();if(event.repeat)return;
+    if(event.code==='F6'){if(!$('save-game').disabled)saveGame();}
+    else if(!$('load-game').disabled)loadSavedGame();return;
+  }
   if(!started || event.code==='Tab' || event.metaKey || event.code==='F5' || event.code==='F12') return;
   if(event.target.closest('select,input')) return;
   if(event.target.closest('button') && (event.code==='Space' || event.code==='Enter')) return;
@@ -194,11 +245,14 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){keyboardBi
 window.addEventListener('blur',()=>{keyboardBindings.clear();releaseKeys();});
 colorArt.load().then(()=>{
   $('preview-help').hidden=true;$('start').disabled=false;window.alleyCatPageReady=true;
+  updateSaveButtons();
 }).catch(error=>{
   // The original game is still usable if a browser cannot decode the new art.
   colorArt.mode='original';updateStyleButtons();$('graphics').disabled=true;
   $('preview-help').hidden=true;$('start').disabled=false;window.alleyCatPageReady=true;
   $('hint').textContent='Color art unavailable; original graphics are ready.';
+  updateSaveButtons();
   console.error(error);
 });
 requestAnimationFrame(frame);
+sizeFullscreen();

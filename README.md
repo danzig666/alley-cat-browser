@@ -15,8 +15,9 @@ The page contains all its JavaScript, graphics data, font, and sound routines.
 It needs no installation, CDN, DOSBox, WebAssembly, or remote service. You can
 also place this one file on any static website.
 
-The game starts with **Color pixel art** and **AdLib-style FM**. The two
-toggle buttons below the game work at any time, including fullscreen:
+The game starts with **Original CGA** and **Original PC speaker** music and
+sound. The two toggle buttons in the controls panel work at any time,
+including fullscreen:
 
 - **Graphics:** Color pixel art / Original CGA.
 - **Audio:** AdLib-style FM / Original PC speaker. This changes **both music
@@ -61,6 +62,31 @@ and browser audio mute. Fullscreen preserves the original 4:3 CRT display
 shape in portrait and landscape; difficulty buttons remain accessible. A
 viewport expansion fallback is used when the fullscreen API is unavailable.
 Sound requires a user gesture. The game stops advancing when its tab is hidden.
+
+The picture uses the available viewport while keeping its 4:3 display shape.
+The layout compares controls beside and below the picture, then picks the
+arrangement that fits the larger game. Wide screens put all controls and info
+in a scrollable side panel; portrait and unfolded phone layouts can put the
+panel below. Resizing, rotating, folding, and fullscreen recalculate the fit.
+
+## Browser saves
+
+Press **Save / F6** for an instant checkpoint, and **Load latest / F7** to
+resume. **Save history** lets you load an older checkpoint. The browser keeps
+**eleven saves: the latest plus ten older saves**. Adding a twelfth removes
+only the oldest; loading a save does not replace the newer ones. A failed save
+keeps the existing history.
+
+Snapshots preserve the suspended JavaScript call stack, game RAM, registers,
+flags, position, room, lives, difficulty, timers, enemies, CGA/color sprite
+state, and the original music/sound sequence. Loading also restores graphics,
+audio style, and mute, and releases held controls. You can load from the start
+screen after reopening or reloading the site.
+
+Saves use IndexedDB on the current browser/site. Other browsers or devices
+have separate saves. Clearing site data removes them; private browsing can
+remove them when its session ends. Storage errors are shown beside the save
+buttons, and the game remains playable.
 
 Movement, jump and action input update immediately on press and release,
 without waiting for the original two-tick (about 110 ms) keyboard poll. The
@@ -160,6 +186,8 @@ node tests/rooms.cjs
 node tests/mobile.cjs
 node tests/presentation.cjs
 node tests/controls.cjs
+node tests/layout.cjs
+node tests/saves.cjs
 ```
 
 Playwright must be available to Node. `CHROMIUM_PATH` can select a browser
@@ -213,10 +241,15 @@ Verified in Chromium:
   foreground/background contrast. Keyboard regression checks exercise actual
   Q/E, arrow and A/D + Space diagonal jumps, immediate input decoding/release,
   independent key holds, Ctrl-S, and release across pause and window blur.
+- Adaptive 4:3 sizing across desktop, laptop, ultrawide, portrait/landscape
+  phone, and unfolded phone viewports. Wide screens use nearly the full height.
+- Save/load reproduces continued native execution, restores every room's
+  complete rendered state, persists across reloads and tabs on the same
+  origin, retains eleven snapshots, and preserves history on storage failure.
 
 A full winning playthrough and every collision/scoring path have **not** been
 verified. Browser frame scheduling and the PC-speaker output may differ in
 timing and timbre from an original PC. Hardware joystick mode is skipped in
-favor of browser keyboard/touch input. Physical gamepad support and saved games
-are not added. Other browsers have not been tested. This is a playable native
+favor of browser keyboard/touch input. Physical gamepad support is not added.
+Other browsers have not been tested. This is a playable native
 translation, not a claim of complete cycle-for-cycle equivalence.

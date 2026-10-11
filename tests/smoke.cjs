@@ -17,7 +17,6 @@ async function main() {
     page.on('pageerror',e=>errors.push(e.message));
     page.on('request',r=>requests.push(r.url()));
     await page.goto('http://127.0.0.1:'+server.address().port);
-    await page.click('#graphics');
     await page.click('#start');
     const state=()=>page.evaluate(()=>alleyCat.state());
     const press=async key=>page.keyboard.press(key,{delay:120});

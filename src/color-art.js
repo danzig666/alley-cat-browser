@@ -1,7 +1,7 @@
 // Color materials are painted into the original 320x200 raster and sprite masks.
 // Neither art mode writes to game RAM, sprite dimensions, nor collision state.
 const colorArt = {
-  mode:'color', ready:false, writing:false,
+  mode:'original', ready:false, writing:false,
   layer:new Uint32Array(0x100000*4), blits:[], scenes:[], tables:[],cheeseMask:null,cheeseTable:null,
   reset() {this.layer.fill(0);this.blits.length=0;this.writing=false;this.cheeseMask=this.cheeseTable=null;},
   async load() {

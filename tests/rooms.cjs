@@ -13,7 +13,7 @@ const root=path.join(__dirname,'..');
   try {
     const page=await browser.newPage();const errors=[];
     page.on('pageerror',e=>errors.push(e.message));
-    await page.goto('http://127.0.0.1:'+server.address().port); await page.click('#start');
+    await page.goto('http://127.0.0.1:'+server.address().port);await page.click('#graphics');await page.click('#start');
     const press=key=>page.keyboard.press(key,{delay:120});
     const phase=p=>page.waitForFunction(p=>alleyCat.state().phase===p,p);
     await phase('title'); await press('Enter'); await phase('difficulty'); await press('k'); await phase('ready');
@@ -34,13 +34,9 @@ const root=path.join(__dirname,'..');
           if(seg===0x1010 && ofs===4 && value>0 && value<8) value=room;
           window.savedMemorySet16(seg,ofs,value);
         };
+        // Use the native continuation mechanism at the original room dispatch.
+        execution.restore([{name:'sub_17230',pc:0x173e7,parked:null,budget:false}]);
         game.iterator=sub_17230();
-        // Start directly from the stable alley checkpoint by advancing the
-        // translated main function's outer PC to its room entry continuation.
-        // The equivalent continuation is generated from the original routine.
-        const source=sub_17230.toString();
-        const enter=source.replace('function* sub_17230()', 'function* testRoomEntry()').replace('let pc=0;', 'let pc=0x173e7;');
-        game.iterator=eval('('+enter+')')();
         memoryASet(0x1010,0x418,room===7?1:0);
         memoryASet(0x1010,0x551,1);
       },room);
@@ -60,6 +56,24 @@ const root=path.join(__dirname,'..');
       assert(result.lit>1000,`Room ${room} must draw its graphics`);
       assert(result.frames>before.frames,`Room ${room} must keep updating`);
       await page.locator('#game').screenshot({path:path.join(__dirname,`room-${room}.png`)});
+      const restored=await page.evaluate(()=>{
+        game.suspend();releaseKeys();render(context,image);
+        const snapshot=game.capture(),pixels=canvas.getContext('2d').getImageData(0,0,320,200).data.slice();
+        game.restore(snapshot);render(context,image);
+        const after=canvas.getContext('2d').getImageData(0,0,320,200).data;
+        const same=pixels.every((value,i)=>value===after[i]);
+        let clock=0;const realTime=game.time;game.time=()=>snapshot.elapsed+clock;
+        const hash=values=>{let value=2166136261;for(const byte of values)value=Math.imul(value^byte,16777619);return value>>>0;};
+        const advance=()=>{
+          for(let i=0;i<200;i++){clock+=8;game.iterator.next();}
+          return {ram:hash(ram),words:Array.from(words),flags:{...flags},steps:game.steps,phase:game.phase,
+            layer:hash(colorArt.layer),divisor:speaker.divisor,gate:speaker.gate,events:speaker.events};
+        };
+        const expected=advance();clock=0;game.restore(snapshot);const actual=advance();
+        const identical=JSON.stringify(expected)===JSON.stringify(actual);
+        game.time=realTime;game.restore(snapshot);game.resume();return same&&identical;
+      });
+      assert(restored,`Room ${room} must restore its complete pixel art and sprite state`);
       if(room===4) {
         const cheese=await page.evaluate(()=>{
           game.suspend();const mask=colorArt.cheeseMask;

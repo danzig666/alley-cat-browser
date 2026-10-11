@@ -6,6 +6,7 @@ Assets come from the user-supplied executable, verified against the reference.
 from pathlib import Path
 import base64
 import hashlib
+import json
 import re
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -16,6 +17,8 @@ source = (ROOT / 'reference/cat.cpp').read_text()
 source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
 registers = r'\b(ax|bx|cx|dx|ah|bh|ch|dh|al|bl|cl|dl|si|di|bp|sp|cs|ds|es|ss|tx|tl)\b'
 functions = []
+routine_pcs = {}
+routine_calls = {}
 for match in re.finditer(r'void (\w+)\(\)\s*\{', source):
     name = match[1]
     depth, pos = 1, match.end()
@@ -76,11 +79,46 @@ for match in re.finditer(r'void (\w+)\(\)\s*\{', source):
             'memoryASet16(r.ds, r.bp, r.bx); colorArt.saveWord(r.ds,r.bp,r.es,r.di);')
         body = body.replace('stosw();',
             'colorArt.paintWord(r.es,r.di,r.ds,r.si-2); colorArt.writing=true; stosw(); colorArt.writing=false;')
+    # Each cooperative yield and call gets an explicit continuation. The
+    # native generator stack can then be rebuilt without replaying gameplay.
+    continuation = 0x200000
+    calls = {}
+    def resumable(match):
+        global continuation
+        call = match[0].startswith('yield*')
+        statement = match[0]
+        continuation += 1
+        at = continuation
+        if call:
+            calls[at] = re.search(r'yield\* (\w+)', statement)[1]
+            continuation += 1
+            after = continuation
+            return f'frame.pc={at};\ncase {at}:\n{statement}\nframe.pc={after};\ncase {after}:;'
+        value = re.search(r'yield\s+(\d)', statement)[1]
+        return f'frame.pc={at};frame.parked={value};{statement}\ncase {at}: frame.parked=null;'
+    body = re.sub(r'yield\* (?:sub_[0-9a-f]+|interrupt)\([^;]*\);|yield [01];', resumable, body)
+    # Initialization before dispatch is itself made resumable, so restoring
+    # the difficulty screen never clears it or replays its setup.
+    if before_loop:
+        before_loop = re.sub(r'pc = (0x[0-9a-f]+);', r'{pc=\1;continue dispatch;}', before_loop)
+        body = re.sub(r'yield\* (?:sub_[0-9a-f]+|interrupt)\([^;]*\);', resumable, before_loop) + '\n' + body
+    routine_pcs[name] = [0] + [int(pc, 0) for pc in re.findall(r'case (0x[0-9a-f]+|\d+):', body)]
+    routine_calls[name] = calls
     functions.append(f'''function* {name}() {{
   let pc=0;
-  {before_loop}
+  const frame=execution.enter('{name}',pc);pc=frame.pc;
+  let skipBudget=frame.budget || execution.restoring;
+  try {{
+  if(execution.restoring && execution.pending.length===0) {{
+    execution.restoring=false;
+    if(frame.parked!==null) {{yield frame.parked;frame.parked=null;frame.budget=false;}}
+  }}
   dispatch: while (true) {{
-    if ((++game.steps & 1023) === 0) yield 0;
+    if (!skipBudget && (++game.steps & 1023) === 0) {{
+      frame.pc=pc;frame.budget=true;frame.parked=0;yield 0;
+      frame.parked=null;frame.budget=false;
+    }}
+    skipBudget=false;
     switch(pc) {{
     case 0:
 {body}
@@ -88,19 +126,21 @@ for match in re.finditer(r'void (\w+)\(\)\s*\{', source):
     default: throw new Error("Invalid control flow in {name}");
     }}
   }}
+  }} finally {{execution.leave(frame);}}
 }}''')
 translated = '\n\n'.join(functions)
+translated = '\n'.join(line.rstrip() for line in translated.split('\n'))
 # Wrap only presentation blitters. Their registers, branches and RAM writes
 # still come from the unmodified recovered routines.
 for name in ('sub_19f65', 'sub_19efc'):
     translated += f'''\nconst original_{name}={name};
 {name}=function*() {{
-  colorArt.beginBlit('{name}');
+  if(!execution.restoring)colorArt.beginBlit('{name}');
   try {{yield* original_{name}();}} finally {{colorArt.endBlit();}}
 }};\n'''
 translated += '''\nconst original_sub_19fcd=sub_19fcd;
 sub_19fcd=function*() {
-  if(r.es===0xb800)colorArt.skinStatic(r.ds,r.si,r.cx);
+  if(!execution.restoring && r.es===0xb800)colorArt.skinStatic(r.ds,r.si,r.cx);
   yield* original_sub_19fcd();
 };\n'''
 translated += '''\nconst original_sub_1b1ce=sub_1b1ce;
@@ -108,6 +148,9 @@ sub_1b1ce=function*() {
   yield* original_sub_1b1ce();
   colorArt.captureCheese();
 };\n'''
+translated += '\nconst ROUTINES={' + ','.join(routine_pcs) + '};\n'
+translated += 'const ROUTINE_PCS=' + json.dumps(routine_pcs) + ';\n'
+translated += 'const ROUTINE_CALLS=' + json.dumps(routine_calls) + ';\n'
 (ROOT / 'src/routines.js').write_text('// Ahead-of-time translation of the matching Alley Cat binary.\n' + translated)
 encoded = base64.b64encode(binary).decode()
 assets = f'const GAME_BYTES = Uint8Array.from(atob("{encoded}"), c=>c.charCodeAt(0));\n'
@@ -118,10 +161,9 @@ for key, file in [('alley','alley-native.png'), ('rooms','rooms-native.png')]:
     path = ROOT/'art'/file
     if path.exists():
         art_assets[key] = 'data:image/png;base64,' + base64.b64encode(path.read_bytes()).decode()
-import json
 assets += 'const COLOR_ART_ASSETS = ' + json.dumps(art_assets) + ';\n'
 parts = [assets, (ROOT/'src/engine.js').read_text(), (ROOT/'src/color-art.js').read_text(),
-         translated, (ROOT/'src/app.js').read_text()]
+         translated, (ROOT/'src/saves.js').read_text(), (ROOT/'src/app.js').read_text()]
 template = (ROOT/'src/page.html').read_text()
 html = template.replace('/* INLINE_STYLE */', (ROOT/'src/style.css').read_text())
 html = html.replace('/* INLINE_GAME */', '\n'.join(parts))

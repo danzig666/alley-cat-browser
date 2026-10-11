@@ -13,12 +13,27 @@ for (const [i, name] of ['ax','bx','cx','dx','si','di','bp','sp','cs','ds','es',
 const flags = {carry:false, zero:false, direction:false, interrupts:true};
 const ram = new Uint8Array(0x100000);
 class GameExit extends Error {}
+const execution={
+  frames:[],pending:[],restoring:false,
+  reset() {this.frames=[];this.pending=[];this.restoring=false;},
+  enter(name,pc=0) {
+    const frame=this.pending.length?this.pending.shift():{name,pc,parked:null,budget:false};
+    if(frame.name!==name)throw new Error('Save continuation does not match '+name);
+    this.frames.push(frame);return frame;
+  },
+  leave(frame) {
+    if(this.frames.at(-1)!==frame)throw new Error('Save continuation stack mismatch');
+    this.frames.pop();
+  },
+  restore(frames) {this.reset();this.pending=frames.map(frame=>({...frame}));this.restoring=true;}
+};
 const game = {
   steps:0, phase:'idle', iterator:null, error:null, frames:0,
   origin:0, suspendedAt:0, suspendedTotal:0, timerOffset:0,
   paletteRegister:0x30, mode:4, row:0, col:0, retrace:0,
   time() { return (this.suspendedAt || performance.now())-this.origin-this.suspendedTotal; },
   reset() {
+    execution.reset();
     releaseKeys();
     ram.fill(0); words.fill(0);
     colorArt.reset();
@@ -99,7 +114,7 @@ function rcr16(value,count) {while(count--) {const carry=value&1; value=(value>>
 // Recreate the game's PIT channel 2 divisor and speaker gate through Web Audio.
 const speaker = {
   context:null, oscillator:null, gain:null, analyser:null, divisor:0, lowByte:null,
-  control:0, gate:0, muted:false, frequency:0, events:0, style:'fm',
+  control:0, gate:0, muted:false, frequency:0, events:0, style:'speaker',
   fm:null, lastNote:0, wasActive:false,
   async enable() {
     if (!this.context) {
@@ -178,6 +193,12 @@ function portRead(port) {
   return 0;
 }
 function* interrupt(number) {
+  const frame=execution.enter('interrupt');
+  try {
+  if(frame.pc===1) {
+    if(execution.restoring && !execution.pending.length) {execution.restoring=false;yield frame.parked;}
+    frame.parked=null;return;
+  }
   if(number===0x1a) {
     if(r.ah===0) {
       const tick=(Math.floor(game.time()*1193182/65536000)+game.timerOffset)>>>0;
@@ -185,7 +206,7 @@ function* interrupt(number) {
     } else if(r.ah===1) {
       game.timerOffset=((r.cx<<16)|r.dx)-Math.floor(game.time()*1193182/65536000);
     } else throw new Error('Unsupported clock function '+r.ah);
-    yield 0; return;
+    frame.pc=1;frame.parked=0;yield 0;frame.parked=null;return;
   }
   if(number===0x11) {r.ax=0x26; return;}
   if(number===0x10) {
@@ -202,6 +223,7 @@ function* interrupt(number) {
     }
   }
   throw new Error('Unsupported BIOS function '+number.toString(16));
+  } finally {execution.leave(frame);}
 }
 function teletype(char,color) {
   if(char===13) {game.col=0; return;}

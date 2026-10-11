@@ -9,16 +9,8 @@
 </head>
 <body>
   <main>
-    <header>
-      <a class="wordmark" href="#">ALLEY<span>CAT</span><i></i></a>
-      <span class="edition">1984 / BROWSER EDITION</span>
-    </header>
-    <section class="intro">
-      <div><p class="eyebrow">BACK IN THE NEIGHBORHOOD</p><h1>The alley is yours.</h1><p class="description">Leap the fence. Dodge the dogs. Make a little mischief.</p></div>
-      <span class="badge" id="art-badge"><i></i> FULL COLOR / ORIGINAL CGA</span>
-    </section>
     <section class="arcade" id="arcade" aria-label="Alley Cat game">
-      <div class="screen-bar"><span><i></i> ALLEY CAT</span><span id="status" role="status" aria-live="polite">READY WHEN YOU ARE</span></div>
+      <div class="playfield" id="playfield">
       <div class="screen" id="screen">
         <canvas id="game" width="320" height="200" tabindex="0" aria-label="Alley Cat. Arrows or WASD to move, Space to jump, Q or E to jump diagonally, Alt or F for action. Swipe to move and jump, tap for action."></canvas>
         <div id="cover" class="cover">
@@ -31,19 +23,35 @@
         </div>
         <div id="error" role="alert" hidden></div>
       </div>
+      </div>
+      <aside class="sidebar" id="sidebar" aria-label="Game controls and information">
+    <header>
+      <a class="wordmark" href="#">ALLEY<span>CAT</span><i></i></a>
+      <span class="edition">1984 / BROWSER EDITION</span>
+    </header>
+    <section class="intro">
+      <div><p class="eyebrow">BACK IN THE NEIGHBORHOOD</p><h1>The alley is yours.</h1><p class="description">Leap the fence. Dodge the dogs. Make a little mischief.</p></div>
+      <span class="badge" id="art-badge"><i></i> ORIGINAL CGA / PC SPEAKER</span>
+    </section>
+      <div class="screen-bar"><span><i></i> ALLEY CAT</span><span id="status" role="status" aria-live="polite">READY WHEN YOU ARE</span></div>
       <div class="toolbar">
         <p id="hint">Keyboard & touch controls</p>
         <div class="tools"><button id="sound" disabled>Sound on</button><button id="pause" disabled>Pause</button><button id="restart" disabled>Restart</button><button id="fullscreen">Fullscreen</button></div>
       </div>
       <div class="style-controls" aria-label="Presentation settings">
-        <button id="graphics" type="button" data-mode="color" aria-pressed="true" aria-label="Pixel art graphics; switch to CGA"><span class="toggle-label">GRAPHICS</span><span class="toggle-value">Pixel art ⇄ CGA</span></button>
-        <button id="audio-style" type="button" data-mode="fm" aria-pressed="true" aria-label="AdLib-style music and effects; switch to original PC speaker"><span class="toggle-label">MUSIC + SOUND</span><span class="toggle-value">AdLib ⇄ PC speaker</span></button>
+        <button id="graphics" type="button" data-mode="original" aria-pressed="false" aria-label="CGA graphics; switch to pixel art"><span class="toggle-label">GRAPHICS</span><span class="toggle-value">CGA ⇄ Pixel art</span></button>
+        <button id="audio-style" type="button" data-mode="speaker" aria-pressed="false" aria-label="Original PC speaker music and effects; switch to AdLib-style FM"><span class="toggle-label">MUSIC + SOUND</span><span class="toggle-value">PC speaker ⇄ AdLib</span></button>
       </div>
       <div class="menu" id="menu" hidden>
         <span id="menu-hint">Press Enter to continue.</span>
         <div id="menu-options"></div>
       </div>
-    </section>
+      <section class="save-controls" aria-label="Saved games">
+        <div class="save-buttons"><button id="save-game" disabled>Save · F6</button><button id="load-game" disabled>Load latest · F7</button></div>
+        <p id="save-status" role="status" aria-live="polite">Saves stay in this browser. Latest + 10 older saves kept.</p>
+        <details id="save-history"><summary>Save history <span id="save-count">(0)</span></summary><ol id="save-list"></ol></details>
+      </section>
+
     <p class="touch-hint">Swipe & hold to move · swipe up to jump · tap for action</p>
     <section class="touch-controls" aria-label="Touch controls">
       <div class="dpad"><button data-key="ArrowUp" aria-label="Move up">↑</button><button data-key="ArrowLeft" aria-label="Move left">←</button><button data-key="ArrowDown" aria-label="Move down">↓</button><button data-key="ArrowRight" aria-label="Move right">→</button></div>
@@ -54,6 +62,8 @@
       <dl><div><dt><kbd>←</kbd><kbd>→</kbd> <span>or</span> <kbd>A</kbd><kbd>D</kbd></dt><dd>Move · W/S or ↑/↓ for up/down</dd></div><div><dt><kbd>Space</kbd></dt><dd>Jump · hold a direction to jump sideways</dd></div><div><dt><kbd>Q</kbd> / <kbd>E</kbd></dt><dd>Jump left / right with one key</dd></div><div><dt><kbd>Alt</kbd> <span>or</span> <kbd>F</kbd></dt><dd>Special action</dd></div><div><dt><kbd>Esc</kbd></dt><dd>Pause · any key to resume</dd></div><div><dt><kbd>Ctrl</kbd> + <kbd>S</kbd> / <kbd>R</kbd> / <kbd>M</kbd></dt><dd>Sound / restart / menu</dd></div></dl>
     </section>
     <footer><span>ALLEY CAT · Bill Williams · IBM PC, 1984</span><span>Built for a little nostalgia.</span></footer>
+      </aside>
+    </section>
   </main>
   <script>
     // Keep failures visible even if the main script cannot initialize.

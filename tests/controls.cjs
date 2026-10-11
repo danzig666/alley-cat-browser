@@ -20,8 +20,8 @@ const {chromium}=require('playwright');
     const restore=()=>page.evaluate(()=>{
       releaseKeys();keyboardBindings.clear();ram.set(controlsBaseline.ram);words.set(controlsBaseline.words);
       Object.assign(flags,controlsBaseline.flags);colorArt.layer.set(controlsBaseline.layer);colorArt.blits.length=0;
-      const source=sub_17230.toString().replace('function* sub_17230()','function* controlsContinuation()').replace('let pc=0;','let pc=0x17385;');
-      game.iterator=eval('('+source+')')();game.phase='playing';game.resume();
+      execution.restore([{name:'sub_17230',pc:0x17385,parked:null,budget:false}]);
+      game.iterator=sub_17230();game.phase='playing';game.resume();
       return alleyCat.state();
     });
     // Read the axes inside the very same DOM event turn. This would fail if
