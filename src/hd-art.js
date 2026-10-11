@@ -293,7 +293,8 @@ const hdArt={
       const alpha=game.phase==='playing'?Math.max(0,Math.min(1,(game.time()-record.at)/55)):1;
       const x=record.fromX+(record.x-record.fromX)*alpha,y=record.fromY+(record.y-record.fromY)*alpha;
       let sprite={dog:4,mouse:5,spider:6,fish:7,broom:8,bird:10,romance:11}[record.kind]??0;
-      if(record.kind==='player'||record.kind==='cat')sprite=record.y<record.fromY?3:Math.floor(record.source/2)%3;
+      // Native six-row player pieces occupy 24 bytes per gait frame.
+      if(record.kind==='player'||record.kind==='cat')sprite=record.y<record.fromY?3:Math.floor(record.source/24)%3;
       if(record.kind==='bubble'){
         ctx.strokeStyle='#d9f3ec';ctx.lineWidth=.45;ctx.beginPath();ctx.ellipse(x+record.width/2,y+record.height/2,record.width/2,record.height/2,0,0,Math.PI*2);ctx.stroke();continue;
       }

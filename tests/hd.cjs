@@ -63,9 +63,11 @@ const {chromium}=require('playwright');
       const stages=[];
       const pixels=t=>{game.time=()=>now+t;hdArt.render();stages.push(hdArt.renderedRecords.filter(r=>r.kind==='player'));return hdArt.ctx.getImageData(0,0,1280,800).data.slice();};
       const a=pixels(10),b=pixels(30),c=pixels(55);
+      for(const record of pieces)record.source+=24;
+      const gait=pixels(55);
       for(const record of records)Object.assign(hdArt.entities.get(record.id),record);
       game.time=originalTime;hdArt.render();
-      return {ok:a.some((value,i)=>value!==b[i])&&b.some((value,i)=>value!==c[i]),phase:game.phase,stages,diffs:[a.filter((v,i)=>v!==b[i]).length,b.filter((v,i)=>v!==c[i]).length]};
+      return {ok:a.some((value,i)=>value!==b[i])&&b.some((value,i)=>value!==c[i])&&c.some((value,i)=>value!==gait[i]),phase:game.phase,stages,diffs:[a.filter((v,i)=>v!==b[i]).length,b.filter((v,i)=>v!==c[i]).length,c.filter((v,i)=>v!==gait[i]).length]};
     });assert(smooth.ok,JSON.stringify(smooth));assert.deepEqual(await snapshot(),before);
     const invalid=await page.evaluate(()=>{
       const damaged=game.capture();damaged.hd.entities[0].width=NaN;
